@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class InitilizerClass {
 
-    public static void initialize(String url,String value) {
+    public static WebDriver initialize(String url,String value) {
         WebDriver driver;
         System.setProperty("webdriver.chrome.driver","C:\\Program Files\\Selenium\\Drivers\\chromedriver.exe");
         driver = new ChromeDriver();
@@ -17,5 +17,12 @@ public class InitilizerClass {
         Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"RegistryMap1_RegistryListBox\"]")));
         drop.selectByVisibleText(value);
         driver.findElement(By.xpath("//*[@id=\"GoButton\"]")).click();
+        return driver;
+    }
+
+    public static void clenUp(WebDriver driver)
+    {
+        driver.close();
+        driver.quit();
     }
 }

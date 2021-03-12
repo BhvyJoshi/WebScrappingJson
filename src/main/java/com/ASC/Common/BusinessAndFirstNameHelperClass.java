@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class BusinessAndFirstNameHelperClass{
     public WebDriver driver;
 
-    public void initialize(String url,String value) {
+  /*  public void initialize(String url,String value) {
         System.setProperty("webdriver.chrome.driver","C:\\Program Files\\Selenium\\Drivers\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -21,7 +21,7 @@ public class BusinessAndFirstNameHelperClass{
         drop.selectByVisibleText(value);
         driver.findElement(By.xpath("//*[@id=\"GoButton\"]")).click();
 
-    }
+    }*/
 
     public void firstPage(WebDriver driver,String keyWord,String fileName)
     {

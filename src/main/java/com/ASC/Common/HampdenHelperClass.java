@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class BarnstableHelperClass {
+public class HampdenHelperClass {
 
     private boolean checkNext;
     public String[] grabHeader(WebDriver driver)

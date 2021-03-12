@@ -26,19 +26,6 @@ public class Barnstable extends BarnstableHelperClass{
         fullTableData(driver,fileName);
     }
 
-
-   /* public void initialize(String url,String value) {
-        System.setProperty("webdriver.chrome.driver","C:\\Program Files\\Selenium\\Drivers\\chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get(url);
-        driver.manage().deleteAllCookies();
-        Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"RegistryMap1_RegistryListBox\"]")));
-        drop.selectByVisibleText(value);
-        driver.findElement(By.xpath("//*[@id=\"GoButton\"]")).click();
-
-    }*/
-
     public void firstPage(WebDriver driver,String keyWord,String value)
     {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
