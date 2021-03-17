@@ -1,5 +1,3 @@
-package com.ASC.ExecutableClasses;
-
 import com.ASC.Common.BusinessAndFirstNameHelperClass;
 import com.ASC.Common.InitilizerClass;
 import org.testng.annotations.AfterTest;
@@ -11,7 +9,7 @@ public class ClassWithFirstName extends BusinessAndFirstNameHelperClass {
     @Test
     public void firstName(String url,String value,String keyWord,String firstName, String fileName)
     {
-        InitilizerClass.initialize(url,value);
+        driver = InitilizerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName,fileName);
     }
 

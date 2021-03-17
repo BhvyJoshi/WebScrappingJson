@@ -82,7 +82,7 @@ public class BarnstableHelperClass {
         List<WebElement> rows = table.findElements(By.tagName("tr"));
 
         rows.remove(0);
-        if(rows.get(rows.size()-1).findElement(By.tagName("td")).getText()!="More names may be available")
+        if(!rows.get(rows.size() - 1).findElement(By.tagName("td")).getText().equals("More names may be available"))
         {
             checkNext = false;
         }

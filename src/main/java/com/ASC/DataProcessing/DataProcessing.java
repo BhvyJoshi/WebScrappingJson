@@ -10,17 +10,11 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
-
-public class dataProcessing {
-
-public dataProcessing(){}
-
-    public  String[] grabHeader(WebDriver driver)
+public class DataProcessing {
+    public String[] grabHeader(WebDriver driver)
     {
         WebElement headerTag =  driver.findElement(By.xpath("//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr"));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
@@ -30,13 +24,27 @@ public dataProcessing(){}
             header[i]=headers.get(i).getText();
         }
         header = ArrayUtils.remove(header,0);
+        header = modifyHeader(header);
         return header;
     }
 
-    public  void tableData(WebDriver driver,String fileName)
+    private String[] modifyHeader(String[] hdr)
+    {
+        String header = Arrays.toString(hdr);
+        header = header.replace("Type Desc.","Type_Desc");
+        header = header.replace("Type","Type_c").replace("Name/ Corporation","Name_Corporation_c");
+        header = header.replace("Book","Book_c").replace("Page","Page_c").replace("Type_c_Desc","Type_Desc_c");
+        header = header.replace("Rec. Date","Rec_Date_c").replace("Street #","Street_c");
+        header = header.replace("Property Descr","Property_Descr_c").replace("Town","Town_c");
+        header = header.replace("[","").replace("]","");
+        hdr = header.split(",");
+        return hdr;
+    }
+
+    public void tableData(WebDriver driver,String fileName)
     {
         String[] headers = grabHeader(driver);
-        List<HashMap<String,String>> tableDataContaint;
+        ArrayList<SortedMap<String,String>> tableDataContaint;
         tableDataContaint = grabData(driver,headers);
 
         boolean checkNext = true;
@@ -53,18 +61,13 @@ public dataProcessing(){}
             }
         }
 
-        List<JSONObject> jsonObj = new ArrayList<>();
-
-        for(HashMap<String, String> data : tableDataContaint) {
-            JSONObject obj = new JSONObject(data);
-            jsonObj.add(obj);
-        }
+        JSONObject jsonObj = generateJson(tableDataContaint,headers);
 
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
             if(myObj.createNewFile()) {
                 FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(new JSONArray(jsonObj).toString());
+                myWriter.write(jsonObj.toString());
                 myWriter.close();
             }
         } catch (IOException e) {
@@ -73,17 +76,17 @@ public dataProcessing(){}
         }
     }
 
-    public List<HashMap<String,String>> appendToList(List<HashMap<String,String>> original,List<HashMap<String,String>> toBeAppend)
+    public ArrayList<SortedMap<String,String>> appendToList(ArrayList<SortedMap<String,String>> original,ArrayList<SortedMap<String,String>> toBeAppend)
     {
-        List<HashMap<String,String>> append = new ArrayList<>();
+        ArrayList<SortedMap<String,String>> append = new ArrayList<>();
         Stream.of(original,toBeAppend).forEach(append::addAll);
         return append;
     }
 
-    public List<HashMap<String,String>> grabData(WebDriver driver,String[] header)
+    public ArrayList<SortedMap<String,String>> grabData(WebDriver driver,String[] header)
     {
-        List<HashMap<String,String>> list = new ArrayList<>();
-        HashMap<String,String> map= new HashMap<>();
+        ArrayList<SortedMap<String,String>> list = new ArrayList<>();
+        SortedMap<String,String> map= new TreeMap<>();
         WebElement table =  driver.findElement(By.xpath("//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table"));
         List<WebElement> rows = table.findElements(By.tagName("tr"));
 
@@ -95,9 +98,29 @@ public dataProcessing(){}
                 }
             }
             list.add(map);
-            map = new HashMap<>();
+            map = new TreeMap<>();
         }
         return list;
     }
 
+    public JSONObject generateJson(ArrayList<SortedMap<String,String>> requiredData, String[] header) {
+        JSONObject jsonObject = new JSONObject();
+
+        JSONArray array = new JSONArray();
+
+        JSONObject staticData = new JSONObject();
+        staticData.put("type", "Lead_Search_c");
+        staticData.put("referenceId", "ref");
+
+        for(SortedMap<String, String> data : requiredData) {
+            JSONObject dataElements = new JSONObject();
+            dataElements.put("attributes", staticData);
+            for (String str:header ) {
+                dataElements.put(str,data.get(str));
+            }
+            array.put(dataElements);
+        }
+        jsonObject.put("records", array);
+        return jsonObject;
+    }
 }

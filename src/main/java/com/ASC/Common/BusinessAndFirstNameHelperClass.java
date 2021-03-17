@@ -1,14 +1,12 @@
 package com.ASC.Common;
 
-import com.ASC.DataProcessing.dataProcessing;
+import com.ASC.DataProcessing.DataProcessing;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 
 import java.util.concurrent.TimeUnit;
 
-public class BusinessAndFirstNameHelperClass extends dataProcessing{
+public class BusinessAndFirstNameHelperClass extends DataProcessing {
     public WebDriver driver;
 
   /*  public void initialize(String url,String value) {
