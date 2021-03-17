@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.concurrent.TimeUnit;
 
-public class BusinessAndFirstNameHelperClass{
+public class BusinessAndFirstNameHelperClass extends dataProcessing{
     public WebDriver driver;
 
   /*  public void initialize(String url,String value) {
@@ -28,7 +28,7 @@ public class BusinessAndFirstNameHelperClass{
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.findElement(By.xpath("//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]")).sendKeys(keyWord);
         driver.findElement(By.xpath("//*[@id=\"SearchFormEx1_btnSearch\"]")).click();
-        dataProcessing.tableData(driver,fileName);
+        tableData(driver,fileName);
     }
 
     public void firstPage(WebDriver driver,String keyWord,String firstName,String fileName)
@@ -37,7 +37,7 @@ public class BusinessAndFirstNameHelperClass{
         driver.findElement(By.xpath("//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]")).sendKeys(keyWord);
         driver.findElement(By.xpath("//*[@id=\"SearchFormEx1_ACSTextBox_FirstName1\"]")).sendKeys(firstName);
         driver.findElement(By.xpath("//*[@id=\"SearchFormEx1_btnSearch\"]")).click();
-        dataProcessing.tableData(driver,fileName);
+        tableData(driver,fileName);
     }
 
 }

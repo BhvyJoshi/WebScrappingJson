@@ -1,5 +1,6 @@
 package com.ASC.Common;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
@@ -19,9 +20,9 @@ public class HampdenHelperClass {
     private boolean checkNext;
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath("//*[@id=\"search\"]/div/table/tbody/tr[1]"));
+        WebElement headerTag =  driver.findElement(By.xpath("//*[@id=\"search\"]/div/div[5]/table/tbody/tr[1]"));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
-        String[] header = new String[headers.size()];
+        String[] header = new String[headers.size() - 2];
         for (int i =0;i<headers.size();i++)
         {
             header[i]=headers.get(i).getText();

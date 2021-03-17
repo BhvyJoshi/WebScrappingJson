@@ -20,7 +20,7 @@ public class dataProcessing {
 
 public dataProcessing(){}
 
-    public static String[] grabHeader(WebDriver driver)
+    public  String[] grabHeader(WebDriver driver)
     {
         WebElement headerTag =  driver.findElement(By.xpath("//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr"));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
@@ -33,7 +33,7 @@ public dataProcessing(){}
         return header;
     }
 
-    public static void tableData(WebDriver driver,String fileName)
+    public  void tableData(WebDriver driver,String fileName)
     {
         String[] headers = grabHeader(driver);
         List<HashMap<String,String>> tableDataContaint;
@@ -73,14 +73,14 @@ public dataProcessing(){}
         }
     }
 
-    public static List<HashMap<String,String>> appendToList(List<HashMap<String,String>> original,List<HashMap<String,String>> toBeAppend)
+    public List<HashMap<String,String>> appendToList(List<HashMap<String,String>> original,List<HashMap<String,String>> toBeAppend)
     {
         List<HashMap<String,String>> append = new ArrayList<>();
         Stream.of(original,toBeAppend).forEach(append::addAll);
         return append;
     }
 
-    public static List<HashMap<String,String>> grabData(WebDriver driver,String[] header)
+    public List<HashMap<String,String>> grabData(WebDriver driver,String[] header)
     {
         List<HashMap<String,String>> list = new ArrayList<>();
         HashMap<String,String> map= new HashMap<>();

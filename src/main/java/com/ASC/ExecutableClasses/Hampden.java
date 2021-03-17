@@ -16,12 +16,13 @@ public class Hampden extends HampdenHelperClass {
     public static String url = "https://www.masslandrecords.com";
     public static String value= "Hampden";
     public static String keyWord = "lender";
-    public static String fileName = "demobarnstable";
+    public static String fileName = "demo";
 
     @Test
     public void test(){
         driver = InitilizerClass.initialize(url,value);
         firstPage(driver,keyWord,value);
+        fullTableData(driver,fileName);
     }
 
     public void firstPage(WebDriver driver, String keyWord,String value)

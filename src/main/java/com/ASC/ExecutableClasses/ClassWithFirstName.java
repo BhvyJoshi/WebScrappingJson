@@ -1,6 +1,7 @@
 package com.ASC.ExecutableClasses;
 
 import com.ASC.Common.BusinessAndFirstNameHelperClass;
+import com.ASC.Common.InitilizerClass;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -10,14 +11,13 @@ public class ClassWithFirstName extends BusinessAndFirstNameHelperClass {
     @Test
     public void firstName(String url,String value,String keyWord,String firstName, String fileName)
     {
-        initialize(url,value);
+        InitilizerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName,fileName);
     }
 
     @AfterTest
-    public void cleanup()
+    public void tearDown()
     {
-        driver.close();
-        driver.quit();
+        InitilizerClass.clenUp(driver);
     }
 }
