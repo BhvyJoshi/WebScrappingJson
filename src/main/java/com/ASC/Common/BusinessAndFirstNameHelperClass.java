@@ -1,25 +1,14 @@
 package com.ASC.Common;
 
-import com.ASC.DataProcessing.DataProcessing;
+import com.ASC.DataProcessing.dataprocessing_1;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class BusinessAndFirstNameHelperClass extends DataProcessing {
+public class BusinessAndFirstNameHelperClass extends dataprocessing_1 {
     public WebDriver driver;
 
-  /*  public void initialize(String url,String value) {
-        System.setProperty("webdriver.chrome.driver","C:\\Program Files\\Selenium\\Drivers\\chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get(url);
-        driver.manage().deleteAllCookies();
-        Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"RegistryMap1_RegistryListBox\"]")));
-        drop.selectByVisibleText(value);
-        driver.findElement(By.xpath("//*[@id=\"GoButton\"]")).click();
-
-    }*/
 
     public void firstPage(WebDriver driver,String keyWord,String fileName)
     {
