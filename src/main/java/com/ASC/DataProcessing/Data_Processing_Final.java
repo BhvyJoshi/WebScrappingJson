@@ -12,13 +12,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Data_Processing_Final {
 
     public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
+
     public String[] grabHeader(WebDriver driver)
     {
         WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
@@ -121,7 +121,13 @@ public class Data_Processing_Final {
 
     public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
     {
-        return original.put(toBeAppend);
+        JSONArray sourceArray = new JSONArray(toBeAppend);
+        JSONArray destinationArray = new JSONArray(original);
+
+        for (int i = 0; i < sourceArray.length(); i++) {
+            destinationArray.put(sourceArray.getJSONObject(i));
+        }
+        return destinationArray;
     }
 
     public String getMainTableRow(int count){

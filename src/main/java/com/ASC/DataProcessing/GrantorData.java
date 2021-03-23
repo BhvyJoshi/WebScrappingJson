@@ -5,8 +5,7 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +18,7 @@ public class GrantorData {
 
     public JSONArray getGrantorData(WebDriver driver, int rowID) {
 
-        WebDriverWait wait=new WebDriverWait(driver, 20);
-
-        WebElement linkedText;
-        linkedText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(getButtonXpath(rowID))));
+        WebElement linkedText = driver.findElement(By.xpath(getButtonXpath(rowID)));
         linkedText.click();
         String grantorLabel = driver.findElement(By.xpath(labelPath)).getText();
         String[] number = grantorLabel.split("Grantor/Grantee-");
@@ -46,6 +42,7 @@ public class GrantorData {
         }
         return rowOfSubTable;
     }
+
     private JSONArray getMultipleGrantorData(WebDriver driver,int dataRecords){
         int noOfPages = dataRecords/10;
         int dataInLastPage = dataRecords % 10;
@@ -69,16 +66,25 @@ public class GrantorData {
                 WebElement nextBtn = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr[12]/td/table/tbody/tr/td[" + (pageCount + 1) + "]/a"));
                 nextBtn.click();
                 Thread.sleep(5000);
-                subTableContent = appendToList(subTableContent, getActualGrantorData(listOfRows(driver, dataInLastPage + 2)));
-            }catch(Exception e2){}
+                subTableContent = appendToList(subTableContent, getActualGrantorData(listOfRows(driver, dataInLastPage)));
+            }catch(Exception e2){
+                e2.printStackTrace();
+            }
         }
         return subTableContent;
     }
 
     private JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
     {
-        return original.put(toBeAppend);
+        JSONArray sourceArray = new JSONArray(toBeAppend);
+        JSONArray destinationArray = new JSONArray(original);
+
+        for (int i = 0; i < sourceArray.length(); i++) {
+            destinationArray.put(sourceArray.getJSONObject(i));
+        }
+        return destinationArray;
     }
+
     private JSONArray getActualGrantorData(List<WebElement>  rowElement){
 
         JSONArray objForSubTable = new JSONArray();
@@ -103,8 +109,4 @@ public class GrantorData {
         }
     }
 
-   /* public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
-    {
-        return original.put(toBeAppend);
-    }*/
 }
