@@ -56,9 +56,10 @@ public class Data_Processing_Final {
 
         while(checkNext){
             try{
+                Thread.sleep(2000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
                 nextBtn.click();
-                Thread.sleep(5000);
+                Thread.sleep(1500);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers));
             }
             catch (Exception e1){
