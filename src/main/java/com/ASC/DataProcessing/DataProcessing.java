@@ -13,10 +13,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class DataProcessing {
+public class DataProcessing extends GrantorData{
+    public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
+    public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
+    public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
+
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath("//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr"));
+        WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
         String[] header = new String[headers.size()];
         for (int i =0;i<headers.size();i++)
@@ -44,24 +48,25 @@ public class DataProcessing {
     public void tableData(WebDriver driver,String fileName)
     {
         String[] headers = grabHeader(driver);
-        ArrayList<SortedMap<String,String>> tableDataContaint;
-        tableDataContaint = grabData(driver,headers);
+        JSONArray tableDataContent;
+        tableDataContent = grabData(driver,headers);
 
         boolean checkNext = true;
 
         while(checkNext){
             try{
-                WebElement nextBtn = driver.findElement(By.xpath("//*[@id=\"DocList1_LinkButtonNext\"]"));
+                Thread.sleep(2000);
+                WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
                 nextBtn.click();
-                Thread.sleep(5000);
-                tableDataContaint = appendToList(tableDataContaint,grabData(driver,headers));
+                Thread.sleep(1500);
+                tableDataContent = appendToList(tableDataContent,grabData(driver,headers));
             }
             catch (Exception e1){
                 checkNext = false;
             }
         }
 
-        JSONObject jsonObj = generateJson(tableDataContaint,headers);
+        JSONObject jsonObj = generateJson(tableDataContent);
 
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
@@ -76,51 +81,58 @@ public class DataProcessing {
         }
     }
 
-    public ArrayList<SortedMap<String,String>> appendToList(ArrayList<SortedMap<String,String>> original,ArrayList<SortedMap<String,String>> toBeAppend)
+    public JSONArray grabData(WebDriver driver,String[] header)
     {
-        ArrayList<SortedMap<String,String>> append = new ArrayList<>();
-        Stream.of(original,toBeAppend).forEach(append::addAll);
-        return append;
-    }
-
-    public ArrayList<SortedMap<String,String>> grabData(WebDriver driver,String[] header)
-    {
-        ArrayList<SortedMap<String,String>> list = new ArrayList<>();
-        SortedMap<String,String> map= new TreeMap<>();
-        WebElement table =  driver.findElement(By.xpath("//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table"));
-        List<WebElement> rows = table.findElements(By.tagName("tr"));
-
-        for (WebElement row : rows) {
-            List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int j = 0, itr = 0; (j < cols.size()); j++, itr++) {
-                if (j != 0) {
-                    map.put(header[itr - 1], cols.get(j).getText());
-                }
-            }
-            list.add(map);
-            map = new TreeMap<>();
-        }
-        return list;
-    }
-
-    public JSONObject generateJson(ArrayList<SortedMap<String,String>> requiredData, String[] header) {
-        JSONObject jsonObject = new JSONObject();
-
-        JSONArray array = new JSONArray();
+        JSONArray objForPage = new JSONArray();
+        JSONObject objForRow = new JSONObject();
 
         JSONObject staticData = new JSONObject();
         staticData.put("type", "Lead_Search_c");
-        staticData.put("referenceId", "ref");
+        staticData.put("referenceId","ref");
 
-        for(SortedMap<String, String> data : requiredData) {
-            JSONObject dataElements = new JSONObject();
-            dataElements.put("attributes", staticData);
-            for (String str:header ) {
-                dataElements.put(str,data.get(str));
+        WebElement table =  driver.findElement(By.xpath(mainTablePath));
+        int rowSize = table.findElements(By.tagName("tr")).size();
+
+        for (int rowCount=1;rowCount<=rowSize;rowCount++)
+        {
+            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
+
+            List<WebElement> cols = row.findElements(By.tagName("td"));
+            for (int column = 0, hdr = 0; (column < cols.size()); column++, hdr++) {
+                if (column != 0) {
+                    objForRow.put(header[hdr - 1], cols.get(column).getText());
+                }
             }
-            array.put(dataElements);
+            objForRow.put("attributes",staticData);
+            objForRow.put("Grantor_c",getGrantorData(driver,rowCount));
+            objForPage.put(objForRow);
+            objForRow = new JSONObject();
         }
-        jsonObject.put("records", array);
+        return objForPage;
+    }
+
+    public JSONObject generateJson(JSONArray jsonArray)
+    {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("records", jsonArray);
         return jsonObject;
     }
+
+    /*public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
+    {
+        JSONArray sourceArray = new JSONArray(toBeAppend);
+        JSONArray destinationArray = new JSONArray(original);
+
+        for (int i = 0; i < sourceArray.length(); i++) {
+            destinationArray.put(sourceArray.getJSONObject(i));
+        }
+        return destinationArray;
+    }*/
+
+    public String getMainTableRow(int count){
+        return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
+    }
+
+
+
 }
