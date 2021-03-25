@@ -7,8 +7,7 @@ import org.testng.annotations.Test;
 public class ClassWithFirstName extends BusinessAndFirstNameHelperClass {
     @Parameters({"url","value","keyWord","firstName","fileName"})
     @Test
-    public void firstName(String url,String value,String keyWord,String firstName, String fileName)
-    {
+    public void firstName(String url,String value,String keyWord,String firstName, String fileName) throws InterruptedException {
         driver = InitilizerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName,fileName);
     }
