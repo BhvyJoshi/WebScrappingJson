@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class InitilizerClass {
+public class InitializerClass {
 
     public static WebDriver initialize(String url,String value) {
         WebDriver driver;

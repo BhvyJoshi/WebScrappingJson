@@ -1,5 +1,5 @@
 import com.ASC.Common.HampdenHelperClass;
-import com.ASC.Common.InitilizerClass;
+import com.ASC.Common.InitializerClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -18,7 +18,7 @@ public class Hampden extends HampdenHelperClass {
 
     @Test
     public void test(){
-        driver = InitilizerClass.initialize(url,value);
+        driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,value);
         fullTableData(driver,fileName);
     }
@@ -37,6 +37,6 @@ public class Hampden extends HampdenHelperClass {
     @AfterTest
     public void tearDown()
     {
-        InitilizerClass.clenUp(driver);
+        InitializerClass.clenUp(driver);
     }
 }

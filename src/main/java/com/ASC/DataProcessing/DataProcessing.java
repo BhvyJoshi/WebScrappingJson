@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class DataProcessing extends GrantorData{
     public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
@@ -35,11 +34,12 @@ public class DataProcessing extends GrantorData{
     private String[] modifyHeader(String[] hdr)
     {
         String header = Arrays.toString(hdr);
+        header = header.replace(", ",",");
         header = header.replace("Type Desc.","Type_Desc");
-        header = header.replace("Type","Type_c").replace("Name/ Corporation","Name_Corporation_c");
-        header = header.replace("Book","Book_c").replace("Page","Page_c").replace("Type_c_Desc","Type_Desc_c");
-        header = header.replace("Rec. Date","Rec_Date_c").replace("Street #","Street_c");
-        header = header.replace("Property Descr","Property_Descr_c").replace("Town","Town_c");
+        header = header.replace("Type","Type__c").replace("Name/ Corporation","Name_Corporation__c");
+        header = header.replace("Book","Book__c").replace("Page","Page__c").replace("Type__c_Desc","Type_Desc__c");
+        header = header.replace("Rec. Date","Rec_Date__c").replace("Street #","Street__c");
+        header = header.replace("Property Descr","Property_Descr__c").replace("Town","Town__c");
         header = header.replace("[","").replace("]","");
         hdr = header.split(",");
         return hdr;
@@ -55,10 +55,10 @@ public class DataProcessing extends GrantorData{
 
         while(checkNext){
             try{
-                Thread.sleep(2000);
+                Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
                 nextBtn.click();
-                Thread.sleep(1500);
+                Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers));
             }
             catch (Exception e1){
@@ -87,7 +87,7 @@ public class DataProcessing extends GrantorData{
         JSONObject objForRow = new JSONObject();
 
         JSONObject staticData = new JSONObject();
-        staticData.put("type", "Lead_Search_c");
+        staticData.put("type", "Lead_Search__c");
         staticData.put("referenceId","ref");
 
         WebElement table =  driver.findElement(By.xpath(mainTablePath));
@@ -104,7 +104,7 @@ public class DataProcessing extends GrantorData{
                 }
             }
             objForRow.put("attributes",staticData);
-            objForRow.put("Grantor_c",getGrantorData(driver,rowCount));
+            objForRow.put("Grantors__r",getGrantorData(driver,rowCount));
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
@@ -118,21 +118,8 @@ public class DataProcessing extends GrantorData{
         return jsonObject;
     }
 
-    /*public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
-    {
-        JSONArray sourceArray = new JSONArray(toBeAppend);
-        JSONArray destinationArray = new JSONArray(original);
-
-        for (int i = 0; i < sourceArray.length(); i++) {
-            destinationArray.put(sourceArray.getJSONObject(i));
-        }
-        return destinationArray;
-    }*/
-
     public String getMainTableRow(int count){
         return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
     }
-
-
 
 }

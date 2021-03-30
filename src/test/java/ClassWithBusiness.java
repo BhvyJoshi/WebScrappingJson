@@ -1,26 +1,25 @@
 import com.ASC.Common.BusinessAndFirstNameHelperClass;
-import com.ASC.Common.InitilizerClass;
+import com.ASC.Common.InitializerClass;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.lang.annotation.Repeatable;
 
 public class ClassWithBusiness extends BusinessAndFirstNameHelperClass {
 
     public WebDriver driver;
-  // @Parameters({"url","value","keyWord","fileName"})
+    @Parameters({"url","value","keyWord","fileName"})
     @Test
-   //public void withoutFirstName(String url,String value,String keyWord,String fileName){
+    public void withoutFirstName(String url,String value,String keyWord,String fileName){
+/*public void test(){
 
-    public void test() {
-         String url = "https://www.masslandrecords.com";
-         String value= "Hampshire";
-         String keyWord = "lender";
-         String fileName = "demo";
+        String url ="https://www.masslandrecords.com";
+        String keyWord = "lender";
+        String fileName = "demo_";
+        String value = "Nantucket";*/
 
-        driver = InitilizerClass.initialize(url,value);
+        driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,fileName);
     }
 

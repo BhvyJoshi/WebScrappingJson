@@ -1,8 +1,7 @@
 import com.ASC.Common.BarnstableHelperClass;
-import com.ASC.Common.InitilizerClass;
+import com.ASC.Common.InitializerClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
@@ -19,7 +18,7 @@ public class Barnstable extends BarnstableHelperClass{
     @Test
     public void test1()
     {
-        driver=InitilizerClass.initialize(url,value);
+        driver= InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,value);
         fullTableData(driver,fileName);
     }
@@ -40,6 +39,6 @@ public class Barnstable extends BarnstableHelperClass{
     @AfterTest
     public void tearDown()
     {
-        InitilizerClass.clenUp(driver);
+        InitializerClass.clenUp(driver);
     }
 }

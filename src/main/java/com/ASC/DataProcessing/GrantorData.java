@@ -14,33 +14,28 @@ public class GrantorData {
 
     public GrantorData(){}
 
-    public final String[] headerSubTable = {"Name", "Type_c"};
+    public final String[] headerSubTable = {"Name", "Type__c"};
 
     public static final String labelPath = "//*[@id=\"DocDetails1_Label_GrantorGrantee\"]";
 
     public JSONArray getGrantorData(WebDriver driver, int rowID) {
 
-        //System.out.println("\n--------------+++++++++++++++++--------------------\n");
-       // System.out.println("main table row value is "+rowID);
         String grantorLabel = null;
         int dataRecords;
 
         try {
             Thread.sleep(3500);
-            //System.out.println("xpath for btn "+getButtonXpath(rowID));
             WebElement linkedText = driver.findElement(By.xpath(getButtonXpath(rowID)));
             linkedText.click();
-            Thread.sleep(1500);
+            Thread.sleep(2000);
             WebElement grantorLabelPath = driver.findElement(By.xpath(labelPath));
             grantorLabel = grantorLabelPath.getText();
             Thread.sleep(1000);
 
         }catch (Exception e){e.printStackTrace();}
 
-
-        //System.out.println("value of grantor label"+grantorLabel);
         dataRecords = Integer.parseInt(grantorLabel.substring(16));
-        //System.out.println("no of data records "+dataRecords);
+        System.out.println("No of dataRecords:"+dataRecords);
 
         if (dataRecords<=10){
             return getActualGrantorData(listOfRows(driver,dataRecords));
@@ -63,15 +58,12 @@ public class GrantorData {
             }catch(Exception e1){
                 e1.printStackTrace();}
         }
-        //System.out.println("size of listOfRows "+rowOfSubTable.size());
         return rowOfSubTable;
     }
 
     private JSONArray getMultipleGrantorData(WebDriver driver,int dataRecords){
         int noOfPages = dataRecords/10;
         int dataInLastPage = dataRecords % 10;
-
-        //System.out.println("inside getMultipleGrantorData and value of dataRecords is "+dataRecords);
 
         JSONArray subTableContent = getActualGrantorData(listOfRows(driver,10));
         int pageCount = 1;
@@ -93,18 +85,17 @@ public class GrantorData {
                 e1.printStackTrace();
             }
         }
-        //System.out.println("after clicking 2nd page");
         return subTableContent;
     }
 
     private void clickOnNextPage(WebDriver driver, int pageCount) throws InterruptedException {
         pageCount++;
-        Thread.sleep(2000);
+        Thread.sleep(2500);
         boolean check = true;
         WebElement nextBtn = null;
         while(check){
             nextBtn = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr[12]/td/table/tbody/tr/td["+pageCount+"]/a"));
-            check = !nextBtn.isDisplayed();
+            check = !(nextBtn!=null);
         }
         nextBtn.click();
         Thread.sleep(3000);
@@ -125,16 +116,17 @@ public class GrantorData {
 
         JSONArray objForSubTable = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
-        //System.out.println("inside getActualGrantorData and size of rows is "+rowElement.size());
 
         for (WebElement r:rowElement) {
             try{
-                Thread.sleep(1000);
+                Thread.sleep(1500);
                 List<WebElement> cols = r.findElements(By.tagName("td"));
                 for (int i = 0; i < cols.size(); i++) {
                     objForSubRow.put(headerSubTable[i],cols.get(i).getText());
                 }
-            }catch (Exception e){e.printStackTrace();}
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
             objForSubTable.put(objForSubRow);
             objForSubRow = new JSONObject();
         }
