@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GrantorData {
 
@@ -18,7 +19,7 @@ public class GrantorData {
 
     public static final String labelPath = "//*[@id=\"DocDetails1_Label_GrantorGrantee\"]";
 
-    public JSONArray getGrantorData(WebDriver driver, int rowID) {
+    public JSONObject getGrantorData(WebDriver driver, int rowID) {
 
         String grantorLabel = null;
         int dataRecords;
@@ -35,13 +36,15 @@ public class GrantorData {
         }catch (Exception e){e.printStackTrace();}
 
         dataRecords = Integer.parseInt(grantorLabel.substring(16));
-        System.out.println("No of dataRecords:"+dataRecords);
+        //System.out.println("No of dataRecords:"+dataRecords);
 
         if (dataRecords<=10){
-            return getActualGrantorData(listOfRows(driver,dataRecords));
+            JSONArray records = getActualGrantorData(listOfRows(driver,dataRecords),rowID);
+            return new JSONObject().put("records",records);
 
         }else{
-         return getMultipleGrantorData(driver,dataRecords);
+         JSONArray rec = getMultipleGrantorData(driver,dataRecords,rowID);
+            return new JSONObject().put("records",rec);
         }
     }
 
@@ -61,17 +64,17 @@ public class GrantorData {
         return rowOfSubTable;
     }
 
-    private JSONArray getMultipleGrantorData(WebDriver driver,int dataRecords){
+    private JSONArray getMultipleGrantorData(WebDriver driver,int dataRecords,int mainRowId){
         int noOfPages = dataRecords/10;
         int dataInLastPage = dataRecords % 10;
 
-        JSONArray subTableContent = getActualGrantorData(listOfRows(driver,10));
+        JSONArray subTableContent = getActualGrantorData(listOfRows(driver,10),mainRowId);
         int pageCount = 1;
 
         if(pageCount<noOfPages){
             try{
                 clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(listOfRows(driver,10)));
+                subTableContent = appendToList(subTableContent,getActualGrantorData(listOfRows(driver,10),mainRowId));
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -79,7 +82,7 @@ public class GrantorData {
         }else {
             try{
                 clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(listOfRows(driver,dataInLastPage)));
+                subTableContent = appendToList(subTableContent,getActualGrantorData(listOfRows(driver,dataInLastPage),mainRowId));
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -112,10 +115,11 @@ public class GrantorData {
         return destinationArray;
     }
 
-    private JSONArray getActualGrantorData(List<WebElement>  rowElement){
+    private JSONArray getActualGrantorData(List<WebElement>  rowElement,int mainRowId){
 
         JSONArray objForSubTable = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
+        JSONObject objAttributes = new JSONObject();
 
         for (WebElement r:rowElement) {
             try{
@@ -127,8 +131,12 @@ public class GrantorData {
             }catch (Exception e) {
                 e.printStackTrace();
             }
+            objAttributes.put("type","Grantor__c");
+            objAttributes.put("referenceId","ref"+new Random().nextInt(10000));
+            objForSubRow.put("attributes",objAttributes);
             objForSubTable.put(objForSubRow);
             objForSubRow = new JSONObject();
+            objAttributes = new JSONObject();
         }
        return objForSubTable;
     }

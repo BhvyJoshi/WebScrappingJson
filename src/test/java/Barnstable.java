@@ -10,17 +10,22 @@ import java.util.concurrent.TimeUnit;
 
 public class Barnstable extends BarnstableHelperClass{
     public WebDriver driver;
-    public static String url = "https://www.masslandrecords.com";
+    /*public static String url = "https://www.masslandrecords.com";
     public static String value= "Barnstable";
     public static String keyWord = "lender";
-    public static String fileName = "demobarnstable";
+    public static String fileName = "demobarnstable";*/
 
     @Test
     public void test1()
     {
+          String url = "https://www.masslandrecords.com";
+          String value= "Barnstable";
+          String keyWord = "lender";
+          String fileName = "demobarnstable";
+
         driver= InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,value);
-        fullTableData(driver,fileName);
+        tableData(driver,fileName);
     }
 
     public void firstPage(WebDriver driver,String keyWord,String value)

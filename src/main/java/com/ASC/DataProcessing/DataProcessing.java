@@ -10,12 +10,15 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class DataProcessing extends GrantorData{
     public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
+
 
     public String[] grabHeader(WebDriver driver)
     {
@@ -85,10 +88,10 @@ public class DataProcessing extends GrantorData{
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
+        JSONObject attributes = new JSONObject();
 
-        JSONObject staticData = new JSONObject();
-        staticData.put("type", "Lead_Search__c");
-        staticData.put("referenceId","ref");
+       /* staticData.put("type", "Lead_Search_Records__c");
+        staticData.put("referenceId","ref");*/
 
         WebElement table =  driver.findElement(By.xpath(mainTablePath));
         int rowSize = table.findElements(By.tagName("tr")).size();
@@ -101,12 +104,28 @@ public class DataProcessing extends GrantorData{
             for (int column = 0, hdr = 0; (column < cols.size()); column++, hdr++) {
                 if (column != 0) {
                     objForRow.put(header[hdr - 1], cols.get(column).getText());
+                    while(hdr-1 == 5){
+                        Date dob = null;
+                        try {
+                            dob = new SimpleDateFormat("MM/dd/yyyy").parse(cols.get(column).getText());
+                            String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
+                            objForRow.put(header[hdr-1],str);
+                            break;
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
-            objForRow.put("attributes",staticData);
+
+
+            attributes.put("type", "Lead_Search_Result__c");
+            attributes.put("referenceId","ref"+rowCount);
+            objForRow.put("attributes",attributes);
             objForRow.put("Grantors__r",getGrantorData(driver,rowCount));
             objForPage.put(objForRow);
             objForRow = new JSONObject();
+            attributes = new JSONObject();
         }
         return objForPage;
     }
