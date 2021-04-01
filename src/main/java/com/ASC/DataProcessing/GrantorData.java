@@ -5,8 +5,6 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -132,7 +130,7 @@ public class GrantorData {
                 e.printStackTrace();
             }
             objAttributes.put("type","Grantor__c");
-            objAttributes.put("referenceId","ref"+new Random().nextInt(10000));
+            objAttributes.put("referenceId","ref"+new Random().nextInt(10000)+"_"+mainRowId);
             objForSubRow.put("attributes",objAttributes);
             objForSubTable.put(objForSubRow);
             objForSubRow = new JSONObject();

@@ -69,13 +69,13 @@ public class DataProcessing extends GrantorData{
             }
         }
 
-        JSONObject jsonObj = generateJson(tableDataContent);
+        //JSONObject jsonObj = generateJson(tableDataContent);
 
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
             if(myObj.createNewFile()) {
                 FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(jsonObj.toString());
+                myWriter.write(tableDataContent.toString());
                 myWriter.close();
             }
         } catch (IOException e) {
@@ -105,7 +105,7 @@ public class DataProcessing extends GrantorData{
                 if (column != 0) {
                     objForRow.put(header[hdr - 1], cols.get(column).getText());
                     while(hdr-1 == 5){
-                        Date dob = null;
+                        Date dob;
                         try {
                             dob = new SimpleDateFormat("MM/dd/yyyy").parse(cols.get(column).getText());
                             String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
@@ -118,9 +118,8 @@ public class DataProcessing extends GrantorData{
                 }
             }
 
-
             attributes.put("type", "Lead_Search_Result__c");
-            attributes.put("referenceId","ref"+rowCount);
+            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
             objForRow.put("attributes",attributes);
             objForRow.put("Grantors__r",getGrantorData(driver,rowCount));
             objForPage.put(objForRow);
@@ -130,12 +129,12 @@ public class DataProcessing extends GrantorData{
         return objForPage;
     }
 
-    public JSONObject generateJson(JSONArray jsonArray)
+   /* public JSONObject generateJson(JSONArray jsonArray)
     {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("records", jsonArray);
         return jsonObject;
-    }
+    }*/
 
     public String getMainTableRow(int count){
         return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
