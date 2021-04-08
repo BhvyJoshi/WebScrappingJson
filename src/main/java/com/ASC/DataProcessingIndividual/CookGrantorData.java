@@ -79,26 +79,26 @@ public class CookGrantorData extends CookGrantorChild{
 
     public JSONArray grabData(WebDriver driver,String[] subHeader)
     {
-        JSONArray objForPage = new JSONArray();
-        JSONObject objForRow = new JSONObject();
-        JSONObject attributes = new JSONObject();
+        JSONArray objForSubPage = new JSONArray();
+        JSONObject objForSubRow = new JSONObject();
+        JSONObject subAttributes = new JSONObject();
 
-        WebElement table =  driver.findElement(By.xpath(subTableXpath));
-        int rowSize = table.findElements(By.tagName("tr")).size();
+        WebElement subTable =  driver.findElement(By.xpath(subTableXpath));
+        int subRowSize = subTable.findElements(By.tagName("tr")).size();
 
-        for (int rowCount=1;rowCount<=rowSize;rowCount++)
+        for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++)
         {
-            WebElement subRow = driver.findElement(By.xpath(getMainTableRow(rowCount)));
+            WebElement subRow = driver.findElement(By.xpath(getMainTableRow(subRowCount)));
             List<WebElement> subCols = subRow.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < subCols.size()); column++, hdr++) {
                 if (column != 0) {
-                    objForRow.put(subHeader[hdr - 1], subCols.get(column).getText());
+                    objForSubRow.put(subHeader[hdr - 1], subCols.get(column).getText());
                     while(hdr-1 == 4){
                         Date dob;
                         try {
                             dob = new SimpleDateFormat("MM/dd/yyyy").parse(subCols.get(column).getText());
                             String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                            objForRow.put(subHeader[hdr-1],str);
+                            objForSubRow.put(subHeader[hdr-1],str);
                             break;
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -107,16 +107,16 @@ public class CookGrantorData extends CookGrantorChild{
                 }
             }
 
-            attributes.put("type", "SecondPage"); //will be changed
-            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
-            objForRow.put("attributes",attributes);
+            subAttributes.put("type", "SecondPage"); //will be changed
+            subAttributes.put("referenceId","ref"+subRowCount+"_"+new Random().nextInt(100000));
+            objForSubRow.put("attributes",subAttributes);
             //objForRow.put("GranteeCount_Result__r",getGrantorGranteeChildData(driver,rowCount));
 
-            objForPage.put(objForRow);
-            objForRow = new JSONObject();
-            attributes = new JSONObject();
+            objForSubPage.put(objForSubRow);
+            objForSubRow = new JSONObject();
+            subAttributes = new JSONObject();
         }
-        return objForPage;
+        return objForSubPage;
     }
 
 }
