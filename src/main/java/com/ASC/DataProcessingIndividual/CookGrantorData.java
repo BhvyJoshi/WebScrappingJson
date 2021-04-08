@@ -90,15 +90,15 @@ public class CookGrantorData extends CookGrantorChild{
         {
             WebElement subRow = driver.findElement(By.xpath(getMainTableRow(subRowCount)));
             List<WebElement> subCols = subRow.findElements(By.tagName("td"));
-            for (int column = 0, hdr = 0; (column < subCols.size()); column++, hdr++) {
-                if (column != 0) {
-                    objForSubRow.put(subHeader[hdr - 1], subCols.get(column).getText());
-                    while(hdr-1 == 4){
+            for (int subColumn = 0, subHdr = 0; (subColumn < subCols.size()); subColumn++, subHdr++) {
+                if (subColumn != 0) {
+                    objForSubRow.put(subHeader[subHdr - 1], subCols.get(subColumn).getText());
+                    while(subHdr-1 == 4){
                         Date dob;
                         try {
-                            dob = new SimpleDateFormat("MM/dd/yyyy").parse(subCols.get(column).getText());
+                            dob = new SimpleDateFormat("MM/dd/yyyy").parse(subCols.get(subColumn).getText());
                             String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                            objForSubRow.put(subHeader[hdr-1],str);
+                            objForSubRow.put(subHeader[subHdr-1],str);
                             break;
                         } catch (ParseException e) {
                             e.printStackTrace();
