@@ -40,7 +40,6 @@ public class Barnstable extends BarnstableHelperClass{
         driver.findElement(By.xpath("//*[@id=\"search\"]/div/input")).click();
     }
 
-
     @AfterTest
     public void tearDown()
     {

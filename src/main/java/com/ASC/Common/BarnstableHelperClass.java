@@ -11,15 +11,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class BarnstableHelperClass {
 
     private static final String nextButtonPath =  "//*[@id=\"search\"]/div/div[3]/div[1]/div/a[3]";
-    private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody/tr[2]";
-    private boolean checkNext;
+    private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
+    //private static final String headerXpath = "//*[@id=\"search\"]/div/table/tbody/tr[1]";
+
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath("//*[@id=\"search\"]/div/table/tbody/tr[1]"));
+        WebElement headerTag =  driver.findElement(By.xpath(mainTablePath+"/tr[1]"));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
         String[] header = new String[headers.size()-2];
         for (int i =0;i<headers.size()-2;i++)
@@ -64,9 +66,7 @@ public class BarnstableHelperClass {
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers);
 
-        boolean checkNext = true;
-
-        while(checkNext){
+        while(checkForData(driver)){
             try{
                 Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
@@ -75,22 +75,17 @@ public class BarnstableHelperClass {
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers));
             }
             catch (Exception e1){
-               // last row//*[@id="search"]/div/table/tbody/tr[9]
-             /*   if(rows.get(rows.size()-1).findElement(By.tagName("td")).getText()!="More names may be available")
-                {
-                    checkNext = false;
-                }*/
-                checkNext = false;
+                e1.printStackTrace();
             }
         }
 
-        JSONObject jsonObj = generateJson(tableDataContent);
+        //JSONObject jsonObj = generateJson(tableDataContent);
 
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
             if(myObj.createNewFile()) {
                 FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(jsonObj.toString());
+                myWriter.write(tableDataContent.toString());
                 myWriter.close();
             }
         } catch (IOException e) {
@@ -99,19 +94,28 @@ public class BarnstableHelperClass {
         }
     }
 
+    private boolean checkForData(WebDriver driver){
+        WebElement table = driver.findElement(By.xpath("//*[@id=\"search\"]/div/table/tbody"));
+        List<WebElement> rows = table.findElements(By.tagName("tr"));
+        WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
+        String columnText = column.getText();
+
+        return columnText.contains("More names may be available");
+    }
+
+
     public JSONArray grabData(WebDriver driver,String[] header)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        JSONObject staticData = new JSONObject();
-        staticData.put("type", "Lead_Search__c");
-        staticData.put("referenceId","ref");
+        JSONObject attributes = new JSONObject();
+
 
         WebElement table =  driver.findElement(By.xpath(mainTablePath));
         int rowSize = table.findElements(By.tagName("tr")).size();
 
-        for (int rowCount=1;rowCount<=rowSize;rowCount++)
+        for (int rowCount=2;rowCount<rowSize;rowCount++)
         {
             WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
 
@@ -121,7 +125,9 @@ public class BarnstableHelperClass {
                     objForRow.put(header[hdr - 1], cols.get(column).getText());
                 }
             }
-            objForRow.put("attributes",staticData);
+            attributes.put("type", "Lead_Search_Result__c");
+            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
+            objForRow.put("attributes",attributes);
             //objForRow.put("Grantors__r",getGrantorData(driver,rowCount));
             objForPage.put(objForRow);
             objForRow = new JSONObject();
@@ -129,12 +135,12 @@ public class BarnstableHelperClass {
         return objForPage;
     }
 
-    public JSONObject generateJson(JSONArray jsonArray)
+ /*   public JSONObject generateJson(JSONArray jsonArray)
     {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("records", jsonArray);
         return jsonObject;
-    }
+    }*/
 
     public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
     {

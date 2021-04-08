@@ -6,6 +6,7 @@
         <parameter name="value" value="${value}" />
         <parameter name="keyWord" value="${keyWord}" />
         <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
         <classes/>
     </test>
     <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/ClassWithFirstName.java">
@@ -14,6 +15,7 @@
         <parameter name="keyWord" value="${keyWord}" />
         <parameter name="firstName" value="${firstName}" />
         <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
         <classes/>
     </test>
 </suite>

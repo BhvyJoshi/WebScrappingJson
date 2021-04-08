@@ -48,11 +48,11 @@ public class DataProcessing extends GrantorData{
         return hdr;
     }
 
-    public void tableData(WebDriver driver,String fileName)
+    public void tableData(WebDriver driver,String fileName,String request)
     {
         String[] headers = grabHeader(driver);
         JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers);
+        tableDataContent = grabData(driver,headers,request);
 
         boolean checkNext = true;
 
@@ -62,7 +62,7 @@ public class DataProcessing extends GrantorData{
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
                 nextBtn.click();
                 Thread.sleep(2000);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers));
+                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }
             catch (Exception e1){
                 checkNext = false;
@@ -84,7 +84,7 @@ public class DataProcessing extends GrantorData{
         }
     }
 
-    public JSONArray grabData(WebDriver driver,String[] header)
+    public JSONArray grabData(WebDriver driver,String[] header,String request)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
@@ -122,6 +122,7 @@ public class DataProcessing extends GrantorData{
             attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
             objForRow.put("attributes",attributes);
             objForRow.put("Grantors__r",getGrantorData(driver,rowCount));
+            objForRow.put("Lead_Search__c",request);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
             attributes = new JSONObject();

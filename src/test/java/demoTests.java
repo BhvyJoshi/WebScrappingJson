@@ -1,11 +1,9 @@
 import com.ASC.Common.BusinessAndFirstNameHelperClass;
 import com.ASC.Common.InitializerClass;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+@Ignore
 public class demoTests extends BusinessAndFirstNameHelperClass {
 
     public WebDriver driver;
@@ -16,7 +14,7 @@ public class demoTests extends BusinessAndFirstNameHelperClass {
         String keyWord = "lender";
         String fileName = "demo_"+value;
         driver = InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord,fileName);
+        //firstPage(driver,keyWord,fileName,request);
     }
 
     @DataProvider(name = "keyWords")

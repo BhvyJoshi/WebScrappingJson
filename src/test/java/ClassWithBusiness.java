@@ -9,9 +9,9 @@ import org.testng.annotations.Test;
 public class ClassWithBusiness extends BusinessAndFirstNameHelperClass {
 
     public WebDriver driver;
-    @Parameters({"url","value","keyWord","fileName"})
+    @Parameters({"url","value","keyWord","fileName","request"})
     @Test
-    public void withoutFirstName(String url,String value,String keyWord,String fileName){
+    public void withoutFirstName(String url,String value,String keyWord,String fileName,String request){
  /*  public void test(){
 
         String url ="https://www.masslandrecords.com";
@@ -20,7 +20,7 @@ public class ClassWithBusiness extends BusinessAndFirstNameHelperClass {
         String value = "Nantucket";*/
 
         driver = InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord,fileName);
+        firstPage(driver,keyWord,fileName,request);
     }
 
     @AfterTest
