@@ -43,6 +43,7 @@ public class Barnstable extends BarnstableHelperClass{
     @AfterTest
     public void tearDown()
     {
-        InitializerClass.clenUp(driver);
+        driver.close();
+        driver.quit();
     }
 }
