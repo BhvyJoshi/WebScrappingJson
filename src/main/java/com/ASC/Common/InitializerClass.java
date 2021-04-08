@@ -21,9 +21,4 @@ public class InitializerClass {
         return driver;
     }
 
-    public static void clenUp(WebDriver driver)
-    {
-        driver.close();
-        driver.quit();
-    }
 }

@@ -15,9 +15,10 @@ public class South_Bristol {
 
     }
     @AfterTest
-    public void cleanup(WebDriver driver)
+    public void cleanup()
     {
-        InitializerClass.clenUp(driver);
+        driver.close();
+        driver.quit();
     }
 
 }

@@ -15,6 +15,7 @@ public class ClassWithFirstName extends BusinessAndFirstNameHelperClass {
     @AfterTest
     public void tearDown()
     {
-        InitializerClass.clenUp(driver);
+        driver.close();
+        driver.quit();
     }
 }

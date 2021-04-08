@@ -37,6 +37,7 @@ public class Hampden extends HampdenHelperClass {
     @AfterTest
     public void tearDown()
     {
-        InitializerClass.clenUp(driver);
+        driver.close();
+        driver.quit();
     }
 }

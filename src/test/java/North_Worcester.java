@@ -16,9 +16,10 @@ public class North_Worcester {
 
     }
     @AfterTest
-    public void cleanup(WebDriver driver)
+    public void cleanup()
     {
-        InitializerClass.clenUp(driver);
+        driver.close();
+        driver.quit();
     }
 
 }
