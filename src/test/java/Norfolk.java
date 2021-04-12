@@ -4,7 +4,9 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.Parameters;
 
+import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
 public class Norfolk extends BarnstableHelperClass {
@@ -16,29 +18,25 @@ public class Norfolk extends BarnstableHelperClass {
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
 
-    @Test //Done
+    @Test //handle with request ID
+    @Parameters({"url","value","keyWord","fileName","request"})
     public void test(){
         driver= InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord);
+        firstPageSuit2(driver,keyWord);
         tableData(driver,fileName);
     }
 
-    public void firstPage(WebDriver driver,String keyWord) //it will give all towns data, if code will be uncommented then we can select the town.
-    {
-       driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-       /* driver.get("https://www.barnstabledeeds.org/free-public-access/");
-        driver.findElement(By.xpath("//*[@id=\"text-6\"]/div/a/img")).click();*/
-        driver.findElement(By.xpath("/html/body/div/div[2]/div/div[4]/div/div[3]/div[2]/div[2]/div/a")).click();
-        driver.findElement(By.xpath("//*[@id=\"W9SNM\"]")).sendKeys(keyWord);
-       /* Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
-        drop.selectByVisibleText("All towns");*/
-        driver.findElement(By.xpath("//*[@id=\"search\"]/div/input")).click();
-    }
+    //9 headers 11 data columns and need 7 data
     @AfterTest
     public void cleanup()
     {
         driver.close();
         driver.quit();
+
+        String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+        System.out.println("JVM Name = " + jvmName);
+        long pid = Long.valueOf(jvmName.split("@")[0]);
+        System.out.println("JVM PID  = " + pid);
     }
 
 }

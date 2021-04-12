@@ -4,10 +4,9 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.Parameters;
 
-import java.util.concurrent.TimeUnit;
-
-public class North_Essex extends BarnstableHelperClass { //Done,Need to change date format
+public class North_Essex extends BarnstableHelperClass { //handle with reqID and header and data
 
     public WebDriver driver;
     public static String url = "https://www.masslandrecords.com";
@@ -16,24 +15,14 @@ public class North_Essex extends BarnstableHelperClass { //Done,Need to change d
     public static String fileName = "demo_"+value;
 
     @Test
+    @Parameters({"url","value","keyWord","fileName","request"})
     public void test(){
         driver= InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord);
+        firstPageSuit2(driver,keyWord);
         tableData(driver,fileName);
     }
 
-    public void firstPage(WebDriver driver,String keyWord) //it will give all towns data, if code will be uncommented then we can select the town.
-    {
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-       /* driver.get("https://www.barnstabledeeds.org/free-public-access/");
-        driver.findElement(By.xpath("//*[@id=\"text-6\"]/div/a/img")).click();*/
-        driver.findElement(By.xpath("/html/body/div/div[2]/div/div[4]/div/div[3]/div[2]/div[2]/div/a")).click();
-        driver.findElement(By.xpath("//*[@id=\"W9SNM\"]")).sendKeys(keyWord);
-       /* Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
-        drop.selectByVisibleText("All towns");*/
-        driver.findElement(By.xpath("//*[@id=\"search\"]/div/input")).click();
-    }
-
+    // 9 headers, 9 data columns and need is 7
     @AfterTest
     public void cleanup()
     {

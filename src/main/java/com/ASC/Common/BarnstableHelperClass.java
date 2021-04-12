@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class BarnstableHelperClass {
 
@@ -22,6 +23,48 @@ public class BarnstableHelperClass {
     private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
     private static final String headerXpath = "//*[@id=\"search\"]/div/table/tbody/tr[1]";
     public static final String checkNextData = "//*[@id=\"search\"]/div/table/tbody";
+    public static final String mainSearchBtnClick = "/html/body/div/div[2]/div/div[4]/div/div[3]/div[2]/div[2]/div/a";
+    public static final String searchKeyWord = "//*[@id=\"W9SNM\"]";
+    public static final String searchBtnClick = "//*[@id=\"search\"]/div/input";
+
+    public void FirstPageForBarnstable(WebDriver driver,String keyWord) //it will give all towns data, if code will be uncommented then we can select the town.
+    {
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        driver.get("https://www.barnstabledeeds.org/free-public-access/");
+        driver.findElement(By.xpath("//*[@id=\"text-6\"]/div/a/img")).click();
+        driver.findElement(By.xpath(mainSearchBtnClick)).click();
+        driver.findElement(By.xpath(searchKeyWord)).sendKeys(keyWord);
+       /* Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
+        drop.selectByVisibleText("All towns");*/
+        driver.findElement(By.xpath(searchBtnClick)).click();
+    }
+
+    public void firstPageForHampden(WebDriver driver, String keyWord)
+    {
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        driver.get("https://search.hampdendeeds.com/html/Hampden/V3/search.html");
+        driver.findElement(By.xpath("/html/body/section[1]/div/div[2]/div[1]/div/ul/li[2]/a")).click();
+        driver.findElement(By.xpath(searchKeyWord)).sendKeys(keyWord);
+      /*  Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
+        drop.selectByVisibleText(value);*/
+        driver.findElement(By.xpath("//*[@id=\"search\"]/div[4]/div[2]/input[1]")).click();
+    }
+
+    public void firstPageSuit2(WebDriver driver,String keyWord)
+    {
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        driver.findElement(By.xpath(mainSearchBtnClick)).click();
+        driver.findElement(By.xpath(searchKeyWord)).sendKeys(keyWord);
+        driver.findElement(By.xpath(searchBtnClick)).click();
+    }
+
+    public void firstPageSuit2(WebDriver driver,String keyWord,String searchKeyWordXpath)
+    {
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        driver.findElement(By.xpath(mainSearchBtnClick)).click();
+        driver.findElement(By.xpath(searchKeyWordXpath)).sendKeys(keyWord);
+        driver.findElement(By.xpath(searchBtnClick)).click();
+    }
 
     public String[] grabHeader(WebDriver driver)
     {
@@ -67,7 +110,6 @@ public class BarnstableHelperClass {
                 e1.printStackTrace();
             }
         }
-
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
             if(myObj.createNewFile()) {
@@ -86,10 +128,7 @@ public class BarnstableHelperClass {
         List<WebElement> rows = table.findElements(By.tagName("tr"));
         WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
         String columnText = column.getText();
-        if (columnText.contains("More names may be available"))
-            return true;
-        else
-            return false;
+        return columnText.contains("More names may be available");
     }
 
 
@@ -99,8 +138,6 @@ public class BarnstableHelperClass {
         JSONObject objForRow = new JSONObject();
 
         JSONObject attributes = new JSONObject();
-
-
         WebElement table =  driver.findElement(By.xpath(mainTablePath));
         int rowSize = table.findElements(By.tagName("tr")).size();
 
@@ -110,25 +147,24 @@ public class BarnstableHelperClass {
 
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < cols.size()-4); column++, hdr++) {
-                if (column != 0) {
                     objForRow.put(header[hdr], cols.get(column).getText());
-
                     while(hdr == 3) {
                         Date dob;
                         try {
                             dob = new SimpleDateFormat("MM-dd-yyyy").parse(cols.get(column).getText());
                             String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                            objForRow.put(header[hdr - 1], str);
+                            objForRow.put(header[hdr], str);
                             break;
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
                     }
-                }
+
             }
             attributes.put("type", "Lead_Search_Result__c");
             attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
             objForRow.put("attributes",attributes);
+            objForRow.put("Lead_Search__c","reuestID"); //add request id
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
