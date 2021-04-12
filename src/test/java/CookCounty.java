@@ -4,16 +4,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.Parameters;
 
 import java.util.concurrent.TimeUnit;
 
 public class CookCounty extends CookCountyHelper {
 
-    WebDriver driver;
+    public WebDriver driver;
     @Test
-    public void test_CookCounty()
+    //@Parameters({"url","value","keyWord","fileName","request"})
+    //public void CookCountyMethod(String url,String value,String keyWord, String fileName, String request){
+    public void test_cookCounty()
     {
-        String url = "http://162.217.184.82/i2/default.aspx?AspxAutoDetectCookieSupport=1";
+        String url = "http://162.217.184.82/i2/";
         String value = "lender";
         String fileName = "cookCounty_demo";
         String reqID = "1234";
@@ -36,8 +39,9 @@ public class CookCounty extends CookCountyHelper {
     }
 
     @AfterTest
-    public void tearDown()
+    public void cleanUp()
     {
+        //driver.quit();
         driver.close();
         driver.quit();
     }

@@ -9,7 +9,10 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -17,11 +20,12 @@ public class BarnstableHelperClass {
 
     private static final String nextButtonPath =  "//*[@id=\"search\"]/div/div[3]/div[1]/div/a[3]";
     private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
-    //private static final String headerXpath = "//*[@id=\"search\"]/div/table/tbody/tr[1]";
+    private static final String headerXpath = "//*[@id=\"search\"]/div/table/tbody/tr[1]";
+    public static final String checkNextData = "//*[@id=\"search\"]/div/table/tbody";
 
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath(mainTablePath+"/tr[1]"));
+        WebElement headerTag =  driver.findElement(By.xpath(headerXpath));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
         String[] header = new String[headers.size()-2];
         for (int i =0;i<headers.size()-2;i++)
@@ -44,22 +48,6 @@ public class BarnstableHelperClass {
         return hdr;
     }
 
-//Common sites headers
-    /*public String[] modifyHeader(String[] hdr)
-    {
-        String header = Arrays.toString(hdr);
-        header = header.replace(", ",",");
-        header = header.replace("Type Desc.","Type_Desc");
-        header = header.replace("Type","Type__c").replace("Name/ Corporation","Name_Corporation__c");
-        header = header.replace("Book","Book__c").replace("Page","Page__c").replace("Type__c_Desc","Type_Desc__c");
-        header = header.replace("Rec. Date","Rec_Date__c").replace("Street #","Street__c");
-        header = header.replace("Property Descr","Property_Descr__c").replace("Town","Town__c");
-        header = header.replace("[","").replace("]","");
-        hdr = header.split(",");
-        return hdr;
-    }
-*/
-
     public void tableData(WebDriver driver,String fileName)
     {
         String[] headers = grabHeader(driver);
@@ -71,6 +59,7 @@ public class BarnstableHelperClass {
                 Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
                 nextBtn.click();
+                System.out.print("\n------------next Button clicked----");
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers));
             }
@@ -78,8 +67,6 @@ public class BarnstableHelperClass {
                 e1.printStackTrace();
             }
         }
-
-        //JSONObject jsonObj = generateJson(tableDataContent);
 
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
@@ -95,12 +82,14 @@ public class BarnstableHelperClass {
     }
 
     private boolean checkForData(WebDriver driver){
-        WebElement table = driver.findElement(By.xpath("//*[@id=\"search\"]/div/table/tbody"));
+        WebElement table = driver.findElement(By.xpath(checkNextData));
         List<WebElement> rows = table.findElements(By.tagName("tr"));
         WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
         String columnText = column.getText();
-
-        return columnText.contains("More names may be available");
+        if (columnText.contains("More names may be available"))
+            return true;
+        else
+            return false;
     }
 
 
@@ -122,25 +111,29 @@ public class BarnstableHelperClass {
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < cols.size()-4); column++, hdr++) {
                 if (column != 0) {
-                    objForRow.put(header[hdr - 1], cols.get(column).getText());
+                    objForRow.put(header[hdr], cols.get(column).getText());
+
+                    while(hdr == 3) {
+                        Date dob;
+                        try {
+                            dob = new SimpleDateFormat("MM-dd-yyyy").parse(cols.get(column).getText());
+                            String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
+                            objForRow.put(header[hdr - 1], str);
+                            break;
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
             attributes.put("type", "Lead_Search_Result__c");
             attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
             objForRow.put("attributes",attributes);
-            //objForRow.put("Grantors__r",getGrantorData(driver,rowCount));
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
         return objForPage;
     }
-
- /*   public JSONObject generateJson(JSONArray jsonArray)
-    {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("records", jsonArray);
-        return jsonObject;
-    }*/
 
     public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
     {
@@ -154,7 +147,6 @@ public class BarnstableHelperClass {
     }
 
     public String getMainTableRow(int count){
-       // return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
         return "//*[@id=\"search\"]/div/table/tbody/tr["+count+"]";
     }
 }

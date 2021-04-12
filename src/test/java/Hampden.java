@@ -8,6 +8,8 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
+
+//Not able to open the site. saying proxy timeout.
 public class Hampden extends HampdenHelperClass {
 
     public WebDriver driver;

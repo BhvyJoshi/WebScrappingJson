@@ -10,33 +10,34 @@ import java.util.concurrent.TimeUnit;
 
 public class Barnstable extends BarnstableHelperClass{
     public WebDriver driver;
+
     /*public static String url = "https://www.masslandrecords.com";
     public static String value= "Barnstable";
     public static String keyWord = "lender";
     public static String fileName = "demobarnstable";*/
 
     @Test
-    public void test1()
+    public void test1() //Done
     {
           String url = "https://www.masslandrecords.com";
           String value= "Barnstable";
           String keyWord = "lender";
-          String fileName = "demobarnstable";
+          String fileName = "demo_"+value;
 
         driver= InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord,value);
+        firstPage(driver,keyWord);
         tableData(driver,fileName);
     }
 
-    public void firstPage(WebDriver driver,String keyWord,String value)
+    public void firstPage(WebDriver driver,String keyWord) //it will give all towns data, if code will be uncommented then we can select the town.
     {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get("https://www.barnstabledeeds.org/free-public-access/");
         driver.findElement(By.xpath("//*[@id=\"text-6\"]/div/a/img")).click();
         driver.findElement(By.xpath("/html/body/div/div[2]/div/div[4]/div/div[3]/div[2]/div[2]/div/a")).click();
         driver.findElement(By.xpath("//*[@id=\"W9SNM\"]")).sendKeys(keyWord);
-        Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
-        drop.selectByVisibleText(value);
+       /* Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
+        drop.selectByVisibleText("All towns");*/
         driver.findElement(By.xpath("//*[@id=\"search\"]/div/input")).click();
     }
 

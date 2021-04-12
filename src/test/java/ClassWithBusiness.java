@@ -12,13 +12,14 @@ public class ClassWithBusiness extends BusinessAndFirstNameHelperClass {
     @Parameters({"url","value","keyWord","fileName","request"})
     @Test
     public void withoutFirstName(String url,String value,String keyWord,String fileName,String request){
- /*  public void test(){
+  /* public void test(){
 
         String url ="https://www.masslandrecords.com";
         String keyWord = "lender";
-        String fileName = "demo_";
-        String value = "Nantucket";*/
-
+        String value = "Nantucket";
+        String fileName = "demo_"+value;
+        String request = "1234";
+*/
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,fileName,request);
     }

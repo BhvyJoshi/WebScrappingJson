@@ -69,7 +69,6 @@ public class DataProcessing extends GrantorData{
             }
         }
 
-        //JSONObject jsonObj = generateJson(tableDataContent);
 
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
@@ -90,8 +89,6 @@ public class DataProcessing extends GrantorData{
         JSONObject objForRow = new JSONObject();
         JSONObject attributes = new JSONObject();
 
-       /* staticData.put("type", "Lead_Search_Records__c");
-        staticData.put("referenceId","ref");*/
 
         WebElement table =  driver.findElement(By.xpath(mainTablePath));
         int rowSize = table.findElements(By.tagName("tr")).size();
@@ -129,13 +126,6 @@ public class DataProcessing extends GrantorData{
         }
         return objForPage;
     }
-
-   /* public JSONObject generateJson(JSONArray jsonArray)
-    {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("records", jsonArray);
-        return jsonObject;
-    }*/
 
     public String getMainTableRow(int count){
         return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
