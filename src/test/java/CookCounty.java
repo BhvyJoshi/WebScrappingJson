@@ -1,10 +1,11 @@
 import com.ASC.Common.CookCountyHelper;
-import org.junit.Test;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,7 @@ public class CookCounty extends CookCountyHelper {
         String value = "lender";
         String fileName = "cookCounty_demo";
         String reqID = "1234";
+
         driver = initializeMainPage(url);
         firstPage(driver,value);
         tableData(driver,fileName,reqID);

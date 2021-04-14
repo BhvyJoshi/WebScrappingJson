@@ -1,12 +1,15 @@
 import com.ASC.Common.BusinessAndFirstNameHelperClass;
 import com.ASC.Common.InitializerClass;
+import com.ASC.Common.Suit1HelperClass;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-
-public class ClassWithBusiness extends BusinessAndFirstNameHelperClass {
+//contains support for :--> Dukes, Fall River Bristol, Franklin, Middle Berkshire, Nantucket, Suffolk
+                        // North Berkshire, North Middlesex, Hampshire, South Berkshire, South Middlesex, Worcester
+//with and without firstName
+public class Suit1 extends Suit1HelperClass {
 
     public WebDriver driver;
     @Parameters({"url","value","keyWord","firstName","fileName","request"})
@@ -24,14 +27,6 @@ public class ClassWithBusiness extends BusinessAndFirstNameHelperClass {
         firstPage(driver,keyWord,firstName,fileName,request);
     }
     protected void withoutFirstName(String url,String value,String keyWord,String fileName,String request){
-  /* public void test(){
-
-        String url ="https://www.masslandrecords.com";
-        String keyWord = "lender";
-        String value = "Nantucket";
-        String fileName = "demo_"+value;
-        String request = "1234";
-*/
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,fileName,request);
     }

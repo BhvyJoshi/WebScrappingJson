@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="TestSuite" verbose="2" preserve-order="true">
+<suite name="TestSuite" verbose="2" >
 
     <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Barnstable.java">
         <parameter name="url" value="${url}" />
@@ -21,6 +21,16 @@
     </test>
 
     <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/ClassWithFirstName.java">
+        <parameter name="url" value="${url}" />
+        <parameter name="value" value="${value}" />
+        <parameter name="keyWord" value="${keyWord}" />
+        <parameter name="firstName" value="${firstName}" />
+        <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
+        <classes/>
+    </test>
+
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Suit1.java">
         <parameter name="url" value="${url}" />
         <parameter name="value" value="${value}" />
         <parameter name="keyWord" value="${keyWord}" />

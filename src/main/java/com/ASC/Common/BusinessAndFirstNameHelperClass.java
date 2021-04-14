@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 public class BusinessAndFirstNameHelperClass extends DataProcessing {
     public WebDriver driver;
 
-
     public void firstPage(WebDriver driver,String keyWord,String fileName,String request) {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.findElement(By.xpath("//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]")).sendKeys(keyWord);

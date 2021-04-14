@@ -11,7 +11,7 @@ public class ClassWithFirstName extends BusinessAndFirstNameHelperClass {
 
     @Parameters({"url","value","keyWord","firstName","fileName","request"})
     @Test
-    public void firstName(String url,String value,String keyWord,String firstName, String fileName,String request) throws InterruptedException {
+    public void firstName(String url,String value,String keyWord,String firstName, String fileName,String request) {
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName,fileName,request);
     }

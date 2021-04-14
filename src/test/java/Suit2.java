@@ -1,5 +1,5 @@
-import com.ASC.Common.BarnstableHelperClass;
 import com.ASC.Common.InitializerClass;
+import com.ASC.Common.Suit2HelperClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
@@ -8,14 +8,15 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-
-public class Barnstable extends BarnstableHelperClass{
+//contains Support for: -->  Branstable,Norfolk,North Essex
+//with and without firstName
+public class Suit2 extends Suit2HelperClass {
 
     public WebDriver driver;
     private  String searchRegistryRecordClick;
 
     @Test
-    @Parameters({"url","value","keyWord","fileName","request"})
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
     public void test1() //Need to handle reqestID
     {
           String url = "https://www.masslandrecords.com";
