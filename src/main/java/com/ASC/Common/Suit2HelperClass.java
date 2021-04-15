@@ -22,7 +22,6 @@ public class Suit2HelperClass {
     private static final String nextButtonPath =  "//*[@id=\"search\"]/div/div[3]/div[1]/div/a[3]";
     private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
     private static final String headerXpath = "//*[@id=\"search\"]/div/table/tbody/tr[1]";
-    public static final String checkNextData = "//*[@id=\"search\"]/div/table/tbody";
     public static final String searchLastNameText = "//*[@id=\"W9SNM\"]";
     public static final String searchRecordsClick = "//*[@id=\"search\"]/div/input";
     public static final String searchFirstNameText = "//*[@id=\"W9GNM\"]";
@@ -72,8 +71,7 @@ public class Suit2HelperClass {
         {
             header[i]=headers.get(i).getText();
         }
-        header = modifyHeader1(header);
-        return header;
+        return modifyHeader1(header);
     }
 
     public String[] modifyHeader1(String[] hdr)
@@ -121,7 +119,7 @@ public class Suit2HelperClass {
     }
 
     private boolean checkForData(WebDriver driver){
-        WebElement table = driver.findElement(By.xpath(checkNextData));
+        WebElement table = driver.findElement(By.xpath(mainTablePath));
         List<WebElement> rows = table.findElements(By.tagName("tr"));
         WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
         String columnText = column.getText();

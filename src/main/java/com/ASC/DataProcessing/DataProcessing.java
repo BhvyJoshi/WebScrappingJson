@@ -30,8 +30,7 @@ public class DataProcessing extends GrantorData{
             header[i]=headers.get(i).getText();
         }
         header = ArrayUtils.remove(header,0);
-        header = modifyHeader(header);
-        return header;
+        return modifyHeader(header);
     }
 
     private String[] modifyHeader(String[] hdr)

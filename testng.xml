@@ -2,14 +2,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="TestSuite" verbose="2" >
 
-    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Barnstable.java">
-        <parameter name="url" value="${url}" />
-        <parameter name="value" value="${value}" />
-        <parameter name="keyWord" value="${keyWord}" />
-        <parameter name="fileName" value="${fileName}" />
-        <parameter name="request" value="${request}" />
-        <classes/>
-    </test>
 
     <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/ClassWithBusiness.java">
         <parameter name="url" value="${url}" />
