@@ -18,7 +18,8 @@ public class South_Essex extends SouthEssexHelperClass {
     public void test(){
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord);
-        grabHeader(driver);
+        //grabHeader(driver);
+        tableData(driver,fileName,"123456");
     }
 
     @AfterTest
