@@ -1,6 +1,6 @@
 package com.ASC.Common;
 
-import com.ASC.DataProcessingIndividual.CookGrantorData;
+import com.ASC.DataProcessing.CookGrantorData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
@@ -59,7 +59,7 @@ public class CookCountyHelper extends CookGrantorData {
                 checkNext = false;
             }
         }
-        generateFile(fileName, tableDataContent.toString());
+        generateFile(fileName, tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request)
@@ -92,18 +92,5 @@ public class CookCountyHelper extends CookGrantorData {
         return objForPage;
     }
 
-    public void generateFile(String fileName, String tableDataContent)
-    {
-        try {
-            File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
-            if(myObj.createNewFile()) {
-                FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(tableDataContent);
-                myWriter.close();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
+
 }

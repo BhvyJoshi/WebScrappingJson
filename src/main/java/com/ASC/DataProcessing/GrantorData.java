@@ -52,8 +52,8 @@ public class GrantorData extends CommonMethods{
         while(rowOfSubTable.size()!=length){
             try{
                 Thread.sleep(3000);
-               // for (int itr=2;itr<=length+1;itr++
-                    for (int itr=2;itr<=length;itr++){ // --> fot plymouth county
+               for (int itr=2;itr<=length+1;itr++){
+                    //for (int itr=2;itr<=length;itr++){ // --> fot plymouth county
                 WebElement row = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr["+itr+"]"));
                 rowOfSubTable.add(row);
                 }
@@ -103,8 +103,6 @@ public class GrantorData extends CommonMethods{
         Thread.sleep(3000);
     }
 
-
-
     private JSONArray getActualGrantorData(List<WebElement>  rowElement,int mainRowId){
 
         JSONArray objForSubTable = new JSONArray();
@@ -131,21 +129,21 @@ public class GrantorData extends CommonMethods{
        return objForSubTable;
     }
 
-  /*  private String getButtonXpath(int rowValue){
+    private String getButtonXpath(int rowValue){
 
         if(rowValue<9){
             return "//*[@id=\"DocList1_GridView_Document_ctl0"+(rowValue+1)+"_ButtonRow_Name/ Corporation_"+(rowValue-1)+"\"]";
         }else{
             return "//*[@id=\"DocList1_GridView_Document_ctl"+(rowValue+1)+"_ButtonRow_Name/ Corporation_"+(rowValue-1)+"\"]";
         }
-    }*/
+    }
 
-    private String getButtonXpath(int rowValue){ //for plymouth county only
+   /* private String getButtonXpath(int rowValue){ //for plymouth county only
 
         if(rowValue<9){
             return "//*[@id=\"DocList1_GridView_Document_ctl0"+(rowValue+1)+"_ButtonRow_Name_"+(rowValue-1)+"\"]";
         }else{
             return "//*[@id=\"DocList1_GridView_Document_ctl"+(rowValue+1)+"_ButtonRow_Name_"+(rowValue-1)+"\"]";
         }
-    }
+    }*/
 }

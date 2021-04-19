@@ -47,8 +47,7 @@ public class PlymouthHelperClass extends GrantorData {
         header = header.replace("Rec Date","Rec_Date__c").replace("Street","Street__c");
         header = header.replace("Doc. #","Doc__c").replace("Town","Town__c");
         header = header.replace("[","").replace("]","");
-        hdr = header.split(",");
-        return hdr;
+        return header.split(",");
     }
 
     public void tableData(WebDriver driver,String fileName,String request)

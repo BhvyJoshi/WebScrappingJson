@@ -1,6 +1,6 @@
-package com.ASC.DataProcessing;
+package com.ASC.HeaderProcessing;
 
-import jdk.javadoc.internal.doclets.formats.html.markup.Head;
+import com.ASC.DataProcessing.CommonMethods;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import java.util.Arrays;
 import java.util.List;
 
-public class HeaderProcessingSuit2 extends CommonMethods implements HeaderProcessing  {
+public class Suit2 extends CommonMethods {
 
     private static final String headerXpath = "//*[@id=\"search\"]/div/table/tbody/tr[1]";
 
@@ -17,7 +17,6 @@ public class HeaderProcessingSuit2 extends CommonMethods implements HeaderProces
         WebElement headerTag =  driver.findElement(By.xpath(headerXpath));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
         String[] header = new String[7];
-        //for (int i =0;i<headers.size()-2;i++)
         for (int i =0;i<7;i++)
         {
             header[i]=headers.get(i).getText();
@@ -25,7 +24,6 @@ public class HeaderProcessingSuit2 extends CommonMethods implements HeaderProces
         return modifyHeader(header);
     }
 
-    @Override
     public String[] modifyHeader(String[] hdr) {
         String header = Arrays.toString(hdr);
         header = header.replace(", ",",");
@@ -36,5 +34,4 @@ public class HeaderProcessingSuit2 extends CommonMethods implements HeaderProces
         hdr = header.split(",");
         return hdr;
     }
-
 }

@@ -5,6 +5,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 public class South_Bristol extends Suit1HelperClass {
+
     public WebDriver driver;
     public static String url = "https://www.masslandrecords.com";
     public static String value= "South Bristol";

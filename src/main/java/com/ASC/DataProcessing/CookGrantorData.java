@@ -1,6 +1,6 @@
-package com.ASC.DataProcessingIndividual;
+package com.ASC.DataProcessing;
 
-import org.apache.commons.lang3.ArrayUtils;
+import com.ASC.HeaderProcessing.Cook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
@@ -12,12 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class CookGrantorData{
+public class CookGrantorData extends Cook {
 
     public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static final String subTableXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody";
@@ -148,47 +147,4 @@ public class CookGrantorData{
         return objForSubPage;
     }
 
-    public String[] getHeader(WebDriver driver, String xPath) {
-        WebElement headerLine = driver.findElement(By.xpath(xPath));
-        List<WebElement> headers = headerLine.findElements(By.tagName("th"));
-        String[] header = new String[headers.size()];
-        for (int i = 0; i < headers.size(); i++) {
-            header[i] = headers.get(i).getText();
-        }
-        return header;
-    }
-
-    public String[] grabHeader(WebDriver driver, String XPath){ //can be used for first page's data
-        String dummyHeader = Arrays.toString(getHeader(driver,XPath));
-        dummyHeader = dummyHeader.replace(", ",",");
-        dummyHeader = dummyHeader.replace("[","").replace("]","");
-        dummyHeader = dummyHeader.replace("Name","Name__c").replace("Trust#","Trust_No__c");
-        String[] result = dummyHeader.split(",");
-        result = ArrayUtils.remove(result,3); //removing last 2 headers as not required.
-        result = ArrayUtils.remove(result,2);
-        return result;
-
-    }
-
-    public String[] grabHeader(WebDriver driver, String XPath,int x){ // can be used for 2nd page's data
-        String[] hdr = getHeader(driver,XPath);
-        hdr = ArrayUtils.remove(hdr,x);
-        String dummyHeader = Arrays.toString(hdr);
-        dummyHeader = dummyHeader.replace(", ",",");
-        dummyHeader = dummyHeader.replace("[","").replace("]","");
-        dummyHeader = dummyHeader.replace("Grantor","Grantor__c").replace("Grantee","Grantee__c");
-        dummyHeader = dummyHeader.replace("Doc. #","Doc_No__c").replace("Type Desc.","Type_Desc__c");
-        dummyHeader = dummyHeader.replace("Recorded Date","Recorded_Date__c").replace("PIN","PIN__c");
-        return dummyHeader.split(",");
-    }
-
-    public JSONArray appendToList(JSONArray original,JSONArray toBeAppend){
-        JSONArray sourceArray = new JSONArray(toBeAppend);
-        JSONArray destinationArray = new JSONArray(original);
-
-        for (int i = 0; i < sourceArray.length(); i++) {
-            destinationArray.put(sourceArray.getJSONObject(i));
-        }
-        return destinationArray;
-    }
 }

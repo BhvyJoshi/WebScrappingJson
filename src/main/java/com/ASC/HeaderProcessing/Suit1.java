@@ -1,4 +1,4 @@
-package com.ASC.DataProcessing;
+package com.ASC.HeaderProcessing;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import java.util.Arrays;
 import java.util.List;
 
-public class HeaderProcessingSuit1 implements HeaderProcessing {
+public class Suit1  {
 
     public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
 

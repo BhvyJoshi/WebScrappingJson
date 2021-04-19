@@ -1,5 +1,6 @@
 package com.ASC.Common;
 
+import com.ASC.HeaderProcessing.SouthEssex;
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,7 +19,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class SouthEssexHelperClass {
+public class SouthEssexHelperClass extends SouthEssex {
+
     public static final String searchRecordsBtn= "//*[@id=\"ctl00_SampleContent_ImageButton1\"]";
     public static final String startDateText= "//*[@id=\"ASPxPageControl1_RecordedTab_NameSearchStart\"]";
     public static final String startDate = "1/2/1951";
@@ -30,7 +32,7 @@ public class SouthEssexHelperClass {
     public static final String nextBtnPanel = "//*[@id=\"ASPxGridView1\"]/tbody/tr/td/div[1]";
     /*public static final String nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[10]";*/
     //*[@id="ASPxGridView1_DXPagerTop"]/a[11]
-    public static final String headerXpath = "//*[@id=\"ASPxGridView1_DXHeadersRow0\"]";
+
     //public static final String dataRow = "//*[@id=\"ASPxGridView1_DXDataRow15\"]";
     public static final String searchResultCount = "//*[@id=\"dvSearchTerms\"]/table/tbody/tr[4]/td[1]";
     //first page data row 0 to 14,2nd page 15 to 31 and so on.....
@@ -45,52 +47,19 @@ public class SouthEssexHelperClass {
         driver.findElement(By.xpath(searchBtn)).click();
     }
 
-    public String[] grabHeader(WebDriver driver){
-        List<WebElement> headers = driver.findElement(By.xpath(headerXpath)).findElements(By.tagName("td"));
-        String[] header = new String[headers.size()];
-        for (int i =0;i<headers.size();i++)
-        {
-            header[i]=headers.get(i).getText();
-        }
-        header = Arrays.toString(header).replace("\n","").replace("[","").replace("]","").split(",");
-        for (int i = 0; i < header.length; i++){
-            if(!header[i].trim().equals("") || header[i]!=null)
-                header[i] = header[i].trim();
-        }
-        header = Arrays.stream(header).distinct().toArray(String[]::new);
-        header = ArrayUtils.removeAll(header,0,1,2);
-        return modifyHeader(header);
-    }
-
-    private String[] modifyHeader(String[] hdr)
-    {
-        String header = Arrays.toString(hdr);
-        header = header.replace(", ",",");
-        header = header.replace("DATE","DATE__c").replace("ROLE","ROLE__c");
-        header = header.replace("Type","Type__c").replace("FIRST PARTY NAME","FIRST_PARTY_NAME__c");
-        header = header.replace("Book","Book__c").replace("Page","Page__c");
-        header = header.replace("DESC","DESC__c").replace("Street","Street__c");
-        header = header.replace("Locus","Locus__c").replace("PBK","PBK__c");
-        header = header.replace("PPG","PPG__c").replace("Consideration","Consideration__c");
-        header = header.replace("SECOND PARTY NAME","SECOND_PARTY_NAME__c").replace("Town","Town__c");
-        header = header.replace("[","").replace("]","");
-        return header.split(",");
-    }
-
     public void tableData(WebDriver driver,String fileName,String requestID)
     {
         String[] headers = grabHeader(driver);
-        System.out.println("Headers size====="+headers.length);
+        //System.out.println("Headers size====="+headers.length);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,requestID,0,15);
         String searchResult = driver.findElement(By.xpath(searchResultCount)).getText();
         searchResult = searchResult.replace("Result:","").replace("Rows","").trim();
         int noOfLoop = Integer.parseInt(searchResult)/15;
-        System.out.println("No of full pages ===="+noOfLoop);
+        //System.out.println("No of full pages ===="+noOfLoop);
         int lastPageData = Integer.parseInt(searchResult) % 15;
-        System.out.println("data in last page ==="+lastPageData);
+        //System.out.println("data in last page ==="+lastPageData);
         int count =0;
-
 
         while(count<noOfLoop-1){
             try{
@@ -106,10 +75,10 @@ public class SouthEssexHelperClass {
                /* new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(nextBtn));
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextBtn);*/
                 nextBtn.click();
-                System.out.print("\n------------next Button clicked--- page No----"+(count+1));
+                //System.out.print("\n------------next Button clicked--- page No----"+(count+1));
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15));
-                System.out.println("\nvalue of Count is --------"+count);
+                //System.out.println("\nvalue of Count is --------"+count);
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -118,31 +87,8 @@ public class SouthEssexHelperClass {
         driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
         tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
        System.out.println("no of objects in Json Array ---->"+tableDataContent.length());
-        generateFile(fileName,tableDataContent.toString());
+        generateFile(fileName,tableDataContent);
     }
-
-    public void generateFile(String fileName, String fileContent){
-        try {
-            File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
-            if(myObj.createNewFile()) {
-                FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(fileContent);
-                myWriter.close();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-   /* private boolean checkForData(WebDriver driver){
-        WebElement table = driver.findElement(By.xpath(mainTablePath));
-        List<WebElement> rows = table.findElements(By.tagName("tr"));
-        WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
-        String columnText = column.getText();
-        return columnText.contains("More names may be available");
-    }*/
-
 
     public JSONArray grabData(WebDriver driver,String[] header,String requestID,int lowerLimit, int upperLimit)
     {
@@ -179,18 +125,7 @@ public class SouthEssexHelperClass {
         return objForPage;
     }
 
-    public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
-    {
-        JSONArray sourceArray = new JSONArray(toBeAppend);
-        JSONArray destinationArray = new JSONArray(original);
-
-        for (int i = 0; i < sourceArray.length(); i++) {
-            destinationArray.put(sourceArray.getJSONObject(i));
-        }
-        return destinationArray;
-    }
-
-    public String getMainTableRow(int count){
+     public String getMainTableRow(int count){
         return "//*[@id=\"ASPxGridView1_DXDataRow"+count+"\"]";
     }
 }

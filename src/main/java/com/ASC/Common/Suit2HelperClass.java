@@ -1,24 +1,20 @@
 package com.ASC.Common;
 
-import com.ASC.DataProcessing.HeaderProcessingSuit2;
+import com.ASC.HeaderProcessing.Suit2;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class Suit2HelperClass extends HeaderProcessingSuit2 {
+public class Suit2HelperClass extends Suit2 {
 
     private static final String nextButtonPath =  "//*[@id=\"search\"]/div/div[3]/div[1]/div/a[3]";
     private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
@@ -34,18 +30,8 @@ public class Suit2HelperClass extends HeaderProcessingSuit2 {
           firstPageSuit2WithFirstName(driver, keyWord, searchRegistryRecordClick,firstName);
       }
   }
-    public void firstPageForHampden(WebDriver driver, String keyWord)
-    {
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("https://search.hampdendeeds.com/html/Hampden/V3/search.html");
-        driver.findElement(By.xpath("/html/body/section[1]/div/div[2]/div[1]/div/ul/li[2]/a")).click();
-        driver.findElement(By.xpath(searchLastNameText)).sendKeys(keyWord);
-      /*Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
-        drop.selectByVisibleText(value);*/
-        driver.findElement(By.xpath("//*[@id=\"search\"]/div[4]/div[2]/input[1]")).click();
-    }
 
-    public void firstPageSuit2WithFirstName(WebDriver driver,String keyWord,String searchRegistryRecordClick,String firstName)
+  public void firstPageSuit2WithFirstName(WebDriver driver,String keyWord,String searchRegistryRecordClick,String firstName)
     {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.findElement(By.xpath(searchRegistryRecordClick)).click();

@@ -1,5 +1,6 @@
 package com.ASC.Common;
 
+import com.ASC.HeaderProcessing.Hampden;
 import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,10 +22,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class HampdenHelperClass {
+public class HampdenHelperClass extends Hampden {
 
 
-    public final static String headerTagPath = "//*[@id=\"search\"]/div/div[5]/table/tbody/tr[1]";
+
     public static final String searchLastNameText = "//*[@id=\"W9SNM\"]";
     public static final String searchFirstNameText = "//*[@id=\"W9GNM\"]";
     public static final String mainTablePath = "//*[@id=\"search\"]/div/div[5]/table/tbody";
@@ -52,32 +53,6 @@ public class HampdenHelperClass {
         driver.findElement(By.xpath("//*[@id=\"search\"]/div[4]/div[2]/input[1]")).click();
     }
 
-  public String[] grabHeader(WebDriver driver)
-    {
-        WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
-        List<WebElement> headers = headerTag.findElements(By.tagName("th"));
-        String[] header = new String[headers.size()-2];
-        for (int i =0;i<headers.size()-2;i++)
-        {
-            header[i]=headers.get(i).getText();
-        }
-
-        return modifyHeader(header);
-    }
-
-    private String[] modifyHeader(String[] hdr)
-    {
-        String header = Arrays.toString(hdr);
-        header = header.replace(", ",",");
-        header = header.replace("Reverse Party","Reverse_Party__c").replace("Name","Name__c");
-        header = header.replace("Town","Town__c").replace("Date Received","Date_Received__c");
-        header = header.replace("Book (page)","Book_(page)__c").replace("Document Type","Document_Type__c").replace("Document Desc","Document_Desc__c");
-        header = header.replace("[","").replace("]","");
-        System.out.println(header);
-        hdr = header.split(",");
-        return hdr;
-    }
-
     public void tableData(WebDriver driver,String fileName,String requestID)
     {
         String[] headers = grabHeader(driver);
@@ -99,17 +74,7 @@ public class HampdenHelperClass {
                 e1.printStackTrace();
             }
         }
-        try {
-            File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
-            if(myObj.createNewFile()) {
-                FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(tableDataContent.toString());
-                myWriter.close();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+       generateFile(fileName,tableDataContent);
     }
 
     private boolean checkForData(WebDriver driver){
@@ -119,7 +84,6 @@ public class HampdenHelperClass {
         String columnText = column.getText();
         return columnText.contains("More names may be available");
     }
-
 
     public JSONArray grabData(WebDriver driver,String[] header,String requestID)
     {
@@ -161,20 +125,8 @@ public class HampdenHelperClass {
         return objForPage;
     }
 
-    public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
-    {
-        JSONArray sourceArray = new JSONArray(toBeAppend);
-        JSONArray destinationArray = new JSONArray(original);
-
-        for (int i = 0; i < sourceArray.length(); i++) {
-            destinationArray.put(sourceArray.getJSONObject(i));
-        }
-        return destinationArray;
-    }
-
     public String getMainTableRow(int count){
         return " //*[@id=\"search\"]/div/div[5]/table/tbody/tr["+count+"]";
     }
-
 
 }

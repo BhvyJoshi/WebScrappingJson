@@ -1,15 +1,12 @@
 package com.ASC.DataProcessing;
 
-import org.apache.commons.lang3.ArrayUtils;
+import com.ASC.HeaderProcessing.Suit1;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,7 +47,7 @@ public class DataProcessing extends GrantorData{
     public void tableData(WebDriver driver,String fileName,String request)
     {
         //String[] headers = grabHeader(driver);
-        String[] headers = new HeaderProcessingSuit1().grabHeader(driver);
+        String[] headers = new Suit1().grabHeader(driver);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
 
