@@ -92,7 +92,7 @@ public class SouthEssexHelperClass {
         int count =0;
 
 
-        while(count<noOfLoop){
+        while(count<noOfLoop-1){
             try{
                 String nextBtnClick;
                 count ++;

@@ -1,5 +1,6 @@
 package com.ASC.Common;
 
+import com.ASC.DataProcessing.HeaderProcessingSuit2;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
@@ -17,11 +18,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class Suit2HelperClass {
+public class Suit2HelperClass extends HeaderProcessingSuit2 {
 
     private static final String nextButtonPath =  "//*[@id=\"search\"]/div/div[3]/div[1]/div/a[3]";
     private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
-    private static final String headerXpath = "//*[@id=\"search\"]/div/table/tbody/tr[1]";
+
     public static final String searchLastNameText = "//*[@id=\"W9SNM\"]";
     public static final String searchRecordsClick = "//*[@id=\"search\"]/div/input";
     public static final String searchFirstNameText = "//*[@id=\"W9GNM\"]";
@@ -61,31 +62,6 @@ public class Suit2HelperClass {
         driver.findElement(By.xpath(searchRecordsClick)).click();
     }
 
-    public String[] grabHeader(WebDriver driver)
-    {
-        WebElement headerTag =  driver.findElement(By.xpath(headerXpath));
-        List<WebElement> headers = headerTag.findElements(By.tagName("th"));
-        String[] header = new String[7];
-        //for (int i =0;i<headers.size()-2;i++)
-        for (int i =0;i<7;i++)
-        {
-            header[i]=headers.get(i).getText();
-        }
-        return modifyHeader1(header);
-    }
-
-    public String[] modifyHeader1(String[] hdr)
-    {
-        String header = Arrays.toString(hdr);
-        header = header.replace(", ",",");
-        header = header.replace("Name","Name__c");
-        header = header.replace("Reverse Party","Reverse_Party__c").replace("Town","Town__c");
-        header = header.replace("Date Received","Date_Received__C").replace("Document Type","Document_Type__c").replace("Document Desc","Document_Desc__c");
-        header = header.replace("Book (page)","Book_(page)__c").replace("[","").replace("]","");
-        hdr = header.split(",");
-        return hdr;
-    }
-
     public void tableData(WebDriver driver,String fileName,String requestID)
     {
         String[] headers = grabHeader(driver);
@@ -105,17 +81,7 @@ public class Suit2HelperClass {
                 e1.printStackTrace();
             }
         }
-        try {
-            File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
-            if(myObj.createNewFile()) {
-                FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(tableDataContent.toString());
-                myWriter.close();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        generateFile(fileName,tableDataContent);
     }
 
     private boolean checkForData(WebDriver driver){
@@ -165,17 +131,6 @@ public class Suit2HelperClass {
             objForRow = new JSONObject();
         }
         return objForPage;
-    }
-
-    public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
-    {
-        JSONArray sourceArray = new JSONArray(toBeAppend);
-        JSONArray destinationArray = new JSONArray(original);
-
-        for (int i = 0; i < sourceArray.length(); i++) {
-            destinationArray.put(sourceArray.getJSONObject(i));
-        }
-        return destinationArray;
     }
 
     public String getMainTableRow(int count){

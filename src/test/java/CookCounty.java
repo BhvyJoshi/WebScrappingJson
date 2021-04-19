@@ -43,7 +43,6 @@ public class CookCounty extends CookCountyHelper {
     @AfterTest
     public void cleanUp()
     {
-        //driver.quit();
         driver.close();
         driver.quit();
     }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GrantorData {
+public class GrantorData extends CommonMethods{
 
     public GrantorData(){}
 
@@ -103,16 +103,7 @@ public class GrantorData {
         Thread.sleep(3000);
     }
 
-    public JSONArray appendToList(JSONArray original,JSONArray toBeAppend)
-    {
-        JSONArray sourceArray = new JSONArray(toBeAppend);
-        JSONArray destinationArray = new JSONArray(original);
 
-        for (int i = 0; i < sourceArray.length(); i++) {
-            destinationArray.put(sourceArray.getJSONObject(i));
-        }
-        return destinationArray;
-    }
 
     private JSONArray getActualGrantorData(List<WebElement>  rowElement,int mainRowId){
 

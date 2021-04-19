@@ -15,12 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class DataProcessing extends GrantorData{
-    public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
+
     public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
 
-    public String[] grabHeader(WebDriver driver)
+  /*  public String[] grabHeader(WebDriver driver)
     {
         WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
@@ -33,7 +33,7 @@ public class DataProcessing extends GrantorData{
         return modifyHeader(header);
     }
 
-    private String[] modifyHeader(String[] hdr)
+    public String[] modifyHeader(String[] hdr)
     {
         String header = Arrays.toString(hdr);
         header = header.replace(", ",",");
@@ -45,11 +45,12 @@ public class DataProcessing extends GrantorData{
         header = header.replace("[","").replace("]","");
         hdr = header.split(",");
         return hdr;
-    }
+    }*/
 
     public void tableData(WebDriver driver,String fileName,String request)
     {
-        String[] headers = grabHeader(driver);
+        //String[] headers = grabHeader(driver);
+        String[] headers = new HeaderProcessingSuit1().grabHeader(driver);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
 
@@ -67,19 +68,8 @@ public class DataProcessing extends GrantorData{
                 checkNext = false;
             }
         }
+        generateFile(fileName,tableDataContent);
 
-
-        try {
-            File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
-            if(myObj.createNewFile()) {
-                FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
-                myWriter.write(tableDataContent.toString());
-                myWriter.close();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request)

@@ -1,6 +1,5 @@
 import com.ASC.Common.InitializerClass;
 import com.ASC.Common.Suit1HelperClass;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
@@ -20,7 +19,6 @@ public class South_Bristol extends Suit1HelperClass {
         driver = InitializerClass.initialize(url,value);
         driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");
         firstPage(driver, keyWord, fileName, requestId);
-
     }
 
     @AfterTest

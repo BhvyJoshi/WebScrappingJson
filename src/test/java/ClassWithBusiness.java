@@ -24,14 +24,6 @@ public class ClassWithBusiness extends BusinessAndFirstNameHelperClass {
         firstPage(driver,keyWord,firstName,fileName,request);
     }
     protected void withoutFirstName(String url,String value,String keyWord,String fileName,String request){
-  /* public void test(){
-
-        String url ="https://www.masslandrecords.com";
-        String keyWord = "lender";
-        String value = "Nantucket";
-        String fileName = "demo_"+value;
-        String request = "1234";
-*/
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,fileName,request);
     }
