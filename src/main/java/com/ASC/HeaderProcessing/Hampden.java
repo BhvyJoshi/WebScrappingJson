@@ -21,7 +21,6 @@ public class Hampden extends CommonMethods {
         {
             header[i]=headers.get(i).getText();
         }
-
         return modifyHeader(header);
     }
 
@@ -33,8 +32,6 @@ public class Hampden extends CommonMethods {
         header = header.replace("Town","Town__c").replace("Date Received","Date_Received__c");
         header = header.replace("Book (page)","Book_(page)__c").replace("Document Type","Document_Type__c").replace("Document Desc","Document_Desc__c");
         header = header.replace("[","").replace("]","");
-        System.out.println(header);
-        hdr = header.split(",");
-        return hdr;
+        return  header.split(",");
     }
 }

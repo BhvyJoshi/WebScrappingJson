@@ -1,12 +1,12 @@
 package com.ASC.Common;
 
-import com.ASC.HeaderProcessing.Suit2;
+import com.ASC.DataProcessing.CommonMethods;
+import com.ASC.HeaderProcessing.Group2;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class Suit2HelperClass extends Suit2 {
+public class Group2HelperClass extends CommonMethods {
 
     private static final String nextButtonPath =  "//*[@id=\"search\"]/div/div[3]/div[1]/div/a[3]";
     private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
@@ -50,7 +50,7 @@ public class Suit2HelperClass extends Suit2 {
 
     public void tableData(WebDriver driver,String fileName,String requestID)
     {
-        String[] headers = grabHeader(driver);
+        String[] headers = new Group2().grabHeader(driver);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,requestID);
 

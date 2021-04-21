@@ -25,7 +25,7 @@ public class CookGrantorData extends Cook {
 
     public JSONObject getGrantorGranteeData(WebDriver driver, int row){
 
-        System.out.println("-----------------main table row---->"+row);
+        //System.out.println("-----------------main table row---->"+row);
         int GrantorCount = Integer.parseInt(driver.findElement(By.xpath(getMainTableRow(row)+"/td[3]")).getText());
         int GranteeCount = Integer.parseInt(driver.findElement(By.xpath(getMainTableRow(row)+"/td[4]")).getText());
 

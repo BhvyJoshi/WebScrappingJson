@@ -1,7 +1,6 @@
 package com.ASC.Common;
 
 import com.ASC.HeaderProcessing.Hampden;
-import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
@@ -11,12 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -24,12 +19,11 @@ import java.util.concurrent.TimeUnit;
 
 public class HampdenHelperClass extends Hampden {
 
-
-
     public static final String searchLastNameText = "//*[@id=\"W9SNM\"]";
     public static final String searchFirstNameText = "//*[@id=\"W9GNM\"]";
     public static final String mainTablePath = "//*[@id=\"search\"]/div/div[5]/table/tbody";
     public static final String nextButtonPath = "//*[@id=\"search\"]/div/div[3]/div/a[2]";
+    public static final String searchBtn = "//*[@id=\"search\"]/div[4]/div[2]/input[1]";
 
     public void firstPageForHampden(WebDriver driver, String keyWord)
     {
@@ -39,7 +33,7 @@ public class HampdenHelperClass extends Hampden {
         driver.findElement(By.xpath(searchLastNameText)).sendKeys(keyWord);
       /*Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
         drop.selectByVisibleText(value);*/
-        driver.findElement(By.xpath("//*[@id=\"search\"]/div[4]/div[2]/input[1]")).click();
+        driver.findElement(By.xpath(searchBtn)).click();
     }
     public void firstPageForHampden(WebDriver driver, String keyWord,String firstName)
     {
@@ -50,7 +44,7 @@ public class HampdenHelperClass extends Hampden {
         driver.findElement(By.xpath(searchFirstNameText)).sendKeys(firstName);
       /*Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
         drop.selectByVisibleText(value);*/
-        driver.findElement(By.xpath("//*[@id=\"search\"]/div[4]/div[2]/input[1]")).click();
+        driver.findElement(By.xpath(searchBtn)).click();
     }
 
     public void tableData(WebDriver driver,String fileName,String requestID)
@@ -63,7 +57,7 @@ public class HampdenHelperClass extends Hampden {
             try{
                 Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
-               /* new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(nextBtn));
+                /*new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(nextBtn));
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextBtn);*/
                 nextBtn.click();
                 System.out.print("\n------------next Button clicked----");

@@ -6,8 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class Suit1HelperClass extends DataProcessing {
-
+public class Group1HelperClass extends DataProcessing {
     public WebDriver driver;
     private static final String searchButtonClick = "//*[@id=\"SearchFormEx1_btnSearch\"]";
     private static final String lastNameTextBox = "//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]";

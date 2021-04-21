@@ -1,16 +1,15 @@
-import com.ASC.Common.BusinessAndFirstNameHelperClass;
+import com.ASC.Common.Group1HelperClass;
 import com.ASC.Common.InitializerClass;
-import com.ASC.Common.Suit1HelperClass;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 //contains support for :--> Dukes, Fall River Bristol, Franklin, Middle Berkshire, Nantucket, Suffolk
-                        // North Berkshire, North Middlesex, Hampshire, South Berkshire, South Middlesex, Worcester
+// North Berkshire, North Middlesex, Hampshire, South Berkshire, South Middlesex, Worcester
 //with and without firstName
-public class Suit1 extends Suit1HelperClass {
 
+public class Group1 extends Group1HelperClass {
     public WebDriver driver;
     @Parameters({"url","value","keyWord","firstName","fileName","request"})
     @Test

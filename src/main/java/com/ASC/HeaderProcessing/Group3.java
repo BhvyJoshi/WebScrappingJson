@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import java.util.Arrays;
 import java.util.List;
 
-public class Suit1  {
+public class Group3 {
 
     public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
 
@@ -21,7 +21,7 @@ public class Suit1  {
         {
             header[i]=headers.get(i).getText();
         }
-        header = ArrayUtils.remove(header,0);
+        header = ArrayUtils.removeAll(header,0, header.length-1,(header.length-2));
         return modifyHeader(header);
     }
 
@@ -32,10 +32,9 @@ public class Suit1  {
         header = header.replace("Type Desc.","Type_Desc");
         header = header.replace("Type","Type__c").replace("Name/ Corporation","Name_Corporation__c");
         header = header.replace("Book","Book__c").replace("Page","Page__c").replace("Type__c_Desc","Type_Desc__c");
-        header = header.replace("Rec. Date","Rec_Date__c").replace("Street #","Street__c");
+        header = header.replace("Fill Date","Fill_Date__c").replace("Street #","Street__c");
         header = header.replace("Property Descr","Property_Descr__c").replace("Town","Town__c");
         header = header.replace("[","").replace("]","");
-        hdr = header.split(",");
-        return hdr;
+        return  header.split(",");
     }
 }

@@ -59,7 +59,7 @@ public class NorthBristolhelperClass extends NorthBristol {
                 Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]"));
                 nextBtn.click();
-                System.out.println("Clicked on button --->"+i);
+               // System.out.println("Clicked on button --->"+i);
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }

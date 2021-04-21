@@ -29,7 +29,6 @@ public class Cook extends CommonMethods {
         String[] result = dummyHeader.split(",");
         //removing last 2 headers as not required.
         return ArrayUtils.removeAll(result,2,3);
-
     }
 
     public String[] grabHeader(WebDriver driver, String XPath,int x){ // can be used for 2nd page's data

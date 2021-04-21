@@ -1,11 +1,10 @@
-import com.ASC.Common.BusinessAndFirstNameHelperClass;
+import com.ASC.Common.Group1HelperClass;
 import com.ASC.Common.InitializerClass;
-import com.ASC.Common.Suit1HelperClass;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.*;
 
 /*@Ignore*/
-public class demoTests extends Suit1HelperClass {
+public class demoTests extends Group1HelperClass {
 
     public WebDriver driver;
     @Test(dataProvider ="keyWords")

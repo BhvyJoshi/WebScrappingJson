@@ -86,7 +86,7 @@ public class SouthEssexHelperClass extends SouthEssex {
         }
         driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
         tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
-       System.out.println("no of objects in Json Array ---->"+tableDataContent.length());
+        //System.out.println("no of objects in Json Array ---->"+tableDataContent.length());
         generateFile(fileName,tableDataContent);
     }
 

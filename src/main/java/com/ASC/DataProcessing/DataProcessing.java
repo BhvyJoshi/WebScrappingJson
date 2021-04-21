@@ -1,6 +1,6 @@
 package com.ASC.DataProcessing;
 
-import com.ASC.HeaderProcessing.Suit1;
+import com.ASC.HeaderProcessing.Group1;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
@@ -16,38 +16,9 @@ public class DataProcessing extends GrantorData{
     public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
-
-  /*  public String[] grabHeader(WebDriver driver)
-    {
-        WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
-        List<WebElement> headers = headerTag.findElements(By.tagName("th"));
-        String[] header = new String[headers.size()];
-        for (int i =0;i<headers.size();i++)
-        {
-            header[i]=headers.get(i).getText();
-        }
-        header = ArrayUtils.remove(header,0);
-        return modifyHeader(header);
-    }
-
-    public String[] modifyHeader(String[] hdr)
-    {
-        String header = Arrays.toString(hdr);
-        header = header.replace(", ",",");
-        header = header.replace("Type Desc.","Type_Desc");
-        header = header.replace("Type","Type__c").replace("Name/ Corporation","Name_Corporation__c");
-        header = header.replace("Book","Book__c").replace("Page","Page__c").replace("Type__c_Desc","Type_Desc__c");
-        header = header.replace("Rec. Date","Rec_Date__c").replace("Street #","Street__c");
-        header = header.replace("Property Descr","Property_Descr__c").replace("Town","Town__c");
-        header = header.replace("[","").replace("]","");
-        hdr = header.split(",");
-        return hdr;
-    }*/
-
     public void tableData(WebDriver driver,String fileName,String request)
     {
-        //String[] headers = grabHeader(driver);
-        String[] headers = new Suit1().grabHeader(driver);
+        String[] headers = new Group1().grabHeader(driver);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
 

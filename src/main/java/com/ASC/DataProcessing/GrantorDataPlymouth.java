@@ -5,13 +5,12 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GrantorData extends CommonMethods{
-
-    public GrantorData(){}
+public class GrantorDataPlymouth extends CommonMethods{
 
     public final String[] headerSubTable = {"Name", "Type__c"};
 
@@ -41,21 +40,20 @@ public class GrantorData extends CommonMethods{
             return new JSONObject().put("records",records);
 
         }else{
-         JSONArray rec = getMultipleGrantorData(driver,dataRecords,rowID);
+            JSONArray rec = getMultipleGrantorData(driver,dataRecords,rowID);
             return new JSONObject().put("records",rec);
         }
     }
 
-    private List<WebElement> listOfRows(WebDriver driver,int length)
+    private List<WebElement> listOfRows(WebDriver driver, int length)
     {
         List<WebElement> rowOfSubTable = new ArrayList<>();
         while(rowOfSubTable.size()!=length){
             try{
                 Thread.sleep(3000);
-               for (int itr=2;itr<=length+1;itr++){
-                    //for (int itr=2;itr<=length;itr++){ // --> for plymouth county
-                WebElement row = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr["+itr+"]"));
-                rowOfSubTable.add(row);
+                for (int itr=2;itr<=length+1;itr++){ // --> for plymouth county
+                    WebElement row = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr["+itr+"]"));
+                    rowOfSubTable.add(row);
                 }
             }catch(Exception e1){
                 e1.printStackTrace();}
@@ -126,17 +124,15 @@ public class GrantorData extends CommonMethods{
             objForSubRow = new JSONObject();
             objAttributes = new JSONObject();
         }
-       return objForSubTable;
+        return objForSubTable;
     }
 
-    private String getButtonXpath(int rowValue){
+   private String getButtonXpath(int rowValue){ //for plymouth county only
 
-        //String btnValue
         if(rowValue<9){
-            return "//*[@id=\"DocList1_GridView_Document_ctl0"+(rowValue+1)+"_ButtonRow_Name/ Corporation_"+(rowValue-1)+"\"]";
+            return "//*[@id=\"DocList1_GridView_Document_ctl0"+(rowValue+1)+"_ButtonRow_Name_"+(rowValue-1)+"\"]";
         }else{
-            return "//*[@id=\"DocList1_GridView_Document_ctl"+(rowValue+1)+"_ButtonRow_Name/ Corporation_"+(rowValue-1)+"\"]";
+            return "//*[@id=\"DocList1_GridView_Document_ctl"+(rowValue+1)+"_ButtonRow_Name_"+(rowValue-1)+"\"]";
         }
     }
-
 }
