@@ -20,7 +20,7 @@ public class Group2 extends Group2HelperClass {
     public void test1()
     {
           String url = "https://www.masslandrecords.com";
-          String value=/*"Norfolk"*//*"North Essex"*//*"Barnstable",*/"North Worcester"; //need to check with Norfolk,North Worcester
+          String value="Norfolk"/*"North Essex"*//*"Barnstable"*//*"North Worcester"*/; //need to check with Norfolk,North Worcester
           String keyWord = "lender";
           String fileName = "demo_"+value;
           String request ="123456";

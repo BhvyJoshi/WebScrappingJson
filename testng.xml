@@ -3,16 +3,7 @@
 <suite name="TestSuite" verbose="2" >
 
 
-    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/ClassWithBusiness.java">
-        <parameter name="url" value="${url}" />
-        <parameter name="value" value="${value}" />
-        <parameter name="keyWord" value="${keyWord}" />
-        <parameter name="fileName" value="${fileName}" />
-        <parameter name="request" value="${request}" />
-        <classes/>
-    </test>
-
-    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/ClassWithFirstName.java">
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Group1.java">
         <parameter name="url" value="${url}" />
         <parameter name="value" value="${value}" />
         <parameter name="keyWord" value="${keyWord}" />
@@ -22,7 +13,17 @@
         <classes/>
     </test>
 
-    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Suit1.java">
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Group2.java">
+        <parameter name="url" value="${url}" />
+        <parameter name="value" value="${value}" />
+        <parameter name="keyWord" value="${keyWord}" />
+        <parameter name="firstName" value="${firstName}" />
+        <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
+        <classes/>
+    </test>
+
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Group3.java">
         <parameter name="url" value="${url}" />
         <parameter name="value" value="${value}" />
         <parameter name="keyWord" value="${keyWord}" />
@@ -36,6 +37,47 @@
         <parameter name="url" value="${url}" />
         <parameter name="value" value="${value}" />
         <parameter name="keyWord" value="${keyWord}" />
+        <parameter name="firstName" value="${firstName}" />
+        <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
+        <classes/>
+    </test>
+
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Hampden.java">
+        <parameter name="url" value="${url}" />
+        <parameter name="value" value="${value}" />
+        <parameter name="keyWord" value="${keyWord}" />
+        <parameter name="firstName" value="${firstName}" />
+        <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
+        <classes/>
+    </test>
+
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/North_Bristol.java">
+        <parameter name="url" value="${url}" />
+        <parameter name="value" value="${value}" />
+        <parameter name="keyWord" value="${keyWord}" />
+        <parameter name="firstName" value="${firstName}" />
+        <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
+        <classes/>
+    </test>
+
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Plymouth.java">
+        <parameter name="url" value="${url}" />
+        <parameter name="value" value="${value}" />
+        <parameter name="keyWord" value="${keyWord}" />
+        <parameter name="firstName" value="${firstName}" />
+        <parameter name="fileName" value="${fileName}" />
+        <parameter name="request" value="${request}" />
+        <classes/>
+    </test>
+
+    <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/South_Essex.java">
+        <parameter name="url" value="${url}" />
+        <parameter name="value" value="${value}" />
+        <parameter name="keyWord" value="${keyWord}" />
+        <parameter name="firstName" value="${firstName}" />
         <parameter name="fileName" value="${fileName}" />
         <parameter name="request" value="${request}" />
         <classes/>
