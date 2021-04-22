@@ -15,10 +15,12 @@ public class DataProcessing extends GrantorData{
 
     public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
+    public static final String recordsPerPage = "//*[@id=\"DocList1_PageView5Btn\"]";
 
     public void tableData(WebDriver driver,String fileName,String request)
     {
         String[] headers = new Group1().grabHeader(driver);
+        driver.findElement(By.xpath(recordsPerPage)).click();
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
 
@@ -37,7 +39,6 @@ public class DataProcessing extends GrantorData{
             }
         }
         generateFile(fileName,tableDataContent);
-
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request)

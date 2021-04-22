@@ -26,12 +26,12 @@ public class Group3HelperClass extends GrantorData {
     private static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
 
-    public void firstPage(WebDriver driver,String keyWord,String fileName,String request) {
+   /* public void firstPage(WebDriver driver,String keyWord,String fileName,String request) {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.findElement(By.xpath(lastNameTextBox)).sendKeys(keyWord);
         driver.findElement(By.xpath(searchButtonClick)).click();
         tableData(driver,fileName,request);
-    }
+    }*/
 
     public void firstPage(WebDriver driver,String keyWord,String firstName,String fileName,String request){
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -43,7 +43,6 @@ public class Group3HelperClass extends GrantorData {
 
     public void tableData(WebDriver driver, String fileName, String request)
     {
-        //String[] headers = grabHeader(driver);
         String[] headers = new Group3().grabHeader(driver);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);

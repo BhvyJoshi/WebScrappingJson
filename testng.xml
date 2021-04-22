@@ -2,7 +2,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="TestSuite" verbose="2" >
 
-
     <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/Group1.java">
         <parameter name="url" value="${url}" />
         <parameter name="value" value="${value}" />
@@ -34,10 +33,7 @@
     </test>
 
     <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/CookCounty.java">
-        <parameter name="url" value="${url}" />
-        <parameter name="value" value="${value}" />
         <parameter name="keyWord" value="${keyWord}" />
-        <parameter name="firstName" value="${firstName}" />
         <parameter name="fileName" value="${fileName}" />
         <parameter name="request" value="${request}" />
         <classes/>
@@ -67,7 +63,6 @@
         <parameter name="url" value="${url}" />
         <parameter name="value" value="${value}" />
         <parameter name="keyWord" value="${keyWord}" />
-        <parameter name="firstName" value="${firstName}" />
         <parameter name="fileName" value="${fileName}" />
         <parameter name="request" value="${request}" />
         <classes/>

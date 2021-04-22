@@ -30,12 +30,15 @@ public class CookCountyHelper extends CookGrantorData {
         }
     }
 
+    public void counter(WebDriver driver){
+        int clickCount = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
+    }
     public void tableData(WebDriver driver,String fileName,String request)
     {
         String[] headers = grabHeader(driver,mainHeaderPath);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
-        int nextBtnCliCkCount  = driver.findElements(By.className("PagerNumberButton")).size();
+        int nextBtnCliCkCount  = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
         boolean checkNext = true;
         int count = 0;
 

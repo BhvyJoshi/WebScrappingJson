@@ -4,12 +4,8 @@ import com.ASC.HeaderProcessing.Hampden;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,16 +21,6 @@ public class HampdenHelperClass extends Hampden {
     public static final String nextButtonPath = "//*[@id=\"search\"]/div/div[3]/div/a[2]";
     public static final String searchBtn = "//*[@id=\"search\"]/div[4]/div[2]/input[1]";
 
-    public void firstPageForHampden(WebDriver driver, String keyWord)
-    {
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("https://search.hampdendeeds.com/html/Hampden/V3/search.html");
-        driver.findElement(By.xpath("/html/body/section[1]/div/div[2]/div[1]/div/ul/li[2]/a")).click();
-        driver.findElement(By.xpath(searchLastNameText)).sendKeys(keyWord);
-      /*Select drop = new Select(driver.findElement(By.xpath("//*[@id=\"W9TOWN\"]")));
-        drop.selectByVisibleText(value);*/
-        driver.findElement(By.xpath(searchBtn)).click();
-    }
     public void firstPageForHampden(WebDriver driver, String keyWord,String firstName)
     {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -57,10 +43,7 @@ public class HampdenHelperClass extends Hampden {
             try{
                 Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
-                /*new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(nextBtn));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextBtn);*/
                 nextBtn.click();
-                System.out.print("\n------------next Button clicked----");
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID));
             }
@@ -94,7 +77,6 @@ public class HampdenHelperClass extends Hampden {
 
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < cols.size()-3); column++, hdr++) {
-                //for (int column = 0, hdr = 0; (column < 7); column++, hdr++) {
                 objForRow.put(header[hdr], cols.get(column).getText());
                 while(hdr == 3) {
                     Date dob;
@@ -107,12 +89,11 @@ public class HampdenHelperClass extends Hampden {
                         e.printStackTrace();
                     }
                 }
-
             }
             attributes.put("type", "Lead_Search_Result__c");
             attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
             objForRow.put("attributes",attributes);
-            objForRow.put("Lead_Search__c",requestID); //add request id
+            objForRow.put("Lead_Search__c",requestID);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
@@ -122,5 +103,4 @@ public class HampdenHelperClass extends Hampden {
     public String getMainTableRow(int count){
         return " //*[@id=\"search\"]/div/div[5]/table/tbody/tr["+count+"]";
     }
-
 }

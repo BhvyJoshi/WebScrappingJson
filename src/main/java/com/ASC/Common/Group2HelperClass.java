@@ -24,31 +24,15 @@ public class Group2HelperClass extends CommonMethods {
     public static final String searchFirstNameText = "//*[@id=\"W9GNM\"]";
 
   public void checkFirstName(WebDriver driver,String keyWord,String searchRegistryRecordClick,String firstName){
-      if(firstName == null){
-          firstPageSuit2(driver, keyWord, searchRegistryRecordClick);
-      }else{
-          firstPageSuit2WithFirstName(driver, keyWord, searchRegistryRecordClick,firstName);
-      }
+      driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+      driver.findElement(By.xpath(searchRegistryRecordClick)).click();
+      //driver.findElement(By.)
+      driver.findElement(By.xpath(searchLastNameText)).sendKeys(keyWord);
+      driver.findElement(By.xpath(searchFirstNameText)).sendKeys(firstName);
+      driver.findElement(By.xpath(searchRecordsClick)).click();
   }
 
-  public void firstPageSuit2WithFirstName(WebDriver driver,String keyWord,String searchRegistryRecordClick,String firstName)
-    {
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.findElement(By.xpath(searchRegistryRecordClick)).click();
-        driver.findElement(By.xpath(searchLastNameText)).sendKeys(keyWord);
-        driver.findElement(By.xpath(searchFirstNameText)).sendKeys(firstName);
-        driver.findElement(By.xpath(searchRecordsClick)).click();
-    }
-
-    public void firstPageSuit2(WebDriver driver,String keyWord,String searchRegistryRecordClick)
-    {
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.findElement(By.xpath(searchRegistryRecordClick)).click();
-        driver.findElement(By.xpath(searchLastNameText)).sendKeys(keyWord);
-        driver.findElement(By.xpath(searchRecordsClick)).click();
-    }
-
-    public void tableData(WebDriver driver,String fileName,String requestID)
+  public void tableData(WebDriver driver,String fileName,String requestID)
     {
         String[] headers = new Group2().grabHeader(driver);
         JSONArray tableDataContent;
@@ -77,8 +61,6 @@ public class Group2HelperClass extends CommonMethods {
         String columnText = column.getText();
         return columnText.contains("More names may be available");
     }
-
-
     public JSONArray grabData(WebDriver driver,String[] header,String requestID)
     {
         JSONArray objForPage = new JSONArray();
@@ -94,8 +76,7 @@ public class Group2HelperClass extends CommonMethods {
 
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < cols.size()-4); column++, hdr++) {
-                //for (int column = 0, hdr = 0; (column < 7); column++, hdr++) {
-                    objForRow.put(header[hdr], cols.get(column).getText());
+                objForRow.put(header[hdr], cols.get(column).getText());
                     while(hdr == 3) {
                         Date dob;
                         try {
@@ -107,8 +88,7 @@ public class Group2HelperClass extends CommonMethods {
                             e.printStackTrace();
                         }
                     }
-
-            }
+                }
             attributes.put("type", "Lead_Search_Result__c");
             attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
             objForRow.put("attributes",attributes);
@@ -118,7 +98,6 @@ public class Group2HelperClass extends CommonMethods {
         }
         return objForPage;
     }
-
     public String getMainTableRow(int count){
         return "//*[@id=\"search\"]/div/table/tbody/tr["+count+"]";
     }

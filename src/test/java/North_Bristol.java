@@ -2,28 +2,26 @@ import com.ASC.Common.InitializerClass;
 import com.ASC.Common.NorthBristolhelperClass;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-//completely done --. need to ask about firstName
+//completely done --. need to ask about firstName on site is not working
 public class North_Bristol extends NorthBristolhelperClass
 {
     public WebDriver driver;
-    public static String url = "https://www.masslandrecords.com";
+   /* public static String url = "https://www.masslandrecords.com";
     public static String value= "North Bristol";
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
     public static String requestID = "123456";
-    public static String firstName = "";
+    public static String firstName = "";*/
 
     @Test
-    public void test(){
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
         driver = InitializerClass.initialize(url,value);
-        if(firstName == null){
-            firstPage(driver,keyWord);
-        }else{
-            firstPage(driver,keyWord,firstName);
-        }
-        tableData(driver,fileName,requestID);
+        firstPage(driver,keyWord,firstName);
+        tableData(driver,fileName,request);
     }
 
     @AfterTest

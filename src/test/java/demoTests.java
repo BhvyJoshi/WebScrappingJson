@@ -14,9 +14,10 @@ public class demoTests extends Group1HelperClass {
         String keyWord = "lender";
         String fileName = "demo_"+value;
         String request = "123456";
+        String firstName = "";
 
         driver = InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord,fileName,request);
+        firstPage(driver,keyWord,fileName,firstName,request);
     }
 
     @DataProvider(name = "keyWords")

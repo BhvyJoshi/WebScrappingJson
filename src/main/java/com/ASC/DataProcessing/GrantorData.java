@@ -20,7 +20,7 @@ public class GrantorData extends CommonMethods{
     public JSONObject getGrantorData(WebDriver driver, int rowID) {
 
         String grantorLabel = null;
-        int dataRecords;
+        //int dataRecords;
 
         try {
             Thread.sleep(3500);
@@ -33,16 +33,13 @@ public class GrantorData extends CommonMethods{
 
         }catch (Exception e){e.printStackTrace();}
 
-        dataRecords = Integer.parseInt(grantorLabel.substring(16));
-        //System.out.println("No of dataRecords:"+dataRecords);
+        //dataRecords = Integer.parseInt(grantorLabel.substring(16));
 
-        if (dataRecords<=10){
-            JSONArray records = getActualGrantorData(listOfRows(driver,dataRecords),rowID);
-            return new JSONObject().put("records",records);
+        if (Integer.parseInt(grantorLabel.substring(16))<=10){
+            return new JSONObject().put("records",getActualGrantorData(listOfRows(driver,Integer.parseInt(grantorLabel.substring(16))),rowID));
 
         }else{
-         JSONArray rec = getMultipleGrantorData(driver,dataRecords,rowID);
-            return new JSONObject().put("records",rec);
+            return new JSONObject().put("records",getMultipleGrantorData(driver,Integer.parseInt(grantorLabel.substring(16)),rowID));
         }
     }
 
@@ -51,9 +48,8 @@ public class GrantorData extends CommonMethods{
         List<WebElement> rowOfSubTable = new ArrayList<>();
         while(rowOfSubTable.size()!=length){
             try{
-                Thread.sleep(3000);
+                Thread.sleep(2000);
                for (int itr=2;itr<=length+1;itr++){
-                    //for (int itr=2;itr<=length;itr++){ // --> for plymouth county
                 WebElement row = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr["+itr+"]"));
                 rowOfSubTable.add(row);
                 }
