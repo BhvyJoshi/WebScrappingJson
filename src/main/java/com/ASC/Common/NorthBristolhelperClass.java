@@ -6,16 +6,10 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 public class NorthBristolhelperClass extends NorthBristol {
 
@@ -25,17 +19,8 @@ public class NorthBristolhelperClass extends NorthBristol {
     public static final String firstNameText = "//*[@id=\"ctl00_cphMainContent_txtFirstName_vtbTextBox_text\"]";
     public static final String searchBtn = "//*[@id=\"ctl00_cphMainContent_btnSearch\"]";
 
-
     public static final String mainTablePath = "//*[@id=\"ctl00_cphMainContent_gvSearchResults\"]/tbody";
     public static final String nextButtonPath = "//*[@id=\"ctl00_cphMainContent_gvSearchResults\"]/tbody/tr[1]/td/table/tbody/tr";
-                                                //*[@id="ctl00_cphMainContent_gvSearchResults"]/tbody/tr[1]/td/table/tbody/tr/td[1]/span
-
-    public void firstPage(WebDriver driver, String keyWord){
-        driver.findElement(By.xpath(searchRecords)).click();
-        driver.findElement(By.xpath(recordedLandInquiry)).click();
-        driver.findElement(By.xpath(lastNameText)).sendKeys(keyWord);
-        driver.findElement(By.xpath(searchBtn)).click();
-    }
 
     public void firstPage(WebDriver driver, String keyWord,String firstName){
         driver.findElement(By.xpath(searchRecords)).click();

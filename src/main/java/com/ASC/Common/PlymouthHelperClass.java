@@ -1,6 +1,7 @@
 package com.ASC.Common;
 
 
+import com.ASC.DataProcessing.GrantorData;
 import com.ASC.DataProcessing.GrantorDataPlymouth;
 import com.ASC.HeaderProcessing.Plymouth;
 import org.json.JSONArray;
@@ -72,7 +73,12 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
                     }
                 }
             }
-            getObjectForRow(driver,request,objForRow,rowCount);
+            JSONObject attributes = new JSONObject();
+            attributes.put("type", "Lead_Search_Result__c");
+            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
+            objForRow.put("attributes",attributes);
+            objForRow.put("Grantors__r",new GrantorDataPlymouth().getGrantorData(driver,rowCount));
+            objForRow.put("Lead_Search__c",request);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
@@ -82,5 +88,4 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
     public String getMainTableRow(int count){
         return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
     }
-
 }

@@ -20,7 +20,6 @@ public class GrantorData extends CommonMethods{
     public JSONObject getGrantorData(WebDriver driver, int rowID) {
 
         String grantorLabel = null;
-        //int dataRecords;
 
         try {
             Thread.sleep(3500);
@@ -32,8 +31,6 @@ public class GrantorData extends CommonMethods{
             Thread.sleep(1000);
 
         }catch (Exception e){e.printStackTrace();}
-
-        //dataRecords = Integer.parseInt(grantorLabel.substring(16));
 
         if (Integer.parseInt(grantorLabel.substring(16))<=10){
             return new JSONObject().put("records",getActualGrantorData(listOfRows(driver,Integer.parseInt(grantorLabel.substring(16))),rowID));
@@ -127,7 +124,6 @@ public class GrantorData extends CommonMethods{
 
     private String getButtonXpath(int rowValue){
 
-        //String btnValue
         if(rowValue<9){
             return "//*[@id=\"DocList1_GridView_Document_ctl0"+(rowValue+1)+"_ButtonRow_Name/ Corporation_"+(rowValue-1)+"\"]";
         }else{
