@@ -1,22 +1,15 @@
 package com.ASC.Common;
 
 import com.ASC.HeaderProcessing.SouthEssex;
-import org.apache.commons.lang3.ArrayUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class SouthEssexHelperClass extends SouthEssex {
@@ -51,8 +44,8 @@ public class SouthEssexHelperClass extends SouthEssex {
         int searchResultCount = getSearchResultCount(driver);
         int noOfLoop = searchResultCount/15;
         int lastPageData = searchResultCount % 15;
+        int count =0;
         if(noOfLoop>10){
-            int count =0;
             while(count<noOfLoop-1){
                 try{
                     String nextBtnClick;
@@ -73,10 +66,7 @@ public class SouthEssexHelperClass extends SouthEssex {
                 }
             }
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
-            tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
-
         }else{
-            int count =0;
             while(count<noOfLoop-1){
                 try{
                     String nextBtnClick;
@@ -97,9 +87,9 @@ public class SouthEssexHelperClass extends SouthEssex {
                 }
             }
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
-            tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
 
         }
+        tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
 
 
         generateFile(fileName,tableDataContent);
