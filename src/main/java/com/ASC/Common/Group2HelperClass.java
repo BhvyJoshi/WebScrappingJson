@@ -5,8 +5,11 @@ import com.ASC.HeaderProcessing.Group2;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,14 +22,19 @@ public class Group2HelperClass extends CommonMethods {
     private static final String nextButtonPath =  "//*[@id=\"search\"]/div/div[3]/div[1]/div/a[3]";
     private final static String mainTablePath = "//*[@id=\"search\"]/div/table/tbody";
 
-    public static final String searchLastNameText = "//*[@id=\"W9SNM\"]";
-    public static final String searchRecordsClick = "//*[@id=\"search\"]/div/input";
-    public static final String searchFirstNameText = "//*[@id=\"W9GNM\"]";
+    private static final String searchLastNameText = "//*[@id=\"W9SNM\"]";
+    private static final String searchRecordsClick = "//*[@id=\"search\"]/div/input";
+    private static final String searchFirstNameText = "//*[@id=\"W9GNM\"]";
 
   public void checkFirstName(WebDriver driver,String keyWord,String searchRegistryRecordClick,String firstName){
       driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-      driver.findElement(By.xpath(searchRegistryRecordClick)).click();
-      //driver.findElement(By.)
+      try{
+          Thread.sleep(2000);
+          new WebDriverWait(driver, 20).until(
+                  webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
+      }catch(Exception e)
+        {e.printStackTrace();}
+      ((JavascriptExecutor) driver).executeScript(searchRegistryRecordClick);
       driver.findElement(By.xpath(searchLastNameText)).sendKeys(keyWord);
       driver.findElement(By.xpath(searchFirstNameText)).sendKeys(firstName);
       driver.findElement(By.xpath(searchRecordsClick)).click();
@@ -43,7 +51,7 @@ public class Group2HelperClass extends CommonMethods {
                 Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
                 nextBtn.click();
-                System.out.print("\n------------next Button clicked----");
+                //System.out.print("\n------------next Button clicked----");
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID));
             }
