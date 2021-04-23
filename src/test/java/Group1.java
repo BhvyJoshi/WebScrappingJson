@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 // North Berkshire, North Middlesex, Hampshire, South Berkshire, South Middlesex, Worcester
 //with and without firstName
 
-//Done --> add support for correctness of data
+// add support for correctness of data
 public class Group1 extends Group1HelperClass {
     public WebDriver driver;
     @Parameters({"url","value","keyWord","firstName","fileName","request"})

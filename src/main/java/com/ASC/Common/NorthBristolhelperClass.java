@@ -74,7 +74,6 @@ public class NorthBristolhelperClass extends NorthBristol {
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
-        JSONObject attributes = new JSONObject();
 
         WebElement table =  driver.findElement(By.xpath(mainTablePath));
         int rowSize = table.findElements(By.tagName("tr")).size();
@@ -98,14 +97,9 @@ public class NorthBristolhelperClass extends NorthBristol {
                         }
                     }
                 }
-
-            attributes.put("type", "Lead_Search_Result__c");
-            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
-            objForRow.put("attributes",attributes);
-            objForRow.put("Lead_Search__c",request);
+            getObjectForRow(request,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
-            attributes = new JSONObject();
         }
         return objForPage;
     }

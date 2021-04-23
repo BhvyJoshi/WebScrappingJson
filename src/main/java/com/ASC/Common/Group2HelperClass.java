@@ -74,7 +74,6 @@ public class Group2HelperClass extends CommonMethods {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        JSONObject attributes = new JSONObject();
         WebElement table =  driver.findElement(By.xpath(mainTablePath));
         int rowSize = table.findElements(By.tagName("tr")).size();
 
@@ -97,10 +96,7 @@ public class Group2HelperClass extends CommonMethods {
                         }
                     }
                 }
-            attributes.put("type", "Lead_Search_Result__c");
-            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
-            objForRow.put("attributes",attributes);
-            objForRow.put("Lead_Search__c",requestID); //add request id
+            getObjectForRow(requestID,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }

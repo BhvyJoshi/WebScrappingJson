@@ -1,3 +1,4 @@
+import com.ASC.Common.Group1HelperClass;
 import com.ASC.Common.Group3HelperClass;
 import com.ASC.Common.InitializerClass;
 import org.openqa.selenium.WebDriver;
@@ -26,7 +27,7 @@ public class Group3 extends Group3HelperClass {
         if(value.contains("South Bristol")){
             driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");
         }
-        firstPage(driver, keyWord, firstName, fileName, request);
+        new Group1HelperClass().firstPage(driver, keyWord, firstName, fileName, request);
     }
 
     @AfterTest

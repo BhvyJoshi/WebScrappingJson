@@ -74,7 +74,6 @@ public class CookCountyHelper extends CookGrantorData {
         {
             WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
             List<WebElement> cols = row.findElements(By.tagName("td"));
-            //for (int column = 0, hdr = 0; (column < cols.size()); column++, hdr++) {//if all data is needed
             for (int column = 0, hdr = 0; (column < 2); column++, hdr++) { //as we need only 1st and 2nd column's data, i.e column<2
                 objForRow.put(header[hdr], cols.get(column).getText());
                 }

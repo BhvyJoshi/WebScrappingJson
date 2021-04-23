@@ -99,7 +99,6 @@ public class SouthEssexHelperClass extends SouthEssex {
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
             tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
 
-            //driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[2]")).click();
         }
 
 
@@ -111,13 +110,11 @@ public class SouthEssexHelperClass extends SouthEssex {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        JSONObject attributes = new JSONObject();
         for (int rowCount=lowerLimit;rowCount<upperLimit;rowCount++)
         {
             WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int hdr = 0; (hdr < header.length); hdr++) {
-                //for (int column = 0, hdr = 0; (column < 7); column++, hdr++) {
                 objForRow.put(header[hdr], cols.get(hdr+2).getText());
                 while(hdr == 0) {
                     Date dob;
@@ -131,16 +128,12 @@ public class SouthEssexHelperClass extends SouthEssex {
                     }
                 }
             }
-            attributes.put("type", "Lead_Search_Result__c");
-            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
-            objForRow.put("attributes",attributes);
-            objForRow.put("Lead_Search__c",requestID); //add request id
+            getObjectForRow(requestID,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
         return objForPage;
     }
-
      public String getMainTableRow(int count){
         return "//*[@id=\"ASPxGridView1_DXDataRow"+count+"\"]";
     }

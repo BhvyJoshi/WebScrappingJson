@@ -1,10 +1,13 @@
 package com.ASC.DataProcessing;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
+import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
 public class CommonMethods {
 
@@ -32,5 +35,22 @@ public class CommonMethods {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    public void getObjectForRow(String requestID, JSONObject objForRow, int rowCount) {
+        JSONObject attributes = new JSONObject();
+        attributes.put("type", "Lead_Search_Result__c");
+        attributes.put("referenceId","ref"+ rowCount +"_"+new Random().nextInt(100000));
+        objForRow.put("attributes", attributes);
+        objForRow.put("Lead_Search__c", requestID);
+    }
+
+    public void getObjectForRow(WebDriver driver, String requestID, JSONObject objForRow, int rowCount) {
+        JSONObject attributes = new JSONObject();
+        attributes.put("type", "Lead_Search_Result__c");
+        attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
+        objForRow.put("attributes",attributes);
+        objForRow.put("Grantors__r",new GrantorData().getGrantorData(driver,rowCount));
+        objForRow.put("Lead_Search__c",requestID);
     }
 }
