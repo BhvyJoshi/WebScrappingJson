@@ -5,11 +5,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class SouthEssexHelperClass extends SouthEssex {
@@ -39,7 +34,6 @@ public class SouthEssexHelperClass extends SouthEssex {
     public void tableData(WebDriver driver,String fileName,String requestID)
     {
         String[] headers = grabHeader(driver);
-        System.out.println("length of header is "+headers.length);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,requestID,0,15);
         int searchResultCount = getSearchResultCount(driver);
@@ -59,8 +53,6 @@ public class SouthEssexHelperClass extends SouthEssex {
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]";
                     }
                     driver.findElement(By.xpath(nextBtnClick)).click();
-                    //driver.findElement(By.xpath(nextBtnClick)).click();
-
                     Thread.sleep(2000);
                     tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15));
                 }
@@ -68,8 +60,8 @@ public class SouthEssexHelperClass extends SouthEssex {
                     e1.printStackTrace();
                 }
             }
+            driver.navigate().refresh();
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
-            //driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
         }else{
             while(count<noOfLoop-1){
                 try{
@@ -82,21 +74,19 @@ public class SouthEssexHelperClass extends SouthEssex {
 
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(count+1)+"]";
                     }
-                    driver.findElement(By.xpath(nextBtnClick)).click();
                     driver.navigate().refresh();
-                    //driver.findElement(By.xpath(nextBtnClick)).click();
-                    Thread.sleep(2000);
+                    driver.findElement(By.xpath(nextBtnClick)).click();
+                    Thread.sleep(1500);
                     tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15));
                 }
                 catch (Exception e1){
                     e1.printStackTrace();
                 }
             }
+            driver.navigate().refresh();
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
-            //driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
         }
         tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
-
 
         generateFile(fileName,tableDataContent);
     }
@@ -106,28 +96,9 @@ public class SouthEssexHelperClass extends SouthEssex {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        //*[@id="ASPxGridView1_DXDataRow0"]/td[3]
-        //*[@id="ASPxGridView1_DXDataRow0"]/td[17]
         for (int rowCount=lowerLimit;rowCount<upperLimit;rowCount++)
         {
-           /* WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
-            List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int hdr = 0; (hdr < header.length); hdr++) {
-                objForRow.put(header[hdr], cols.get(hdr+2).getText());
-                while(hdr == 0) {
-                    Date dob;
-                    try {
-                        dob = new SimpleDateFormat("MM/dd/yyyy").parse(cols.get(hdr+2).getText());
-                        String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                        objForRow.put(header[hdr], str);
-                        break;
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }*/
-
-            String[] data = new String[25]; //data of each row
+            String[] data = new String[15]; //data of each row
             for (int itr = 0; itr<=13; itr++){
                 String xPath = getMainTableRow(rowCount)+"/td["+(itr+3)+"]";
                 data[itr] = driver.findElement(By.xpath(xPath)).getText();
