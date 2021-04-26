@@ -39,6 +39,7 @@ public class SouthEssexHelperClass extends SouthEssex {
     public void tableData(WebDriver driver,String fileName,String requestID)
     {
         String[] headers = grabHeader(driver);
+        System.out.println("length of header is "+headers.length);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,requestID,0,15);
         int searchResultCount = getSearchResultCount(driver);
@@ -54,10 +55,12 @@ public class SouthEssexHelperClass extends SouthEssex {
                     if(count == 1) {
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[10]";
                     }else {
+                        driver.navigate().refresh();
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]";
                     }
-                    WebElement nextBtn = driver.findElement(By.xpath(nextBtnClick));
-                    nextBtn.click();
+                    driver.findElement(By.xpath(nextBtnClick)).click();
+                    //driver.findElement(By.xpath(nextBtnClick)).click();
+
                     Thread.sleep(2000);
                     tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15));
                 }
@@ -66,6 +69,7 @@ public class SouthEssexHelperClass extends SouthEssex {
                 }
             }
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
+            //driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
         }else{
             while(count<noOfLoop-1){
                 try{
@@ -75,10 +79,12 @@ public class SouthEssexHelperClass extends SouthEssex {
                     if(count == 1) {
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[2]";
                     }else {
+
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(count+1)+"]";
                     }
-                    WebElement nextBtn = driver.findElement(By.xpath(nextBtnClick));
-                    nextBtn.click();
+                    driver.findElement(By.xpath(nextBtnClick)).click();
+                    driver.navigate().refresh();
+                    //driver.findElement(By.xpath(nextBtnClick)).click();
                     Thread.sleep(2000);
                     tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15));
                 }
@@ -87,7 +93,7 @@ public class SouthEssexHelperClass extends SouthEssex {
                 }
             }
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
-
+            //driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
         }
         tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
 
@@ -100,9 +106,11 @@ public class SouthEssexHelperClass extends SouthEssex {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
+        //*[@id="ASPxGridView1_DXDataRow0"]/td[3]
+        //*[@id="ASPxGridView1_DXDataRow0"]/td[17]
         for (int rowCount=lowerLimit;rowCount<upperLimit;rowCount++)
         {
-            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
+           /* WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int hdr = 0; (hdr < header.length); hdr++) {
                 objForRow.put(header[hdr], cols.get(hdr+2).getText());
@@ -117,7 +125,23 @@ public class SouthEssexHelperClass extends SouthEssex {
                         e.printStackTrace();
                     }
                 }
+            }*/
+
+            String[] data = new String[25]; //data of each row
+            for (int itr = 0; itr<=13; itr++){
+                String xPath = getMainTableRow(rowCount)+"/td["+(itr+3)+"]";
+                data[itr] = driver.findElement(By.xpath(xPath)).getText();
+                data[itr] = driver.findElement(By.xpath(xPath)).getText();
             }
+
+            for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
+                while(itr1 == 0){
+                    data[itr1] = generateDate(data[itr1]);
+                    break;
+                }
+                objForRow.put(header[itr1],data[itr1]);
+            }
+
             getObjectForRow(requestID,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();

@@ -1,7 +1,5 @@
 package com.ASC.Common;
 
-
-import com.ASC.DataProcessing.GrantorData;
 import com.ASC.DataProcessing.GrantorDataPlymouth;
 import com.ASC.HeaderProcessing.Plymouth;
 import org.json.JSONArray;
@@ -9,7 +7,6 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,8 +29,8 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
         while(checkNext){
             try{
                 Thread.sleep(1000);
-                WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
-                nextBtn.click();
+                driver.findElement(By.xpath(nextButtonPath)).click();
+                driver.findElement(By.xpath(nextButtonPath)).click();
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }

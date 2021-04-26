@@ -42,17 +42,16 @@ public class NorthBristolhelperClass extends NorthBristol {
 
             try{
                 Thread.sleep(1000);
-                WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]"));
-                nextBtn.click();
-               // System.out.println("Clicked on button --->"+i);
-                Thread.sleep(2000);
+                driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
+                driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
+                Thread.sleep(1500);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }
             catch (Exception e1){
                 e1.printStackTrace();
             }
         }
-    generateFile(fileName,tableDataContent);
+        generateFile(fileName,tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request)
@@ -66,27 +65,37 @@ public class NorthBristolhelperClass extends NorthBristol {
         for (int rowCount=3;rowCount<=rowSize-3;rowCount++)
         {
             WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
-
             List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int column = 0, hdr = 0; (column < cols.size()-1); column++, hdr++) {
-                objForRow.put(header[hdr], cols.get(column).getText());
-                while(hdr == 2){
-                    Date dob;
-                    try {
-                        dob = new SimpleDateFormat("MM/dd/yyyy").parse(cols.get(column).getText());
-                        String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                        objForRow.put(header[hdr],str);
-                        break;
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
+
+            String[] data = new String[cols.size()]; //data of each row
+            for (int itr = 1; itr<=cols.size()-1; itr++){
+                String xPath = getMainTableRow(rowCount)+"/td["+itr+"]";
+                data[itr] = driver.findElement(By.xpath(xPath)).getText();
+            }
+
+            for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
+                while(itr1 == 3){
+                    data[itr1] = generateDate(data[itr1]);
+                    break;
                 }
+                objForRow.put(header[itr1],data[itr1]);
+            }
+
             getObjectForRow(request,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
         return objForPage;
+    }
+
+    public String generateDate(String date){
+        Date dob = null;
+        try {
+            dob = new SimpleDateFormat("MM/dd/yyyy").parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new SimpleDateFormat("yyyy-MM-dd").format(dob);
     }
 
     public String getMainTableRow(int count){

@@ -6,6 +6,9 @@ import org.openqa.selenium.WebDriver;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class CommonMethods {
@@ -51,5 +54,15 @@ public class CommonMethods {
         objForRow.put("attributes",attributes);
         objForRow.put("Grantors__r",new GrantorData().getGrantorData(driver,rowCount));
         objForRow.put("Lead_Search__c",requestID);
+    }
+
+    public String generateDate(String date){
+        Date dob = null;
+        try {
+            dob = new SimpleDateFormat("MM/dd/yyyy").parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new SimpleDateFormat("yyyy-MM-dd").format(dob);
     }
 }

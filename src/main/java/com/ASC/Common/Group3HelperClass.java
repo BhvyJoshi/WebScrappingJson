@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Group3HelperClass extends GrantorData {
 
@@ -19,9 +20,21 @@ public class Group3HelperClass extends GrantorData {
     private static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     private static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
+   /* private static final String searchButtonClick = "//*[@id=\"SearchFormEx1_btnSearch\"]";
+    private static final String lastNameTextBox = "//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]";
+    private static final String firstnameTextBox = "//*[@id=\"SearchFormEx1_ACSTextBox_FirstName1\"]";
+
+    public void firstPage(WebDriver driver,String keyWord,String firstName){
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        driver.findElement(By.xpath(lastNameTextBox)).sendKeys(keyWord);
+        driver.findElement(By.xpath(firstnameTextBox)).sendKeys(firstName);
+        driver.findElement(By.xpath(searchButtonClick)).click();
+    }
+    */
     public void tableData(WebDriver driver, String fileName, String request)
     {
         String[] headers = new Group3().grabHeader(driver);
+        driver.findElement(By.xpath("//*[@id=\"DocList1_PageView5Btn\"]")).click();
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
 

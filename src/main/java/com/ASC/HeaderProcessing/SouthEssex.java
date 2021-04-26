@@ -10,22 +10,25 @@ import java.util.List;
 
 public class SouthEssex extends CommonMethods {
 
-    public static final String headerXpath = "//*[@id=\"ASPxGridView1_DXHeadersRow0\"]";
+    //public static final String headerXpath = "//*[@id=\"ASPxGridView1_DXHeadersRow0\"]";
 
+    //*[@id="ASPxGridView1_col0"]/table/tbody/tr/td[1]/table/tbody/tr/td
+    //*[@id="ASPxGridView1_col10"]/table/tbody/tr/td[1]/table/tbody/tr/td
+    //*[@id="ASPxGridView1_col1"]/table/tbody/tr/td[1]/table/tbody/tr/td
     public String[] grabHeader(WebDriver driver){
-        List<WebElement> headers = driver.findElement(By.xpath(headerXpath)).findElements(By.tagName("td"));
-        String[] header = new String[headers.size()];
-        for (int i =0;i<headers.size();i++)
+       // List<WebElement> headers = driver.findElement(By.xpath(headerXpath)).findElements(By.tagName("td"));
+        String[] header = new String[13];
+        for (int i=0; i<=12; i++)
         {
-            header[i]=headers.get(i).getText();
+            header[i]=driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_col"+(i+1)+"\"]/table/tbody/tr/td[1]/table/tbody/tr/td")).getText();
         }
-        header = Arrays.toString(header).replace("\n","").replace("[","").replace("]","").split(",");
+       /* header = Arrays.toString(header).replace("\n","").replace("[","").replace("]","").split(",");
         for (int i = 0; i < header.length; i++){
             if(!header[i].trim().equals("") || header[i]!=null)
                 header[i] = header[i].trim();
         }
         header = Arrays.stream(header).distinct().toArray(String[]::new);
-        header = ArrayUtils.removeAll(header,0,1,2);
+        header = ArrayUtils.removeAll(header,0,1,2);*/
         return modifyHeader(header);
     }
 

@@ -16,9 +16,10 @@ public class NorthBristol extends CommonMethods {
         WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
         List<WebElement> headers = headerTag.findElements(By.tagName("th"));
         String[] header = new String[headers.size()-1];
-        for (int i =0;i<headers.size()-1;i++)
+        for (int i =1;i<headers.size()-1;i++)
         {
-            header[i]=headers.get(i).getText();
+            header[i]=driver.findElement(By.xpath(headerTagPath+"/th["+i+"]")).getText();
+            //header[i]=driver.findElement(By.xpath(headerTagPath+"/th["+i+"]")).getText();
         }
         return modifyHeader(header);
     }
