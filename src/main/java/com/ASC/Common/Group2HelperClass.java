@@ -81,19 +81,8 @@ public class Group2HelperClass extends CommonMethods {
 
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < cols.size()-4); column++, hdr++) {
-                objForRow.put(header[hdr], cols.get(column).getText());
-                    while(hdr == 3) {
-                        Date dob;
-                        try {
-                            dob = new SimpleDateFormat("MM-dd-yyyy").parse(cols.get(column).getText());
-                            String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                            objForRow.put(header[hdr], str);
-                            break;
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                HampdenHelperClass.addDataToJsonObj(header, objForRow, cols, column, hdr);
+            }
             getObjectForRow(requestID,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();

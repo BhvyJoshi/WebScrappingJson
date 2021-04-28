@@ -36,6 +36,7 @@ public class CookCountyHelper extends CookGrantorData {
     public void tableData(WebDriver driver,String fileName,String request)
     {
         String[] headers = grabHeader(driver,mainHeaderPath);
+
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
         int nextBtnCliCkCount  = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
@@ -46,8 +47,9 @@ public class CookCountyHelper extends CookGrantorData {
             try{
                 Thread.sleep(2000);
                 WebElement nextBtn = driver.findElement(By.xpath(mainTableNextButtonPath));
-                new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(nextBtn));
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextBtn);
+                new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(mainTableNextButtonPath))));
+               // new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(nextBtn));
+                //((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextBtn);
                 nextBtn.click();
                 System.out.println("\n------- next btn clicked------------"+(++count));
                 Thread.sleep(2000);
@@ -55,6 +57,7 @@ public class CookCountyHelper extends CookGrantorData {
                 nextBtnCliCkCount --;
             }
             catch (Exception e1){
+                e1.printStackTrace();
                 checkNext = false;
             }
         }
@@ -67,11 +70,14 @@ public class CookCountyHelper extends CookGrantorData {
         JSONObject objForRow = new JSONObject();
         JSONObject attributes = new JSONObject();
 
-        WebElement table =  driver.findElement(By.xpath(mainTablePath));
-        int rowSize = table.findElements(By.tagName("tr")).size();
+        //driver.findElement(By.xpath("//*[@id=\"NameList1_PageView5Btn\"]")).click();
+
+        int rowSize =  driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
         {
+            //driver.findElement(By.xpath("//*[@id=\"NameList1_PageView5Btn\"]")).click();
+            System.out.println("\n-----------main table row ------->"+rowCount);
             WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < 2); column++, hdr++) { //as we need only 1st and 2nd column's data, i.e column<2
@@ -89,6 +95,5 @@ public class CookCountyHelper extends CookGrantorData {
         }
         return objForPage;
     }
-
 
 }

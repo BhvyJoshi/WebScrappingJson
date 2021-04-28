@@ -9,16 +9,16 @@ import java.util.List;
 
 public class Hampden extends CommonMethods {
 
-    public final static String headerTagPath = "//*[@id=\"search\"]/div/div[5]/table/tbody/tr[1]";
+    public final static String headerTagPath = "//*[@id=\"search\"]/div/div[5]/table/tbody/tr[1]/th[";
 
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
-        List<WebElement> headers = headerTag.findElements(By.tagName("th"));
-        String[] header = new String[headers.size()-2];
-        for (int i =0;i<headers.size()-2;i++)
+        //WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
+        ///List<WebElement> headers = headerTag.findElements(By.tagName("th"));
+        String[] header = new String[7];
+        for (int i =0;i<=6;i++)
         {
-            header[i]=headers.get(i).getText();
+            header[i]=driver.findElement(By.xpath(headerTagPath+(i+1)+"]")).getText();
         }
         return modifyHeader(header);
     }

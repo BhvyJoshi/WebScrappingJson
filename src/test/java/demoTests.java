@@ -9,11 +9,11 @@ import org.testng.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 /*@Ignore*/
-public class demoTests extends Group2HelperClass {
+public class demoTests extends Group1HelperClass {
 
     public WebDriver driver;
     public  String searchRegistryRecordClick;
-    @Test(dataProvider ="Group3")
+    @Test(dataProvider ="Group1")
     public void testDemo(String value){
 
         String url ="https://www.masslandrecords.com";
@@ -30,7 +30,7 @@ public class demoTests extends Group2HelperClass {
         }
         new Group1HelperClass().firstPage(driver, keyWord, firstName); group3*/
 
-        switch (value) {
+       /* switch (value) {
             case "Barnstable": //Done
                 searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
                 driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -48,7 +48,7 @@ public class demoTests extends Group2HelperClass {
                 searchRegistryRecordClick = "$(\".homeButton a\")[1].click();";
                 checkFirstName(driver,keyWord,searchRegistryRecordClick,firstName);
                 break;
-        }
+        }*/
         tableData(driver,fileName,request);
     }
 

@@ -9,18 +9,19 @@ import java.util.List;
 
 public class Group3 {
 
-    public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
+    public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr/th[";
 
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
-        List<WebElement> headers = headerTag.findElements(By.tagName("th"));
-        String[] header = new String[headers.size()];
-        for (int i =0;i<headers.size();i++)
+       /* WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
+        List<WebElement> headers = headerTag.findElements(By.tagName("th"));*/
+        //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]/td[9]
+
+        String[] header = new String[8];
+        for (int i =0;i<8;i++)
         {
-            header[i]=headers.get(i).getText();
+            header[i]=driver.findElement(By.xpath(headerTagPath+(i+2)+"]")).getText();
         }
-        header = ArrayUtils.removeAll(header,0, header.length-1,(header.length-2));
         return modifyHeader(header);
     }
 

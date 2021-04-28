@@ -14,8 +14,8 @@ public class Group3 extends Group3HelperClass {
     public static String value= "South Bristol"/*"Fall River Bristol"*/;
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
-    private static String request = "1234";
-    private static String firstName = "";
+    private static final String request = "1234";
+    private static final String firstName = "";
 
     public WebDriver driver;
 

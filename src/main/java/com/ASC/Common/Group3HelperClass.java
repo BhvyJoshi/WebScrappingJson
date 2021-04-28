@@ -6,12 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Group3HelperClass extends GrantorData {
 
@@ -20,17 +16,6 @@ public class Group3HelperClass extends GrantorData {
     private static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     private static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
-   /* private static final String searchButtonClick = "//*[@id=\"SearchFormEx1_btnSearch\"]";
-    private static final String lastNameTextBox = "//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]";
-    private static final String firstnameTextBox = "//*[@id=\"SearchFormEx1_ACSTextBox_FirstName1\"]";
-
-    public void firstPage(WebDriver driver,String keyWord,String firstName){
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.findElement(By.xpath(lastNameTextBox)).sendKeys(keyWord);
-        driver.findElement(By.xpath(firstnameTextBox)).sendKeys(firstName);
-        driver.findElement(By.xpath(searchButtonClick)).click();
-    }
-    */
     public void tableData(WebDriver driver, String fileName, String request)
     {
         String[] headers = new Group3().grabHeader(driver);
@@ -43,9 +28,8 @@ public class Group3HelperClass extends GrantorData {
         while(checkNext){
             try{
                 Thread.sleep(1000);
-                WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
-                nextBtn.click();
-                Thread.sleep(2000);
+                driver.findElement(By.xpath(nextButtonPath)).click();
+                Thread.sleep(1500);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }
             catch (Exception e1){
@@ -60,30 +44,25 @@ public class Group3HelperClass extends GrantorData {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        WebElement table =  driver.findElement(By.xpath(mainTablePath));
-        int rowSize = table.findElements(By.tagName("tr")).size();
+        int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
         {
-            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
-
-            List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int column = 0, hdr = 0; (column < cols.size()-2); column++, hdr++) {
-                if (column != 0) {
-                    objForRow.put(header[hdr - 1], cols.get(column).getText());
-                    while(hdr-1 == 5){
-                        Date dob;
-                        try {
-                            dob = new SimpleDateFormat("MM/dd/yyyy").parse(cols.get(column).getText());
-                            String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                            objForRow.put(header[hdr-1],str);
-                            break;
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
+            String[] data = new String[8]; //data of each row
+            for (int itr = 0; itr<8; itr++){
+                new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
+                    String xPath = getMainTableRow(rowCount)+"/td["+(itr+2)+"]";
+                    data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 }
+
+            for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
+                while(itr1 == 5){
+                    data[itr1] = generateDate(data[itr1]);
+                    break;
+                }
+                objForRow.put(header[itr1],data[itr1]);
             }
+
             getObjectForRow(driver,request,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();

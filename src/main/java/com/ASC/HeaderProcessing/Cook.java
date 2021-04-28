@@ -11,8 +11,7 @@ import java.util.List;
 public class Cook extends CommonMethods {
 
     public String[] getHeader(WebDriver driver, String xPath) {
-        WebElement headerLine = driver.findElement(By.xpath(xPath));
-        List<WebElement> headers = headerLine.findElements(By.tagName("th"));
+        List<WebElement> headers = driver.findElement(By.xpath(xPath)).findElements(By.tagName("th"));
         String[] header = new String[headers.size()];
         for (int i = 0; i < headers.size(); i++) {
             header[i] = headers.get(i).getText();

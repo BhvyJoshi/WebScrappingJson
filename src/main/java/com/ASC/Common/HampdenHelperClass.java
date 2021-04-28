@@ -37,14 +37,16 @@ public class HampdenHelperClass extends Hampden {
         String[] headers = grabHeader(driver);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,requestID);
+        //boolean keepLooping = true;
 
         while(checkForData(driver)){
             try{
                 Thread.sleep(1000);
-                WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
-                nextBtn.click();
-                Thread.sleep(2000);
+                driver.navigate().refresh();
+                driver.findElement(By.xpath(nextButtonPath)).click();
+                Thread.sleep(1500);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID));
+                //keepLooping = false;
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -66,8 +68,7 @@ public class HampdenHelperClass extends Hampden {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        WebElement table =  driver.findElement(By.xpath(mainTablePath));
-        int rowSize = table.findElements(By.tagName("tr")).size();
+        int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=2;rowCount<rowSize;rowCount++)
         {
@@ -75,24 +76,44 @@ public class HampdenHelperClass extends Hampden {
 
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < cols.size()-3); column++, hdr++) {
-                objForRow.put(header[hdr], cols.get(column).getText());
-                while(hdr == 3) {
-                    Date dob;
-                    try {
-                        dob = new SimpleDateFormat("MM-dd-yyyy").parse(cols.get(column).getText());
-                        String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                        objForRow.put(header[hdr], str);
-                        break;
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
+                addDataToJsonObj(header, objForRow, cols, column, hdr);
             }
+         /*   driver.navigate().refresh();
+            String[] data = new String[8]; //data of each row
+            for (int itr = 0; itr<=6; itr++){
+                String xPath = getMainTableRow(rowCount)+"/td["+(itr+1)+"]";
+                data[itr] = driver.findElement(By.xpath(xPath)).getText();
+
+                data[itr] = driver.findElement(By.xpath(xPath)).getText();
+            }
+            for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
+                while(itr1 == 3){
+                    data[itr1] = generateDate(data[itr1],"MM-dd-yyyy");
+                    break;
+                }
+                objForRow.put(header[itr1],data[itr1]);
+            }*/
+
             getObjectForRow(requestID, objForRow, rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
         }
         return objForPage;
+    }
+
+    static void addDataToJsonObj(String[] header, JSONObject objForRow, List<WebElement> cols, int column, int hdr) {
+        objForRow.put(header[hdr], cols.get(column).getText());
+        while(hdr == 3) {
+            Date dob;
+            try {
+                dob = new SimpleDateFormat("MM-dd-yyyy").parse(cols.get(column).getText());
+                String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
+                objForRow.put(header[hdr], str);
+                break;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getMainTableRow(int count){

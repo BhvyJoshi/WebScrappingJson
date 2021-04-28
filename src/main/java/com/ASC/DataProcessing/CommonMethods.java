@@ -65,4 +65,13 @@ public class CommonMethods {
         }
         return new SimpleDateFormat("yyyy-MM-dd").format(dob);
     }
+    /*public String generateDate(String date,String dateFormat){
+        Date dob = null;
+        try {
+            dob = new SimpleDateFormat(dateFormat).parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new SimpleDateFormat("yyyy-MM-dd").format(dob);
+    }*/
 }

@@ -6,9 +6,8 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class DataProcessing extends GrantorData{
 
@@ -19,7 +18,6 @@ public class DataProcessing extends GrantorData{
     public void tableData(WebDriver driver,String fileName,String request)
     {
         String[] headers = new Group1().grabHeader(driver);
-        driver.findElement(By.xpath(recordsPerPage)).click();
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
 
@@ -28,8 +26,9 @@ public class DataProcessing extends GrantorData{
         while(checkNext){
             try{
                 Thread.sleep(1000);
-                WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
-                nextBtn.click();
+                new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(nextButtonPath)));
+                driver.findElement(By.xpath(nextButtonPath)).click();
+                System.out.println("\n------------------next Button clicked------------------");
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }
@@ -44,36 +43,31 @@ public class DataProcessing extends GrantorData{
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
+        //driver.findElement(By.xpath(recordsPerPage)).click();
 
-        WebElement table =  driver.findElement(By.xpath(mainTablePath));
-        int rowSize = table.findElements(By.tagName("tr")).size();
+        int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
         {
-            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
+            System.out.println("MainTable row number is ----->"+rowCount);
+            String[] data = new String[9]; //data of each row
+            for (int itr = 0; itr<9; itr++){
+                new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
+                String xPath = getMainTableRow(rowCount)+"/td["+(itr+2)+"]";
+                data[itr] = driver.findElement(By.xpath(xPath)).getText();
+            }
 
-            List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int column = 0, hdr = 0; (column < cols.size()); column++, hdr++) {
-                if (column != 0) {
-                    objForRow.put(header[hdr - 1], cols.get(column).getText());
-                    while(hdr-1 == 5){
-                        Date dob;
-                        try {
-                            //need to work on stale element
-                            dob = new SimpleDateFormat("MM/dd/yyyy").parse(cols.get(column).getText());
-                            String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                            objForRow.put(header[hdr-1],str);
-                            break;
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
+            for (int itr1 = 0;itr1 <header.length;itr1++){ //mapping of header and data in json object
+                while(itr1 == 5){
+                    data[itr1] = generateDate(data[itr1]);
+                    break;
                 }
+                objForRow.put(header[itr1],data[itr1]);
+
             }
             getObjectForRow(driver,request,objForRow,rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
-
         }
         return objForPage;
     }

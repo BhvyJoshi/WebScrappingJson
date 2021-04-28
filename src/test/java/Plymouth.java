@@ -11,20 +11,20 @@ import java.util.concurrent.TimeUnit;
 //nedd to update logic on page no click
 public class Plymouth extends PlymouthHelperClass {
 
-   /* public static String url = "https://www.masslandrecords.com";
+    public static String url = "https://www.masslandrecords.com";
     public static String value= "Plymouth";
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
-    public static String requestID = "12345";*/
+    public static String request = "12345";
 
     public static final String searchButtonClick = "//*[@id=\"SearchFormEx1_btnSearch\"]";
     public static final String lastNameTextBox = "//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]";
 
     public WebDriver driver;
     @Test
-    @Parameters({"url","value","keyWord","fileName","request"})
-    public void PlymouthCounty(String url,String value,String keyWord,String fileName,String request)
-    {
+    //@Parameters({"url","value","keyWord","fileName","request"})
+    //public void PlymouthCounty(String url,String value,String keyWord,String fileName,String request)
+    public void test(){
       driver = InitializerClass.initialize(url,value);
       driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
       driver.findElement(By.xpath(lastNameTextBox)).sendKeys(keyWord);

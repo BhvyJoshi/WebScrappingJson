@@ -5,8 +5,8 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import java.util.ArrayList;
-import java.util.List;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.Random;
 
 public class GrantorData extends CommonMethods{
@@ -16,6 +16,8 @@ public class GrantorData extends CommonMethods{
     public final String[] headerSubTable = {"Name", "Type__c"};
 
     public static final String labelPath = "//*[@id=\"DocDetails1_Label_GrantorGrantee\"]";
+    public static final String subTableBody = "//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/";
+    public static final String nextBtnLocator = "//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr[12]/td/table/tbody/tr/td";
 
     public JSONObject getGrantorData(WebDriver driver, int rowID) {
 
@@ -23,50 +25,35 @@ public class GrantorData extends CommonMethods{
 
         try {
             Thread.sleep(3500);
-            WebElement linkedText = driver.findElement(By.xpath(getButtonXpath(rowID)));
-            linkedText.click();
+            driver.findElement(By.xpath(getButtonXpath(rowID))).click();
             Thread.sleep(2000);
-            WebElement grantorLabelPath = driver.findElement(By.xpath(labelPath));
-            grantorLabel = grantorLabelPath.getText();
+            new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfElementLocated(By.xpath(labelPath)));
+            grantorLabel = driver.findElement(By.xpath(labelPath)).getText();
             Thread.sleep(1000);
 
         }catch (Exception e){e.printStackTrace();}
+        int dataRecords = Integer.parseInt(grantorLabel.substring(16));
+        System.out.println("value of dataRecords == --------------------"+dataRecords);
 
-        if (Integer.parseInt(grantorLabel.substring(16))<=10){
-            return new JSONObject().put("records",getActualGrantorData(listOfRows(driver,Integer.parseInt(grantorLabel.substring(16))),rowID));
+        if (dataRecords<=10){
+            return new JSONObject().put("records",getActualGrantorData(driver,rowID,dataRecords));
 
         }else{
-            return new JSONObject().put("records",getMultipleGrantorData(driver,Integer.parseInt(grantorLabel.substring(16)),rowID));
+            return new JSONObject().put("records",getMultipleGrantorData(driver,dataRecords,rowID));
         }
-    }
-
-    private List<WebElement> listOfRows(WebDriver driver,int length)
-    {
-        List<WebElement> rowOfSubTable = new ArrayList<>();
-        while(rowOfSubTable.size()!=length){
-            try{
-                Thread.sleep(2000);
-               for (int itr=2;itr<=length+1;itr++){
-                WebElement row = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr["+itr+"]"));
-                rowOfSubTable.add(row);
-                }
-            }catch(Exception e1){
-                e1.printStackTrace();}
-        }
-        return rowOfSubTable;
     }
 
     private JSONArray getMultipleGrantorData(WebDriver driver,int dataRecords,int mainRowId){
         int noOfPages = dataRecords/10;
         int dataInLastPage = dataRecords % 10;
 
-        JSONArray subTableContent = getActualGrantorData(listOfRows(driver,10),mainRowId);
+        JSONArray subTableContent = getActualGrantorData(driver,mainRowId,10);
         int pageCount = 1;
 
         if(pageCount<noOfPages){
             try{
                 clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(listOfRows(driver,10),mainRowId));
+                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,10));
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -74,7 +61,7 @@ public class GrantorData extends CommonMethods{
         }else {
             try{
                 clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(listOfRows(driver,dataInLastPage),mainRowId));
+                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,dataInLastPage));
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -85,45 +72,56 @@ public class GrantorData extends CommonMethods{
 
     private void clickOnNextPage(WebDriver driver, int pageCount) throws InterruptedException {
         pageCount++;
-        Thread.sleep(2500);
+        String locatorXpath = "["+pageCount+"]/a";
+        Thread.sleep(1000);
+        new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(nextBtnLocator+locatorXpath)));
         boolean check = true;
         WebElement nextBtn = null;
         while(check){
-            nextBtn = driver.findElement(By.xpath("//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr[12]/td/table/tbody/tr/td["+pageCount+"]/a"));
+            nextBtn = driver.findElement(By.xpath(nextBtnLocator+locatorXpath));
             check = !(nextBtn!=null);
         }
         nextBtn.click();
         Thread.sleep(3000);
     }
 
-    private JSONArray getActualGrantorData(List<WebElement>  rowElement,int mainRowId){
+    private JSONArray getActualGrantorData(WebDriver driver,int mainRowId,int length){
 
         JSONArray objForSubTable = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
-        JSONObject objAttributes = new JSONObject();
 
-        for (WebElement r:rowElement) {
-            try{
-                Thread.sleep(1500);
-                List<WebElement> cols = r.findElements(By.tagName("td"));
-                for (int i = 0; i < cols.size(); i++) {
-                    objForSubRow.put(headerSubTable[i],cols.get(i).getText());
+        //problem found. the value is not getting updated as per new grantor grantee table, it takes the previous table's value.
+        System.out.println("value of length is --------------->"+length);
+           while(objForSubTable.length()!=length){
+               try{
+                    for (int itr=2;itr<=length+1;itr++){
+                        Thread.sleep(2500);
+                        new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableBody+"/tr")));
+                        driver.findElement(By.xpath(subTableBody+"tr["+itr+"]"));
+                        System.out.println("SubTable row number: ---> "+itr);
+                        WebElement column1 = driver.findElement(By.xpath(subTableBody+"tr["+itr+"]/td[1]"));
+                        WebElement column2 = driver.findElement(By.xpath(subTableBody+"tr["+itr+"]/td[2]"));
+                        objForSubRow.put(headerSubTable[0],column1.getText());
+                        objForSubRow.put(headerSubTable[1],column2.getText());
+                        objForSubRow.put("attributes",attributes(mainRowId));
+                        objForSubTable.put(objForSubRow);
+                        objForSubRow = new JSONObject();
+                    }
+                }catch(Exception e1){
+                   e1.printStackTrace();
                 }
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-            objAttributes.put("type","Grantor__c");
-            objAttributes.put("referenceId","ref"+new Random().nextInt(10000)+"_"+mainRowId);
-            objForSubRow.put("attributes",objAttributes);
-            objForSubTable.put(objForSubRow);
-            objForSubRow = new JSONObject();
-            objAttributes = new JSONObject();
-        }
+           }
        return objForSubTable;
     }
 
-    private String getButtonXpath(int rowValue){
+    private JSONObject attributes(int rowID){
+        JSONObject objAttributes = new JSONObject();
+        objAttributes.put("type","Grantor__c");
+        objAttributes.put("referenceId","ref"+new Random().nextInt(10000)+"_"+rowID);
+        return objAttributes;
+    }
 
+    private String getButtonXpath(int rowValue){
         if(rowValue<9){
             return "//*[@id=\"DocList1_GridView_Document_ctl0"+(rowValue+1)+"_ButtonRow_Name/ Corporation_"+(rowValue-1)+"\"]";
         }else{

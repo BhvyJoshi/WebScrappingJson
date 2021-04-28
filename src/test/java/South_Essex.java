@@ -13,7 +13,7 @@ public class South_Essex extends SouthEssexHelperClass {
     public static String value= "South Essex";
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
-    public static String firstName = "julian";
+    public static String firstName = /*"julian"*/"";
     public static String request = "123";
 
     @Test

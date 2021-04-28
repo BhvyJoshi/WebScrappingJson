@@ -12,14 +12,14 @@ public class Plymouth {
     public static final String headerTagPath ="//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
-        List<WebElement> headers = headerTag.findElements(By.tagName("th"));
-        String[] header = new String[headers.size()];
-        for (int i =0;i<headers.size();i++)
+        //WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
+        //List<WebElement> headers = headerTag.findElements(By.tagName("th"));
+        String[] header = new String[15];
+        for (int i =0;i<15;i++)
         {
-            header[i]=headers.get(i).getText();
+            header[i]=driver.findElement(By.xpath(headerTagPath+"/th["+(i+1)+"]")).getText();
         }
-        return modifyHeader(ArrayUtils.remove(header,0));
+        return modifyHeader(header);
     }
 
     private String[] modifyHeader(String[] hdr)

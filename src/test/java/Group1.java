@@ -12,9 +12,18 @@ import org.testng.annotations.Test;
 // add support for correctness of data
 public class Group1 extends Group1HelperClass {
     public WebDriver driver;
-    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+
+    public static String url = "https://www.masslandrecords.com";
+    public static String value=/* "Hampshire"*//*"Dukes"*/"Worcester"/*"Franklin"*//*"Nantucket"*//*"Suffolk"*//*"North Berkshire"*//*"North Middlesex"*//*"South Berkshire"*//*"South Middlesex"*/;
+    public static String keyWord = "lender";
+    public static String fileName = "demo_"+value;
+    private static final String request = "1234";
+    private static final String firstName = "";
+
+    //@Parameters({"url","value","keyWord","firstName","fileName","request"})
     @Test
-    public void test(String url, String value, String keyWord, String firstName, String fileName, String request){
+    //public void test(String url, String value, String keyWord, String firstName, String fileName, String request){
+    public void test(){
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName);
         tableData(driver,fileName,request);

@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class CookGrantorData extends Cook {
 
@@ -24,9 +25,12 @@ public class CookGrantorData extends Cook {
 
     public JSONObject getGrantorGranteeData(WebDriver driver, int row){
 
-        //System.out.println("-----------------main table row---->"+row);
-        int GrantorCount = Integer.parseInt(driver.findElement(By.xpath(getMainTableRow(row)+"/td[3]")).getText());
+        //driver.navigate().refresh();
+        //driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        //new WebDriverWait(driver,10 ).until(
+          //      webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
         int GranteeCount = Integer.parseInt(driver.findElement(By.xpath(getMainTableRow(row)+"/td[4]")).getText());
+        int GrantorCount = Integer.parseInt(driver.findElement(By.xpath(getMainTableRow(row)+"/td[3]")).getText());
 
         JSONObject grantor= new JSONObject();
         JSONObject grantee = new JSONObject();
@@ -56,14 +60,14 @@ public class CookGrantorData extends Cook {
     }
 
     private JSONArray getChildObjects(WebDriver driver, String clickBtn) {
-        WebElement btn;
         JSONArray dataRecords;
         try {
-            btn = driver.findElement(By.xpath(clickBtn));
-            new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(btn));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", btn);
-            Thread.sleep(2000);
-            btn.click();
+            //driver.navigate().refresh();
+            driver.findElement(By.xpath(clickBtn)).click();
+            new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(clickBtn))));
+            driver.findElement(By.xpath(clickBtn)).click();
+            Thread.sleep(1000);
+
         }catch(Exception e)
             {e.printStackTrace();}
         dataRecords = subTableData(driver);
@@ -85,6 +89,7 @@ public class CookGrantorData extends Cook {
 
     public JSONArray subTableData(WebDriver driver) {
         String[] headers = grabHeader(driver,subHeaderXpath,0);
+
         JSONArray tableDataContent;
         tableDataContent = grabSubTable(driver, headers);
 
@@ -93,10 +98,9 @@ public class CookGrantorData extends Cook {
         while (checkNext) {
             try {
                 Thread.sleep(1000);
-                WebElement nextBtn = driver.findElement(By.xpath(subTableNextButton));
+                driver.navigate().refresh();
+                driver.findElement(By.xpath(subTableNextButton)).click();
                 Thread.sleep(1000);
-                nextBtn.click();
-                Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent, grabSubTable(driver, headers));
             } catch (Exception e1) {
                 checkNext = false;
@@ -114,8 +118,7 @@ public class CookGrantorData extends Cook {
         int subRowSize = subTable.findElements(By.tagName("tr")).size();
 
         for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++)
-        {
-            //System.out.println("---------------subTable row no --->"+subRowCount);
+        { System.out.println("---------------subTable row no --->"+subRowCount);
            WebElement subRow = driver.findElement(By.xpath(getSubTableRow(subRowCount)));
            List<WebElement>   subCols = subRow.findElements(By.tagName("td"));
 
@@ -123,13 +126,10 @@ public class CookGrantorData extends Cook {
                 if (subColumn != 0) {
                     objForSubRow.put(subHeader[subHdr - 1], subCols.get(subColumn).getText());
                     while(subHdr-1 == 4){
-                        Date dob;
                         try {
-                            dob = new SimpleDateFormat("MM/dd/yyyy").parse(subCols.get(subColumn).getText());
-                            String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                            objForSubRow.put(subHeader[subHdr-1],str);
+                            objForSubRow.put(subHeader[subHdr-1],generateDate(subCols.get(subColumn).getText()));
                             break;
-                        } catch (ParseException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
