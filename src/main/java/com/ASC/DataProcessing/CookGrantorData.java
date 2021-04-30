@@ -10,15 +10,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CookGrantorData extends Cook {
 
-    public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
+    //public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
 
     public static final String subTableXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody";
     private final static String subTableNextButton = "//*[@id=\"DocList1_LinkButtonNext\"]";
     private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
 
-
-
-    public JSONArray getGrantorGranteeData(WebDriver driver, int row, JSONObject commonObjData,String requestID){
+    public JSONArray getGrantorGranteeData(WebDriver driver, int row, JSONObject commonObjData,String requestID,String[] subHeaders){
         String GrantorCount = null,GranteeCount = null;
 
        while(GranteeCount==null || GranteeCount==null) {
@@ -32,6 +30,7 @@ public class CookGrantorData extends Cook {
        System.out.println("value of grantor count :-----"+GrantorCount);
         System.out.println("value of grantee count :-----"+GranteeCount);
         JSONArray grantor = new JSONArray();
+        JSONArray grantee = new JSONArray();
         String clickBtn;
 
         if(Integer.parseInt(GrantorCount)!=0){
@@ -42,7 +41,7 @@ public class CookGrantorData extends Cook {
                clickBtn =  "//*[@id=\"NameList1_GridView_NameListGroup_ctl"+(row+1)+"_ctl02\"]";
             }
 
-            grantor.put(getChildObjects(driver, clickBtn,commonObjData,requestID));
+            grantor = getChildObjects(driver, clickBtn,commonObjData,requestID,subHeaders);
         }
 
         if(Integer.parseInt(GranteeCount)!=0){
@@ -52,24 +51,25 @@ public class CookGrantorData extends Cook {
             else{
                 clickBtn = "//*[@id=\"NameList1_GridView_NameListGroup_ctl"+(row+1)+"_ctl03\"]";
             }
-            grantor = appendToList(grantor,getChildObjects(driver, clickBtn,commonObjData,requestID));
+            grantee = getChildObjects(driver, clickBtn,commonObjData,requestID,subHeaders);
         }
-        return grantor;
+        return appendToList(grantor,grantee);
     }
 
-    private JSONArray getChildObjects(WebDriver driver, String clickBtn,JSONObject commonDataObj,String requestID) {
-        JSONArray dataRecords;
+    private JSONArray getChildObjects(WebDriver driver, String clickBtn,JSONObject commonDataObj,String requestID,String[] subHeaders) {
+        JSONArray dataRecords ;
         try {
             Thread.sleep(3000);
-            //wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(clickBtn))));
             new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(clickBtn))));
             driver.findElement(By.xpath(clickBtn)).click();
             System.out.println("value is clicked");
             Thread.sleep(1000);
 
-        }catch(Exception e)
-            {e.printStackTrace();}
-        dataRecords = subTableData(driver,commonDataObj,requestID);
+        }catch(Exception e) {
+            e.printStackTrace();
+            }
+
+        dataRecords = subTableData(driver,commonDataObj,requestID,subHeaders);
         try{
             driver.findElement(By.xpath(groupListButton)).click();
             Thread.sleep(2000);
@@ -78,19 +78,19 @@ public class CookGrantorData extends Cook {
         return dataRecords;
     }
 
-    public String getMainTableRow(int count){
-        return "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
-    }
+   /* public JSONArray convertToSingleArray(JSONArray array){
+        JSONArray result = new JSONArray();
+        for (int index = 0;index<array.length();index++) {
+            JSONObject obj = array.getJSONObject(index);
+            result.put(obj);
+        }
+        return result;
+    }*/
 
-    public String getSubTableRow(int count){
-        return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
-    }
+    public JSONArray subTableData(WebDriver driver,JSONObject commonObjData,String requestID,String[] subHeaders) {
 
-    public JSONArray subTableData(WebDriver driver,JSONObject commonObjData,String requestID) {
-        String[] headers = grabHeader(driver,subHeaderXpath,0);
-
-        JSONArray tableDataContent;
-        tableDataContent = grabSubTable(driver, headers,commonObjData,requestID);
+        JSONArray tableDataContent ;
+        tableDataContent = grabSubTable(driver, subHeaders,commonObjData,requestID);
 
         boolean checkNext = true;
 
@@ -99,7 +99,7 @@ public class CookGrantorData extends Cook {
                 Thread.sleep(1000);
                 driver.findElement(By.xpath(subTableNextButton)).click();
                 Thread.sleep(1000);
-                tableDataContent = appendToList(tableDataContent, grabSubTable(driver, headers,commonObjData,requestID));
+                tableDataContent = appendToList(tableDataContent, grabSubTable(driver, subHeaders,commonObjData,requestID));
             } catch (Exception e1) {
                 checkNext = false;
             }
@@ -117,8 +117,6 @@ public class CookGrantorData extends Cook {
         for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++){
 
             System.out.println("---------------subTable row no --->"+subRowCount);
-
-            //wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(getSubTableRow(subRowCount)+"/td")));
 
             new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getSubTableRow(subRowCount)+"/td")));
 
@@ -163,5 +161,13 @@ public class CookGrantorData extends Cook {
         childRecord2.put("attributes",putSubAttributes(subRowCount));
 
         return childRecordArray.put(childRecord1).put(childRecord2);
+    }
+
+    public String getMainTableRow(int count){
+        return "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
+    }
+
+    public String getSubTableRow(int count){
+        return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
     }
 }

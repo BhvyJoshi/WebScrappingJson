@@ -12,8 +12,12 @@ import java.util.concurrent.TimeUnit;
 public class CookCounty extends CookCountyHelper {
 
     public WebDriver driver;
-   /* public WebDriverWait wait = new WebDriverWait(driver,20);*/
     public static final String url = "http://162.217.184.82/i2/";
+    public static final String mainHeaderPath = "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
+    public static String[] header = new String[2];
+    public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
+    public static String[] subHeader = new String[6];
+    private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
     @Test
     //@Parameters({"keyWord","fileName","request"})
     //public void CookCountyMethod(String keyWord, String fileName, String request)
@@ -28,7 +32,11 @@ public class CookCounty extends CookCountyHelper {
 
         driver = initializeMainPage(url);
         firstPage(driver,keyWord);
-        tableData(driver,fileName,request);
+        header = grabHeader(driver,mainHeaderPath);
+        subHeader = getSubHeader(driver);
+        driver.findElement(By.xpath(groupListButton)).click();
+        driver.navigate().refresh();
+        tableData(driver,fileName,request,header,subHeader);
     }
 
     public WebDriver initializeMainPage(String url) {
@@ -44,6 +52,20 @@ public class CookCounty extends CookCountyHelper {
         return driver;
     }
 
+    private String[] getSubHeader(WebDriver driver1){
+
+        String grantor = driver1.findElement(By.xpath("//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]/td[3]")).getText();
+        //String grantee = driver1.findElement(By.xpath("//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]/td[3]")).getText();
+
+        if(Integer.parseInt(grantor)!=0)
+        {
+            driver1.findElement(By.xpath("//*[@id=\"NameList1_GridView_NameListGroup_ctl02_ctl02\"]")).click();
+        }else{
+            driver1.findElement(By.xpath("//*[@id=\"NameList1_GridView_NameListGroup_ctl02_ctl03\"]")).click();
+        }
+
+        return grabHeader(driver1,subHeaderXpath,0);
+    }
     @AfterTest
     public void cleanUp()
     {
