@@ -14,7 +14,6 @@ public class GrantorData extends CommonMethods{
     public GrantorData(){}
 
     public final String[] headerSubTable = {"Name", "Type__c"};
-
     public static final String labelPath = "//*[@id=\"DocDetails1_Label_GrantorGrantee\"]";
     public static final String subTableBody = "//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/";
     public static final String nextBtnLocator = "//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr[12]/td/table/tbody/tr/td";
@@ -24,14 +23,18 @@ public class GrantorData extends CommonMethods{
         String grantorLabel = null;
 
         try {
-            Thread.sleep(3500);
+            Thread.sleep(2000);
             driver.findElement(By.xpath(getButtonXpath(rowID))).click();
+            System.out.println("-----row is clicked-----");
+            System.out.println("value of grantorLable == --------------------"+grantorLabel);
             Thread.sleep(2000);
             new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfElementLocated(By.xpath(labelPath)));
+            grantorLabel = null;
             grantorLabel = driver.findElement(By.xpath(labelPath)).getText();
             Thread.sleep(1000);
 
         }catch (Exception e){e.printStackTrace();}
+        System.out.println("value of grantorLable == --------------------"+grantorLabel);
         int dataRecords = Integer.parseInt(grantorLabel.substring(16));
         System.out.println("value of dataRecords == --------------------"+dataRecords);
 
@@ -90,12 +93,11 @@ public class GrantorData extends CommonMethods{
         JSONArray objForSubTable = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
 
-        //problem found. the value is not getting updated as per new grantor grantee table, it takes the previous table's value.
         System.out.println("value of length is --------------->"+length);
            while(objForSubTable.length()!=length){
                try{
                     for (int itr=2;itr<=length+1;itr++){
-                        Thread.sleep(2500);
+                        Thread.sleep(2000);
                         new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableBody+"/tr")));
                         driver.findElement(By.xpath(subTableBody+"tr["+itr+"]"));
                         System.out.println("SubTable row number: ---> "+itr);
@@ -103,7 +105,7 @@ public class GrantorData extends CommonMethods{
                         WebElement column2 = driver.findElement(By.xpath(subTableBody+"tr["+itr+"]/td[2]"));
                         objForSubRow.put(headerSubTable[0],column1.getText());
                         objForSubRow.put(headerSubTable[1],column2.getText());
-                        objForSubRow.put("attributes",attributes(mainRowId));
+                        objForSubRow.put("attributes",putSubAttributes(mainRowId));
                         objForSubTable.put(objForSubRow);
                         objForSubRow = new JSONObject();
                     }
@@ -112,13 +114,6 @@ public class GrantorData extends CommonMethods{
                 }
            }
        return objForSubTable;
-    }
-
-    private JSONObject attributes(int rowID){
-        JSONObject objAttributes = new JSONObject();
-        objAttributes.put("type","Grantor__c");
-        objAttributes.put("referenceId","ref"+new Random().nextInt(10000)+"_"+rowID);
-        return objAttributes;
     }
 
     private String getButtonXpath(int rowValue){

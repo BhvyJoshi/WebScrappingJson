@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class CookCounty extends CookCountyHelper {
 
     public WebDriver driver;
+   /* public WebDriverWait wait = new WebDriverWait(driver,20);*/
     public static final String url = "http://162.217.184.82/i2/";
     @Test
     //@Parameters({"keyWord","fileName","request"})

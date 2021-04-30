@@ -5,16 +5,20 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class Cook extends CommonMethods {
 
     public String[] getHeader(WebDriver driver, String xPath) {
-        List<WebElement> headers = driver.findElement(By.xpath(xPath)).findElements(By.tagName("th"));
-        String[] header = new String[headers.size()];
-        for (int i = 0; i < headers.size(); i++) {
-            header[i] = headers.get(i).getText();
+        new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xPath+"/th")));
+        int headerSize = driver.findElement(By.xpath(xPath)).findElements(By.tagName("th")).size();
+        String[] header = new String[headerSize];
+        for (int i = 0; i <headerSize; i++) {
+            header[i] = driver.findElement(By.xpath(xPath+"/th["+(i+1)+"]")).getText();
         }
         return header;
     }
@@ -23,9 +27,8 @@ public class Cook extends CommonMethods {
         String dummyHeader = Arrays.toString(getHeader(driver,XPath));
         dummyHeader = dummyHeader.replace(", ",",");
         dummyHeader = dummyHeader.replace("[","").replace("]","");
-        dummyHeader = dummyHeader.replace("Name","Name__c").replace("Trust#","Trust_No__c");
+        dummyHeader = dummyHeader.replace("Name","Name__c").replace("Trust #","Trust__c");
         String[] result = dummyHeader.split(",");
-        //removing last 2 headers as not required.
         return ArrayUtils.removeAll(result,2,3);
     }
 
@@ -35,9 +38,9 @@ public class Cook extends CommonMethods {
         String dummyHeader = Arrays.toString(hdr);
         dummyHeader = dummyHeader.replace(", ",",");
         dummyHeader = dummyHeader.replace("[","").replace("]","");
-        dummyHeader = dummyHeader.replace("Grantor","Grantor__c").replace("Grantee","Grantee__c");
-        dummyHeader = dummyHeader.replace("Doc. #","Doc_No__c").replace("Type Desc.","Type_Desc__c");
-        dummyHeader = dummyHeader.replace("Recorded Date","Recorded_Date__c").replace("PIN","PIN__c");
+        //dummyHeader = dummyHeader.replace("Grantor","Grantor__c").replace("Grantee","Grantee__c");
+        dummyHeader = dummyHeader.replace("Doc. #","Book__c").replace("Type Desc.","Type_Desc__c");
+        dummyHeader = dummyHeader.replace("Recorded Date","Rec_Date__c").replace("PIN","PIN__c");
         return dummyHeader.split(",");
     }
 }

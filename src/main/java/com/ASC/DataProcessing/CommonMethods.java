@@ -48,10 +48,8 @@ public class CommonMethods {
     }
 
     public void getObjectForRow(WebDriver driver, String requestID, JSONObject objForRow, int rowCount) {
-        JSONObject attributes = new JSONObject();
-        attributes.put("type", "Lead_Search_Result__c");
-        attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
-        objForRow.put("attributes",attributes);
+
+        objForRow.put("attributes",putAttributes(rowCount));
         objForRow.put("Grantors__r",new GrantorData().getGrantorData(driver,rowCount));
         objForRow.put("Lead_Search__c",requestID);
     }
@@ -65,13 +63,19 @@ public class CommonMethods {
         }
         return new SimpleDateFormat("yyyy-MM-dd").format(dob);
     }
-    /*public String generateDate(String date,String dateFormat){
-        Date dob = null;
-        try {
-            dob = new SimpleDateFormat(dateFormat).parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return new SimpleDateFormat("yyyy-MM-dd").format(dob);
-    }*/
+
+    public JSONObject putAttributes(int rowCount){
+        JSONObject attributes = new JSONObject();
+        attributes.put("type", "Lead_Search_Result__c");
+        attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
+        return attributes;
+    }
+
+    public JSONObject putSubAttributes(int rowCount){
+        JSONObject attributes = new JSONObject();
+        attributes.put("type", "Grantor__c");
+        attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
+        return attributes;
+    }
+
 }

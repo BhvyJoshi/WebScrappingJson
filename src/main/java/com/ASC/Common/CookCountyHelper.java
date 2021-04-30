@@ -4,13 +4,10 @@ import com.ASC.DataProcessing.CookGrantorData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.util.List;
-import java.util.Random;
 
 public class CookCountyHelper extends CookGrantorData {
 
@@ -22,7 +19,7 @@ public class CookCountyHelper extends CookGrantorData {
 
     public void firstPage(WebDriver driver, String value) {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1500);
             driver.findElement(By.id(textBoxId)).sendKeys(value);
             driver.findElement(By.xpath(searchBtn)).click();
         } catch (Exception e) {
@@ -30,13 +27,9 @@ public class CookCountyHelper extends CookGrantorData {
         }
     }
 
-    public void counter(WebDriver driver){
-        int clickCount = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
-    }
     public void tableData(WebDriver driver,String fileName,String request)
     {
         String[] headers = grabHeader(driver,mainHeaderPath);
-
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request);
         int nextBtnCliCkCount  = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
@@ -46,10 +39,8 @@ public class CookCountyHelper extends CookGrantorData {
         while(checkNext && nextBtnCliCkCount>=0){
             try{
                 Thread.sleep(2000);
-                WebElement nextBtn = driver.findElement(By.xpath(mainTableNextButtonPath));
                 new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(mainTableNextButtonPath))));
-               // new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(nextBtn));
-                //((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextBtn);
+                WebElement nextBtn = driver.findElement(By.xpath(mainTableNextButtonPath));
                 nextBtn.click();
                 System.out.println("\n------- next btn clicked------------"+(++count));
                 Thread.sleep(2000);
@@ -67,31 +58,25 @@ public class CookCountyHelper extends CookGrantorData {
     public JSONArray grabData(WebDriver driver,String[] header,String request)
     {
         JSONArray objForPage = new JSONArray();
-        JSONObject objForRow = new JSONObject();
-        JSONObject attributes = new JSONObject();
-
-        //driver.findElement(By.xpath("//*[@id=\"NameList1_PageView5Btn\"]")).click();
+        JSONObject objCommon = new JSONObject();
 
         int rowSize =  driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
         {
-            //driver.findElement(By.xpath("//*[@id=\"NameList1_PageView5Btn\"]")).click();
             System.out.println("\n-----------main table row ------->"+rowCount);
-            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
-            List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int column = 0, hdr = 0; (column < 2); column++, hdr++) { //as we need only 1st and 2nd column's data, i.e column<2
-                objForRow.put(header[hdr], cols.get(column).getText());
-                }
+            new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfElementLocated(By.xpath(getMainTableRow(rowCount)+"/td")));
+            for (int itr = 0; itr < 2; itr++) {
+                //as we need only 1st and 2nd column's data, i.e column<2
+                String column = driver.findElement(By.xpath(getMainTableRow(rowCount)+"/td["+(itr+1)+"]")).getText();
+                objCommon.put(header[itr], column);
+            }
 
-            attributes.put("type", "Lead_Search_Result__c"); //will be changed
-            attributes.put("referenceId","ref"+rowCount+"_"+new Random().nextInt(100000));
-            objForRow.put("attributes",attributes);
-            objForRow.put("Grantor_Grantee_Records__r",getGrantorGranteeData(driver,rowCount));
-            objForRow.put("Lead_Search__c",request);
-            objForPage.put(objForRow);
-            objForRow = new JSONObject();
-            attributes = new JSONObject();
+            //obj common is te common data for all grantor count and grantee count
+            //objForRow.put("attributes",putAttributes(rowCount));
+            //objForRow.put("Grantors__r",getGrantorGranteeData(driver,rowCount,objCommon));
+            //objForRow.put("Lead_Search__c",request);
+            objForPage.put(getGrantorGranteeData(driver,rowCount,objCommon,request));
         }
         return objForPage;
     }

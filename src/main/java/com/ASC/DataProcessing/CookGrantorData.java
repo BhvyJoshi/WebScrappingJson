@@ -4,73 +4,72 @@ import com.ASC.HeaderProcessing.Cook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class CookGrantorData extends Cook {
 
     public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
+
     public static final String subTableXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody";
     private final static String subTableNextButton = "//*[@id=\"DocList1_LinkButtonNext\"]";
     private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
 
-    public JSONObject getGrantorGranteeData(WebDriver driver, int row){
 
-        //driver.navigate().refresh();
-        //driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-        //new WebDriverWait(driver,10 ).until(
-          //      webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete"));
-        int GranteeCount = Integer.parseInt(driver.findElement(By.xpath(getMainTableRow(row)+"/td[4]")).getText());
-        int GrantorCount = Integer.parseInt(driver.findElement(By.xpath(getMainTableRow(row)+"/td[3]")).getText());
 
-        JSONObject grantor= new JSONObject();
-        JSONObject grantee = new JSONObject();
+    public JSONArray getGrantorGranteeData(WebDriver driver, int row, JSONObject commonObjData,String requestID){
+        String GrantorCount = null,GranteeCount = null;
 
+       while(GranteeCount==null || GranteeCount==null) {
+           try{
+                GranteeCount = driver.findElement(By.xpath(getMainTableRow(row) + "/td[4]")).getText();
+                GrantorCount = driver.findElement(By.xpath(getMainTableRow(row) + "/td[3]")).getText();
+           }catch(Exception e){
+               e.printStackTrace();
+           }
+       }
+       System.out.println("value of grantor count :-----"+GrantorCount);
+        System.out.println("value of grantee count :-----"+GranteeCount);
+        JSONArray grantor = new JSONArray();
         String clickBtn;
 
-        if(GrantorCount!=0){
+        if(Integer.parseInt(GrantorCount)!=0){
             if(row<9){
                clickBtn = "//*[@id=\"NameList1_GridView_NameListGroup_ctl0"+(row+1)+"_ctl02\"]";
             }
             else{
                clickBtn =  "//*[@id=\"NameList1_GridView_NameListGroup_ctl"+(row+1)+"_ctl02\"]";
             }
-            grantor.put("records",getChildObjects(driver, clickBtn));
+
+            grantor.put(getChildObjects(driver, clickBtn,commonObjData,requestID));
         }
 
-        if(GranteeCount!=0){
+        if(Integer.parseInt(GranteeCount)!=0){
             if(row<9){
                clickBtn = "//*[@id=\"NameList1_GridView_NameListGroup_ctl0"+(row+1)+"_ctl03\"]";
             }
             else{
                 clickBtn = "//*[@id=\"NameList1_GridView_NameListGroup_ctl"+(row+1)+"_ctl03\"]";
             }
-            grantee.put("records",getChildObjects(driver, clickBtn));
+            grantor = appendToList(grantor,getChildObjects(driver, clickBtn,commonObjData,requestID));
         }
-        return new JSONObject().put("Grantor_Count__r",grantor).put("Grantee_Count__r",grantee);
+        return grantor;
     }
 
-    private JSONArray getChildObjects(WebDriver driver, String clickBtn) {
+    private JSONArray getChildObjects(WebDriver driver, String clickBtn,JSONObject commonDataObj,String requestID) {
         JSONArray dataRecords;
         try {
-            //driver.navigate().refresh();
+            Thread.sleep(3000);
+            //wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(clickBtn))));
+            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(clickBtn))));
             driver.findElement(By.xpath(clickBtn)).click();
-            new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(clickBtn))));
-            driver.findElement(By.xpath(clickBtn)).click();
+            System.out.println("value is clicked");
             Thread.sleep(1000);
 
         }catch(Exception e)
             {e.printStackTrace();}
-        dataRecords = subTableData(driver);
+        dataRecords = subTableData(driver,commonDataObj,requestID);
         try{
             driver.findElement(By.xpath(groupListButton)).click();
             Thread.sleep(2000);
@@ -87,21 +86,20 @@ public class CookGrantorData extends Cook {
         return "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr["+count+"]";
     }
 
-    public JSONArray subTableData(WebDriver driver) {
+    public JSONArray subTableData(WebDriver driver,JSONObject commonObjData,String requestID) {
         String[] headers = grabHeader(driver,subHeaderXpath,0);
 
         JSONArray tableDataContent;
-        tableDataContent = grabSubTable(driver, headers);
+        tableDataContent = grabSubTable(driver, headers,commonObjData,requestID);
 
         boolean checkNext = true;
 
         while (checkNext) {
             try {
                 Thread.sleep(1000);
-                driver.navigate().refresh();
                 driver.findElement(By.xpath(subTableNextButton)).click();
                 Thread.sleep(1000);
-                tableDataContent = appendToList(tableDataContent, grabSubTable(driver, headers));
+                tableDataContent = appendToList(tableDataContent, grabSubTable(driver, headers,commonObjData,requestID));
             } catch (Exception e1) {
                 checkNext = false;
             }
@@ -109,41 +107,61 @@ public class CookGrantorData extends Cook {
         return tableDataContent;
     }
 
-    public JSONArray grabSubTable(WebDriver driver,String[] subHeader){
+    public JSONArray grabSubTable(WebDriver driver,String[] subHeader,JSONObject commonData,String requestID){
         JSONArray objForSubPage = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
-        JSONObject subAttributes = new JSONObject();
+        JSONObject childRecord = new JSONObject();
 
-        WebElement subTable =  driver.findElement(By.xpath(subTableXpath));
-        int subRowSize = subTable.findElements(By.tagName("tr")).size();
+        int subRowSize = driver.findElement(By.xpath(subTableXpath)).findElements(By.tagName("tr")).size();
 
-        for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++)
-        { System.out.println("---------------subTable row no --->"+subRowCount);
-           WebElement subRow = driver.findElement(By.xpath(getSubTableRow(subRowCount)));
-           List<WebElement>   subCols = subRow.findElements(By.tagName("td"));
+        for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++){
 
-            for (int subColumn = 0, subHdr = 0; (subColumn < subCols.size()); subColumn++, subHdr++) {
-                if (subColumn != 0) {
-                    objForSubRow.put(subHeader[subHdr - 1], subCols.get(subColumn).getText());
-                    while(subHdr-1 == 4){
-                        try {
-                            objForSubRow.put(subHeader[subHdr-1],generateDate(subCols.get(subColumn).getText()));
-                            break;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+            System.out.println("---------------subTable row no --->"+subRowCount);
+
+            //wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(getSubTableRow(subRowCount)+"/td")));
+
+            new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getSubTableRow(subRowCount)+"/td")));
+
+            String[] data = new String[6]; //data of each row
+            for (int itr = 0; itr<6; itr++){
+
+                new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getSubTableRow(subRowCount)+"/td")));
+                String xPath = getSubTableRow(subRowCount)+"/td["+(itr+2)+"]";
+                data[itr] = driver.findElement(By.xpath(xPath)).getText();
+            }
+            for (int itr1 = 2;itr1 <subHeader.length;itr1++){ //mapping of header and data in json object
+                while(itr1 == 4){
+                    data[itr1] = generateDate(data[itr1]);
+                    break;
                 }
+                objForSubRow.put(subHeader[itr1],data[itr1]);
             }
 
-            subAttributes.put("type", "Grantor_Grantee_Records__c");
-            subAttributes.put("referenceId","ref"+subRowCount+"_"+new Random().nextInt(100000));
-            objForSubRow.put("attributes",subAttributes);
+            childRecord.put("records",childRecords(subHeader,data,subRowCount));
+            objForSubRow.put("attributes",putAttributes(subRowCount)); // only add grantor and grantee column
+            objForSubRow.put("Grantors__r",childRecord);
+            objForSubRow.put("Name__c",commonData.get("Name__c"));
+            objForSubRow.put("Trust__c",commonData.get("Trust__c"));
+            objForSubRow.put("Lead_Search__c",requestID);
             objForSubPage.put(objForSubRow);
             objForSubRow = new JSONObject();
-            subAttributes = new JSONObject();
         }
         return objForSubPage;
     }
 
+    private JSONArray childRecords(String[] subHeader, String[] data, int subRowCount){
+        JSONObject childRecord1 = new JSONObject();
+        JSONObject childRecord2 = new JSONObject();
+        JSONArray childRecordArray = new JSONArray();
+
+        childRecord1.put("Type__c",subHeader[0]);
+        childRecord1.put("Name__c",data[0]);
+        childRecord1.put("attributes",putSubAttributes(subRowCount));
+
+        childRecord2.put("Type__c",subHeader[1]);
+        childRecord2.put("Name__c",data[1]);
+        childRecord2.put("attributes",putSubAttributes(subRowCount));
+
+        return childRecordArray.put(childRecord1).put(childRecord2);
+    }
 }

@@ -23,7 +23,7 @@ public class demoTests extends Group1HelperClass {
         String firstName = "";
 
         driver = InitializerClass.initialize(url,value);
-        //firstPage(driver,keyWord,firstName);
+        firstPage(driver,keyWord,firstName);
 /*
         if(value.contains("South Bristol")){
             driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");

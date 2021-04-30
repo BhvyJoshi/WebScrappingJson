@@ -43,7 +43,6 @@ public class DataProcessing extends GrantorData{
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
-        //driver.findElement(By.xpath(recordsPerPage)).click();
 
         int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
@@ -63,7 +62,6 @@ public class DataProcessing extends GrantorData{
                     break;
                 }
                 objForRow.put(header[itr1],data[itr1]);
-
             }
             getObjectForRow(driver,request,objForRow,rowCount);
             objForPage.put(objForRow);
