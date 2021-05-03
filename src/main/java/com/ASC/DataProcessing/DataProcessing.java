@@ -5,7 +5,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -13,7 +12,6 @@ public class DataProcessing extends GrantorData{
 
     public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
-    public static final String recordsPerPage = "//*[@id=\"DocList1_PageView5Btn\"]";
 
     public void tableData(WebDriver driver,String fileName,String request)
     {

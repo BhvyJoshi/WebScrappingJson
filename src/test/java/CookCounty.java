@@ -19,8 +19,8 @@ public class CookCounty extends CookCountyHelper {
     public static String[] subHeader = new String[6];
     private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
     @Test
-    //@Parameters({"keyWord","fileName","request"})
-    //public void CookCountyMethod(String keyWord, String fileName, String request)
+   /* @Parameters({"keyWord","fileName","request"})
+    public void CookCountyMethod(String keyWord, String fileName, String request){*/
 
     // need to check
     public void test_cookCounty()

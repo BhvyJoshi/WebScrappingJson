@@ -4,6 +4,7 @@ import com.ASC.DataProcessing.CookGrantorData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -29,7 +30,6 @@ public class CookCountyHelper extends CookGrantorData {
 
     public void tableData(WebDriver driver,String fileName,String request,String[] headers,String[] subHeaders)
     {
-        //String[] headers = grabHeader(driver,mainHeaderPath);
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,request,subHeaders);
         int nextBtnCliCkCount  = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
@@ -38,10 +38,17 @@ public class CookCountyHelper extends CookGrantorData {
 
         while(checkNext && nextBtnCliCkCount>=0){
             try{
-                Thread.sleep(2000);
-                new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(mainTableNextButtonPath))));
+                try {
+                    Thread.sleep(2000);
+                    driver.findElement(By.xpath(mainTableNextButtonPath)).click();
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    JavascriptExecutor executor = (JavascriptExecutor) driver;
+                    executor.executeScript("arguments[0].click();", driver.findElement(By.linkText("Next")));
+                }
+                /*new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(mainTableNextButtonPath))));
                 WebElement nextBtn = driver.findElement(By.xpath(mainTableNextButtonPath));
-                nextBtn.click();
+                nextBtn.click();*/
                 System.out.println("\n------- next btn clicked------------"+(++count));
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,subHeaders));
