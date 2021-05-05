@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.concurrent.TimeUnit;
+
 public class Group3HelperClass extends GrantorData {
 
     public WebDriver driver;
@@ -19,8 +21,15 @@ public class Group3HelperClass extends GrantorData {
     public void tableData(WebDriver driver, String fileName, String request)
     {
         String[] headers = new Group3().grabHeader(driver);
-        driver.findElement(By.xpath("//*[@id=\"DocList1_PageView5Btn\"]")).click();
+        //driver.findElement(By.xpath("//*[@id=\"DocList1_PageView5Btn\"]")).click();
         JSONArray tableDataContent;
+        try{
+            Thread.sleep(2000);
+            driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+
+        }catch(Exception e){
+
+        }
         tableDataContent = grabData(driver,headers,request);
 
         boolean checkNext = true;
@@ -50,7 +59,8 @@ public class Group3HelperClass extends GrantorData {
         {
             String[] data = new String[8]; //data of each row
             for (int itr = 0; itr<8; itr++){
-                new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
+                new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
+
                     String xPath = getMainTableRow(rowCount)+"/td["+(itr+2)+"]";
                     data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 }

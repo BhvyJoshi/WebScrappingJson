@@ -52,7 +52,16 @@ public class DataProcessing extends GrantorData{
                 new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
                 String xPath = getMainTableRow(rowCount)+"/td["+(itr+2)+"]";
                 data[itr] = driver.findElement(By.xpath(xPath)).getText();
+                /*while(itr==0){
+                    String type = driver.findElement(By.xpath(xPath)).getText();
+                    if (type.contains("GT")){
+                        data[itr] = "Grantor";
+                    }else{
+                        data[itr] = "Grantee";
+                    }
+                }*/
             }
+            data[0] = data[0].contains("GT")?data[0].replace("GT","Grantee"):data[0].replace("GR","Grantor");
 
             for (int itr1 = 0;itr1 <header.length;itr1++){ //mapping of header and data in json object
                 while(itr1 == 5){

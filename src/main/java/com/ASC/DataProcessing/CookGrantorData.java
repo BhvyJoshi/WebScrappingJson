@@ -42,7 +42,7 @@ public class CookGrantorData extends Cook {
                clickBtn =  "//*[@id=\"NameList1_GridView_NameListGroup_ctl"+(row+1)+"_ctl02\"]";
             }
 
-            grantor = getChildObjects(driver, clickBtn,commonObjData,requestID,subHeaders,GrantorCount);
+            grantor = getChildObjects(driver, clickBtn,commonObjData,requestID,subHeaders);
         }
 
         if(Integer.parseInt(GranteeCount)!=0){
@@ -52,12 +52,12 @@ public class CookGrantorData extends Cook {
             else{
                 clickBtn = "//*[@id=\"NameList1_GridView_NameListGroup_ctl"+(row+1)+"_ctl03\"]";
             }
-            grantee = getChildObjects(driver, clickBtn,commonObjData,requestID,subHeaders,GranteeCount);
+            grantee = getChildObjects(driver, clickBtn,commonObjData,requestID,subHeaders);
         }
         return appendToList(grantor,grantee);
     }
 
-    private JSONArray getChildObjects(WebDriver driver, String clickBtn,JSONObject commonDataObj,String requestID,String[] subHeaders,String linkedText) {
+    private JSONArray getChildObjects(WebDriver driver, String clickBtn,JSONObject commonDataObj,String requestID,String[] subHeaders) {
         JSONArray dataRecords ;
 
         try {
@@ -65,20 +65,14 @@ public class CookGrantorData extends Cook {
             driver.findElement(By.xpath(clickBtn)).click();
             Thread.sleep(1000);
         } catch (Exception e) {
-            JavascriptExecutor executor = (JavascriptExecutor) driver;
-            executor.executeScript("arguments[0].click();", driver.findElement(By.linkText(linkedText)));
+            System.out.println("inside catch block");
+            try{
+                new WebDriverWait(driver,60).until(ExpectedConditions.elementToBeClickable(By.xpath(clickBtn)));
+            }catch(Exception e1){JavascriptExecutor executor = (JavascriptExecutor) driver;
+                executor.executeScript("arguments[0].click();", driver.findElement(By.xpath(clickBtn)));
+            }
         }
         System.out.println("value is clicked");
-       /* try {
-            Thread.sleep(4500);
-            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(clickBtn))));
-            driver.findElement(By.xpath(clickBtn)).click();
-            System.out.println("value is clicked");
-            Thread.sleep(1000);
-
-        }catch(Exception e) {
-            e.printStackTrace();
-            }*/
 
         dataRecords = subTableData(driver,commonDataObj,requestID,subHeaders);
         try{
@@ -88,15 +82,6 @@ public class CookGrantorData extends Cook {
 
         return dataRecords;
     }
-
-   /* public JSONArray convertToSingleArray(JSONArray array){
-        JSONArray result = new JSONArray();
-        for (int index = 0;index<array.length();index++) {
-            JSONObject obj = array.getJSONObject(index);
-            result.put(obj);
-        }
-        return result;
-    }*/
 
     public JSONArray subTableData(WebDriver driver,JSONObject commonObjData,String requestID,String[] subHeaders) {
 
@@ -123,7 +108,7 @@ public class CookGrantorData extends Cook {
         JSONObject objForSubRow = new JSONObject();
         JSONObject childRecord = new JSONObject();
 
-        new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableXpath+"/tr")));
+        new WebDriverWait(driver,60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableXpath+"/tr")));
         int subRowSize = driver.findElement(By.xpath(subTableXpath)).findElements(By.tagName("tr")).size();
 
         for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++){

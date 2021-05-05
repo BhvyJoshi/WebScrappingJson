@@ -24,11 +24,10 @@ public class demoTests extends Group1HelperClass {
 
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName);
-/*
-        if(value.contains("South Bristol")){
+        /*if(value.contains("South Bristol")){
             driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");
         }
-        new Group1HelperClass().firstPage(driver, keyWord, firstName); group3*/
+        new Group1HelperClass().firstPage(driver, keyWord, firstName); *//*group3*/
 
        /* switch (value) {
             case "Barnstable": //Done
@@ -55,7 +54,7 @@ public class demoTests extends Group1HelperClass {
     @DataProvider(name = "Group1")
     public Object[][] dataProvFunc(){
         return new Object[][]{
-                {"Hampshire"},/*{"Fall River Bristol"},*/{"Dukes"},{"Franklin"},{"Middle Berkshire"},{"Nantucket"},
+                {"Hampshire"},{"Fall River Bristol"},{"Dukes"},{"Franklin"},{"Middle Berkshire"},{"Nantucket"},
                 {"North Berkshire"},{"North Middlesex"},{"South Berkshire"},{"South Middlesex"},
                 {"Worcester"},{"Suffolk"}
         };

@@ -18,13 +18,13 @@ public class CookCounty extends CookCountyHelper {
     public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static String[] subHeader = new String[6];
     private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
+
     @Test
-   /* @Parameters({"keyWord","fileName","request"})
-    public void CookCountyMethod(String keyWord, String fileName, String request){*/
+   // @Parameters({"keyWord","fileName","request"})
+    //public void CookCountyMethod(String keyWord, String fileName, String request){
 
     // need to check
-    public void test_cookCounty()
-    {
+    public void test_cookCounty(){
 
         String keyWord = "lender";
         String fileName = "cookCounty_demo";
@@ -55,7 +55,6 @@ public class CookCounty extends CookCountyHelper {
     private String[] getSubHeader(WebDriver driver1){
 
         String grantor = driver1.findElement(By.xpath("//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]/td[3]")).getText();
-        //String grantee = driver1.findElement(By.xpath("//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]/td[3]")).getText();
 
         if(Integer.parseInt(grantor)!=0)
         {

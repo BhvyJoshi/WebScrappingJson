@@ -6,6 +6,9 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,7 +46,7 @@ public class NorthBristolhelperClass extends NorthBristol {
             try{
                 Thread.sleep(1000);
                 driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
-                driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
+                //driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
                 Thread.sleep(1500);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }
@@ -59,22 +62,23 @@ public class NorthBristolhelperClass extends NorthBristol {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        WebElement table =  driver.findElement(By.xpath(mainTablePath));
-        int rowSize = table.findElements(By.tagName("tr")).size();
+        int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=3;rowCount<=rowSize-3;rowCount++)
         {
-            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
-            List<WebElement> cols = row.findElements(By.tagName("td"));
+            new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
+            //WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
+            //List<WebElement> cols = row.findElements(By.tagName("td"));
 
-            String[] data = new String[cols.size()]; //data of each row
-            for (int itr = 1; itr<=cols.size()-1; itr++){
-                String xPath = getMainTableRow(rowCount)+"/td["+itr+"]";
+            String[] data = new String[9]; //data of each row
+            for (int itr = 1; itr<9; itr++){
+                String xPath = getMainTableRow(rowCount)+"/td["+(itr+1)+"]";
                 data[itr] = driver.findElement(By.xpath(xPath)).getText();
             }
 
+            data[2] = data[2].contains("TEE")?data[2].replace("TEE","Grantee"):data[2].replace("TOR","Grantor");
             for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
-                while(itr1 == 3){
+                while(itr1 == 1){
                     data[itr1] = generateDate(data[itr1]);
                     break;
                 }
@@ -88,7 +92,7 @@ public class NorthBristolhelperClass extends NorthBristol {
         return objForPage;
     }
 
-    public String generateDate(String date){
+   /* public String generateDate(String date){
         Date dob = null;
         try {
             dob = new SimpleDateFormat("MM/dd/yyyy").parse(date);
@@ -97,7 +101,7 @@ public class NorthBristolhelperClass extends NorthBristol {
         }
         return new SimpleDateFormat("yyyy-MM-dd").format(dob);
     }
-
+*/
     public String getMainTableRow(int count){
         return "//*[@id=\"ctl00_cphMainContent_gvSearchResults\"]/tbody/tr["+count+"]"; //starts from row 3
     }

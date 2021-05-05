@@ -13,8 +13,6 @@ public class Hampden extends CommonMethods {
 
     public String[] grabHeader(WebDriver driver)
     {
-        //WebElement headerTag =  driver.findElement(By.xpath(headerTagPath));
-        ///List<WebElement> headers = headerTag.findElements(By.tagName("th"));
         String[] header = new String[7];
         for (int i =0;i<=6;i++)
         {

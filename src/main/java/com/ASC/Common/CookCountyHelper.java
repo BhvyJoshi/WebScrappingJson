@@ -49,7 +49,7 @@ public class CookCountyHelper extends CookGrantorData {
                 /*new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(mainTableNextButtonPath))));
                 WebElement nextBtn = driver.findElement(By.xpath(mainTableNextButtonPath));
                 nextBtn.click();*/
-                System.out.println("\n------- next btn clicked------------"+(++count));
+                System.out.println("\n------- Mainnext btn clicked------------"+(++count));
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,subHeaders));
                 nextBtnCliCkCount --;
