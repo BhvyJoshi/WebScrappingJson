@@ -18,16 +18,16 @@ public class Group2 extends Group2HelperClass {
     public  String searchRegistryRecordClick;
 
     @Test
-    //@Parameters({"url","value","keyWord","firstName","fileName","request"})
-    //public void test1(String url,String value,String keyWord, String firstName,String fileName,String request)
-    public void test()
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test1(String url,String value,String keyWord, String firstName,String fileName,String request)
+    //public void test()
     {
-          String url = "https://www.masslandrecords.com";
-          String value="Norfolk"/*"North Essex""Barnstable""North Worcester"*/; //need to check with Norfolk,North Worcester
+        /*  String url = "https://www.masslandrecords.com";
+          String value="Norfolk"*//*"North Essex""Barnstable""North Worcester"*//*; //need to check with Norfolk,North Worcester
           String keyWord = "lender";
           String fileName = "demo_"+value;
           String request ="123456";
-          String firstName ="" /*"barbara"ot working"Nadine"*/;
+          String firstName ="" *//*"barbara"ot working"Nadine"*//*;*/
 
         driver= InitializerClass.initialize(url,value);
         switch (value) {

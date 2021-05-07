@@ -5,6 +5,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.concurrent.TimeUnit;
 
 public class SouthEssexHelperClass extends SouthEssex {
@@ -31,11 +34,12 @@ public class SouthEssexHelperClass extends SouthEssex {
         result =  result.replace("Result:","").replace("Rows","").trim();
         return Integer.parseInt(result);
     }
-    public void tableData(WebDriver driver,String fileName,String requestID)
+
+    public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
         String[] headers = grabHeader(driver);
         JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,requestID,0,15);
+        tableDataContent = grabData(driver,headers,requestID,0,15,logFileName);
         int searchResultCount = getSearchResultCount(driver);
         int noOfLoop = searchResultCount/15;
         int lastPageData = searchResultCount % 15;
@@ -53,11 +57,13 @@ public class SouthEssexHelperClass extends SouthEssex {
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]";
                     }
                     driver.findElement(By.xpath(nextBtnClick)).click();
+                    writeLog("\n-----------Next Btn clicked---------\n",logFileName);
                     Thread.sleep(2000);
-                    tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15));
+                    tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
                 }
                 catch (Exception e1){
-                    e1.printStackTrace();
+                    writeLog(e1.toString(),logFileName);
+                    //e1.printStackTrace();
                 }
             }
             driver.navigate().refresh();
@@ -71,45 +77,45 @@ public class SouthEssexHelperClass extends SouthEssex {
                     if(count == 1) {
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[2]";
                     }else {
-
                         nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(count+1)+"]";
                     }
                     driver.navigate().refresh();
                     driver.findElement(By.xpath(nextBtnClick)).click();
+                    writeLog("\n----------------------Next Btn clicked------------------\n",logFileName);
                     Thread.sleep(1500);
-                    tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15));
+                    tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
                 }
                 catch (Exception e1){
-                    e1.printStackTrace();
+                    writeLog(e1.toString(),logFileName);
+                    //e1.printStackTrace();
                 }
             }
             driver.navigate().refresh();
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
         }
-        tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData));
+        tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData,logFileName));
 
         generateFile(fileName,tableDataContent);
     }
 
-    public JSONArray grabData(WebDriver driver,String[] header,String requestID,int lowerLimit, int upperLimit)
+    public JSONArray grabData(WebDriver driver,String[] header,String requestID,int lowerLimit, int upperLimit,String logFileName)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
         for (int rowCount=lowerLimit;rowCount<upperLimit;rowCount++)
         {
+            new WebDriverWait(driver,15).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
+            writeLog("-----------------Row Number -------"+rowCount,logFileName);
             String[] data = new String[15]; //data of each row
             for (int itr = 0; itr<=13; itr++){
                 String xPath = getMainTableRow(rowCount)+"/td["+(itr+3)+"]";
                 data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 data[itr] = driver.findElement(By.xpath(xPath)).getText();
             }
+            data[0] = generateDate(data[0]);
 
             for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
-                while(itr1 == 0){
-                    data[itr1] = generateDate(data[itr1]);
-                    break;
-                }
                 objForRow.put(header[itr1],data[itr1]);
             }
 

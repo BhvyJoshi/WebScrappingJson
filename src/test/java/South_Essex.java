@@ -5,24 +5,29 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-//completed.
-
+//Done
 public class South_Essex extends SouthEssexHelperClass {
     public WebDriver driver;
-    public static String url = "https://www.masslandrecords.com";
+   /* public static String url = "https://www.masslandrecords.com";
     public static String value= "South Essex";
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
-    public static String firstName = /*"julian"*/"";
+    public static String firstName = "julian";
     public static String request = "123";
-
+*/
     @Test
-   // @Parameters({"url","value","keyWord","firstName","fileName","request"})
-    //public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
-    public void test(){
-        driver = InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord,firstName);
-        tableData(driver,fileName,request);
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
+    //public void test(){
+        String logFileName = value+"_"+fileName;
+        try {
+            driver = InitializerClass.initialize(url, value);
+            firstPage(driver, keyWord, firstName);
+            tableData(driver, fileName, request,logFileName);
+        }catch (Exception e)
+        {
+            writeLog(e.toString(),logFileName);
+        }
     }
 
     @AfterTest

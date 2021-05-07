@@ -18,15 +18,14 @@ public class GrantorData extends CommonMethods{
     public static final String subTableBody = "//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/";
     public static final String nextBtnLocator = "//*[@id=\"DocDetails1_GridView_GrantorGrantee\"]/tbody/tr[12]/td/table/tbody/tr/td";
 
-    public JSONObject getGrantorData(WebDriver driver, int rowID) {
+    public JSONObject getGrantorData(WebDriver driver, int rowID,String logFileName) {
 
         String grantorLabel = null;
 
         try {
             Thread.sleep(2000);
             driver.findElement(By.xpath(getButtonXpath(rowID))).click();
-            System.out.println("-----row is clicked-----");
-            System.out.println("value of grantorLable == --------------------"+grantorLabel);
+            writeLog("-----row is clicked-----"+rowID,logFileName);
             Thread.sleep(2000);
             new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfElementLocated(By.xpath(labelPath)));
             grantorLabel = null;
@@ -34,37 +33,38 @@ public class GrantorData extends CommonMethods{
             Thread.sleep(1000);
 
         }catch (Exception e){e.printStackTrace();}
-        System.out.println("value of grantorLable == --------------------"+grantorLabel);
+        writeLog("value of grantorLable == --------------------"+grantorLabel,logFileName);
         int dataRecords = Integer.parseInt(grantorLabel.substring(16));
-        System.out.println("value of dataRecords == --------------------"+dataRecords);
+        writeLog("value of dataRecords == -------------"+dataRecords,logFileName);
 
+        grantorLabel = null;
+        System.gc();
         if (dataRecords<=10){
-            return new JSONObject().put("records",getActualGrantorData(driver,rowID,dataRecords));
-
+            return new JSONObject().put("records",getActualGrantorData(driver,rowID,dataRecords,logFileName));
         }else{
-            return new JSONObject().put("records",getMultipleGrantorData(driver,dataRecords,rowID));
+            return new JSONObject().put("records",getMultipleGrantorData(driver,dataRecords,rowID,logFileName));
         }
     }
 
-    private JSONArray getMultipleGrantorData(WebDriver driver,int dataRecords,int mainRowId){
+    private JSONArray getMultipleGrantorData(WebDriver driver,int dataRecords,int mainRowId,String logFileName){
         int noOfPages = dataRecords/10;
         int dataInLastPage = dataRecords % 10;
 
-        JSONArray subTableContent = getActualGrantorData(driver,mainRowId,10);
+        JSONArray subTableContent = getActualGrantorData(driver,mainRowId,10,logFileName);
         int pageCount = 1;
 
         if(pageCount<noOfPages){
             try{
-                clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,10));
+                clickOnNextPage(driver, pageCount,logFileName);
+                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,10,logFileName));
             }
             catch (Exception e1){
                 e1.printStackTrace();
             }
         }else {
             try{
-                clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,dataInLastPage));
+                clickOnNextPage(driver, pageCount,logFileName);
+                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,dataInLastPage,logFileName));
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -73,7 +73,7 @@ public class GrantorData extends CommonMethods{
         return subTableContent;
     }
 
-    private void clickOnNextPage(WebDriver driver, int pageCount) throws InterruptedException {
+    private void clickOnNextPage(WebDriver driver, int pageCount,String logFileName) throws InterruptedException {
         pageCount++;
         String locatorXpath = "["+pageCount+"]/a";
         Thread.sleep(1000);
@@ -85,22 +85,24 @@ public class GrantorData extends CommonMethods{
             check = !(nextBtn!=null);
         }
         nextBtn.click();
+        writeLog("\n-------- clicked on next btn of subPage ------\n",logFileName);
         Thread.sleep(3000);
     }
 
-    private JSONArray getActualGrantorData(WebDriver driver,int mainRowId,int length){
+    private JSONArray getActualGrantorData(WebDriver driver,int mainRowId,int length,String logFileName){
 
         JSONArray objForSubTable = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
 
-        System.out.println("value of length is --------------->"+length);
+        writeLog("value of length is --------------->"+length,logFileName);
            while(objForSubTable.length()!=length){
                try{
                     for (int itr=2;itr<=length+1;itr++){
                         Thread.sleep(2000);
                         new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableBody+"/tr")));
                         driver.findElement(By.xpath(subTableBody+"tr["+itr+"]"));
-                        System.out.println("SubTable row number: ---> "+itr);
+                        writeLog("SubTable row number: ---> "+itr,logFileName);
+                        //System.out.println("SubTable row number: ---> "+itr);
                         WebElement column1 = driver.findElement(By.xpath(subTableBody+"tr["+itr+"]/td[1]"));
                         WebElement column2 = driver.findElement(By.xpath(subTableBody+"tr["+itr+"]/td[2]"));
                         objForSubRow.put(headerSubTable[0],column1.getText());

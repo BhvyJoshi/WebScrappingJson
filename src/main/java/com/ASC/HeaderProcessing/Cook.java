@@ -27,7 +27,7 @@ public class Cook extends CommonMethods {
         String dummyHeader = Arrays.toString(getHeader(driver,XPath));
         dummyHeader = dummyHeader.replace(", ",",");
         dummyHeader = dummyHeader.replace("[","").replace("]","");
-        dummyHeader = dummyHeader.replace("Name","Name__c").replace("Trust #","Trust__c");
+        dummyHeader = dummyHeader.replace("Trust #","Trust__c");
         String[] result = dummyHeader.split(",");
         return ArrayUtils.removeAll(result,2,3);
     }

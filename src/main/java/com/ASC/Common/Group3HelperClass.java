@@ -18,7 +18,7 @@ public class Group3HelperClass extends GrantorData {
     private static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
     private static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
-    public void tableData(WebDriver driver, String fileName, String request)
+    public void tableData(WebDriver driver, String fileName, String request,String logFileName)
     {
         String[] headers = new Group3().grabHeader(driver);
         //driver.findElement(By.xpath("//*[@id=\"DocList1_PageView5Btn\"]")).click();
@@ -30,7 +30,7 @@ public class Group3HelperClass extends GrantorData {
         }catch(Exception e){
 
         }
-        tableDataContent = grabData(driver,headers,request);
+        tableDataContent = grabData(driver,headers,request,logFileName);
 
         boolean checkNext = true;
 
@@ -39,7 +39,7 @@ public class Group3HelperClass extends GrantorData {
                 Thread.sleep(1000);
                 driver.findElement(By.xpath(nextButtonPath)).click();
                 Thread.sleep(1500);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
+                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
             }
             catch (Exception e1){
                 checkNext = false;
@@ -48,11 +48,11 @@ public class Group3HelperClass extends GrantorData {
         generateFile(fileName,tableDataContent);
     }
 
-    public JSONArray grabData(WebDriver driver,String[] header,String request)
+    public JSONArray grabData(WebDriver driver,String[] header,String request,String logfileName)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
-
+        GrantorData childRecord = new GrantorData();
         int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
@@ -65,17 +65,16 @@ public class Group3HelperClass extends GrantorData {
                     data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 }
 
+            data[5] = generateDate(data[5]);
+
             for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
-                while(itr1 == 5){
-                    data[itr1] = generateDate(data[itr1]);
-                    break;
-                }
                 objForRow.put(header[itr1],data[itr1]);
             }
 
-            getObjectForRow(driver,request,objForRow,rowCount);
+            getObjectForRow(driver,request,objForRow,rowCount,logfileName,childRecord);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
+            childRecord = new GrantorData();
         }
         return objForPage;
     }

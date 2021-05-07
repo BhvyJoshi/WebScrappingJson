@@ -1,7 +1,9 @@
 import com.ASC.Common.InitializerClass;
 import com.ASC.Common.NorthBristolhelperClass;
+import com.ASC.DataProcessing.CommonMethods;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 //completely done --. need to ask about firstName on site is not working
@@ -15,12 +17,17 @@ public class North_Bristol extends NorthBristolhelperClass {
     public static String firstName = "";
 
     @Test
-    //@Parameters({"url","value","keyWord","firstName","fileName","request"})
-    //public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
-    public void test(){
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
+    //public void test(){
+        try{
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName);
         tableData(driver,fileName,request);
+        }
+        catch (Exception e){
+            writeLog(e.toString(),value);
+        }
     }
 
     @AfterTest

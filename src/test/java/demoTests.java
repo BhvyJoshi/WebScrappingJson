@@ -9,11 +9,11 @@ import org.testng.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 /*@Ignore*/
-public class demoTests extends Group1HelperClass {
+public class demoTests extends Group2HelperClass {
 
     public WebDriver driver;
     public  String searchRegistryRecordClick;
-    @Test(dataProvider ="Group1")
+    @Test(dataProvider ="Group2")
     public void testDemo(String value){
 
         String url ="https://www.masslandrecords.com";
@@ -23,13 +23,13 @@ public class demoTests extends Group1HelperClass {
         String firstName = "";
 
         driver = InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord,firstName);
-        /*if(value.contains("South Bristol")){
+        //firstPage(driver,keyWord,firstName); //group1
+       /* if(value.contains("South Bristol")){
             driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");
         }
-        new Group1HelperClass().firstPage(driver, keyWord, firstName); *//*group3*/
+        new Group1HelperClass().firstPage(driver, keyWord, firstName); //group3*/
 
-       /* switch (value) {
+        switch (value) {
             case "Barnstable": //Done
                 searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
                 driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -47,15 +47,15 @@ public class demoTests extends Group1HelperClass {
                 searchRegistryRecordClick = "$(\".homeButton a\")[1].click();";
                 checkFirstName(driver,keyWord,searchRegistryRecordClick,firstName);
                 break;
-        }*/
+        }
         tableData(driver,fileName,request);
     }
 
     @DataProvider(name = "Group1")
     public Object[][] dataProvFunc(){
         return new Object[][]{
-                {"Hampshire"},{"Fall River Bristol"},{"Dukes"},{"Franklin"},{"Middle Berkshire"},{"Nantucket"},
-                {"North Berkshire"},{"North Middlesex"},{"South Berkshire"},{"South Middlesex"},
+                /*{"Hampshire"},{"Fall River Bristol"},{"Dukes"},{"Franklin"},{"Middle Berkshire"},{"Nantucket"},
+                {"North Berkshire"},{"North Middlesex"},{"South Berkshire"},{"South Middlesex"},*/
                 {"Worcester"},{"Suffolk"}
         };
     }

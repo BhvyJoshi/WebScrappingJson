@@ -17,9 +17,9 @@ public class Hampden extends HampdenHelperClass {
     public static String request = "12345";
 
     @Test
-    //@Parameters({"url","value","keyWord","firstName","fileName","request"})
-    //public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
-    public void test(){
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
+    //public void test(){
         driver = InitializerClass.initialize(url, value);
         firstPageForHampden(driver, keyWord, firstName);
         tableData(driver, fileName,request);

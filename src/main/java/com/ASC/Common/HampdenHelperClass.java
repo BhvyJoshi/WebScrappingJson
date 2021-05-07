@@ -6,6 +6,9 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +42,7 @@ public class HampdenHelperClass extends Hampden {
         tableDataContent = grabData(driver,headers,requestID);
         //boolean keepLooping = true;
 
-        while(checkForData(driver)){
+        while(checkForData(driver,mainTablePath)){
             try{
                 Thread.sleep(1000);
                 driver.navigate().refresh();
@@ -55,8 +58,8 @@ public class HampdenHelperClass extends Hampden {
        generateFile(fileName,tableDataContent);
     }
 
-    private boolean checkForData(WebDriver driver){
-        WebElement table = driver.findElement(By.xpath(mainTablePath));
+    static boolean checkForData(WebDriver driver,String tableXpath){
+        WebElement table = driver.findElement(By.xpath(tableXpath));
         List<WebElement> rows = table.findElements(By.tagName("tr"));
         WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
         String columnText = column.getText();
@@ -76,24 +79,24 @@ public class HampdenHelperClass extends Hampden {
 
             List<WebElement> cols = row.findElements(By.tagName("td"));
             for (int column = 0, hdr = 0; (column < cols.size()-3); column++, hdr++) {
-                addDataToJsonObj(header, objForRow, cols, column, hdr);
-            }
-         /*   driver.navigate().refresh();
-            String[] data = new String[8]; //data of each row
-            for (int itr = 0; itr<=6; itr++){
-                String xPath = getMainTableRow(rowCount)+"/td["+(itr+1)+"]";
-                data[itr] = driver.findElement(By.xpath(xPath)).getText();
-
-                data[itr] = driver.findElement(By.xpath(xPath)).getText();
-            }
-            for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
-                while(itr1 == 3){
-                    data[itr1] = generateDate(data[itr1],"MM-dd-yyyy");
-                    break;
+                //addDataToJsonObj(header, objForRow, cols, column, hdr);
+                new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount) + "/td")));
+                //*[@id="search"]/div/div[5]/table/tbody/tr[2]/td[1]
+                String[] data = new String[9]; //data of each row
+                for (int itr = 0; itr <= 6; itr++) {
+                    String xPath = getMainTableRow(rowCount)+"/td["+(itr+1)+"]";
+                    data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 }
-                objForRow.put(header[itr1],data[itr1]);
-            }*/
+                data[7] = generatePage(data[6]);
+                data[8] = generateType(data[0]);
+                data[3] = generateDateFormat(data[3]); // replacing data format
+                data[0] = getName(data[0]);
+                data[6] = getBook(data[6]);
 
+                for (int itr1 = 0; itr1 < header.length; itr1++) { //mapping of header and data in json object
+                    objForRow.put(header[itr1], data[itr1]);
+                }
+            }
             getObjectForRow(requestID, objForRow, rowCount);
             objForPage.put(objForRow);
             objForRow = new JSONObject();
@@ -118,5 +121,26 @@ public class HampdenHelperClass extends Hampden {
 
     public String getMainTableRow(int count){
         return " //*[@id=\"search\"]/div/div[5]/table/tbody/tr["+count+"]";
+    }
+
+    static String generatePage(String str){
+        String[] split = str.split("-");
+        return split[1];
+    }
+
+    static String generateType(String str){
+        String[] strings = str.split("[(]+",2);
+        if(strings[1].contains("Gtor")){
+            return "Grantor";
+        }else
+            return "Grantee";
+    }
+    static String getBook(String str){
+        String[] split = str.split("-");
+        return split[0];
+    }
+    static String getName(String str){
+        String[] split = str.split("[(]+");
+        return split[0];
     }
 }

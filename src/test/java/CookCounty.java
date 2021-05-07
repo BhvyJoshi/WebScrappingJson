@@ -20,15 +20,15 @@ public class CookCounty extends CookCountyHelper {
     private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
 
     @Test
-   // @Parameters({"keyWord","fileName","request"})
-    //public void CookCountyMethod(String keyWord, String fileName, String request){
+    @Parameters({"keyWord","fileName","request"})
+    public void CookCountyMethod(String keyWord, String fileName, String request){
 
-    // need to check
+   /* // need to check
     public void test_cookCounty(){
 
         String keyWord = "lender";
         String fileName = "cookCounty_demo";
-        String request = "1234";
+        String request = "1234";*/
 
         driver = initializeMainPage(url);
         firstPage(driver,keyWord);

@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,12 +45,12 @@ public class Group2HelperClass extends CommonMethods {
         JSONArray tableDataContent;
         tableDataContent = grabData(driver,headers,requestID);
 
-        while(checkForData(driver)){
+        while(HampdenHelperClass.checkForData(driver,mainTablePath)){
             try{
                 Thread.sleep(1000);
                 WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
                 nextBtn.click();
-                //System.out.print("\n------------next Button clicked----");
+                System.out.print("\n------------next Button clicked----");
                 Thread.sleep(2000);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID));
             }
@@ -60,32 +61,42 @@ public class Group2HelperClass extends CommonMethods {
         generateFile(fileName,tableDataContent);
     }
 
-    private boolean checkForData(WebDriver driver){
-        WebElement table = driver.findElement(By.xpath(mainTablePath));
-        List<WebElement> rows = table.findElements(By.tagName("tr"));
-        WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
-        String columnText = column.getText();
-        return columnText.contains("More names may be available");
-    }
     public JSONArray grabData(WebDriver driver,String[] header,String requestID)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
-        WebElement table =  driver.findElement(By.xpath(mainTablePath));
-        int rowSize = table.findElements(By.tagName("tr")).size();
+        new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(mainTablePath+"/tr")));
+        int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=2;rowCount<rowSize;rowCount++)
         {
-            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
+            int noOfColumn = driver.findElement(By.xpath(getMainTableRow(rowCount))).findElements(By.tagName("td")).size();
+            while (noOfColumn>3) {
+                String[] data = new String[9];
+                System.out.println("------------- Row Number is ------"+rowCount);
+                for (int itr = 0; itr <= 6; itr++) {
+                    //*[@id="search"]/div/table/tbody/tr[13]
+                    new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount) + "/td")));
+                    String xPath = getMainTableRow(rowCount) + "/td[" + (itr + 1) + "]";
+                    data[itr] = driver.findElement(By.xpath(xPath)).getText();
+                }
+                data[7] = HampdenHelperClass.generatePage(data[6]);
+                data[8] = HampdenHelperClass.generateType(data[0]);
+                data[3] = generateDateFormat(data[3]); // replacing data format
+                data[0] = HampdenHelperClass.getName(data[0]);
+                data[6] = HampdenHelperClass.getBook(data[6]);
 
-            List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int column = 0, hdr = 0; (column < cols.size()-4); column++, hdr++) {
-                HampdenHelperClass.addDataToJsonObj(header, objForRow, cols, column, hdr);
+                for (int itr1 = 0; itr1 < header.length; itr1++) { //mapping of header and data in json object
+                    objForRow.put(header[itr1], data[itr1]);
+                }
+                getObjectForRow(requestID,objForRow,rowCount);
+                objForPage.put(objForRow);
+                objForRow = new JSONObject();
+
+                break;
             }
-            getObjectForRow(requestID,objForRow,rowCount);
-            objForPage.put(objForRow);
-            objForRow = new JSONObject();
+
         }
         return objForPage;
     }

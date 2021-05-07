@@ -9,10 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class NorthBristolhelperClass extends NorthBristol {
 
@@ -42,11 +38,9 @@ public class NorthBristolhelperClass extends NorthBristol {
         int nextButtonCount = driver.findElement(By.xpath(nextButtonPath)).findElements(By.tagName("td")).size();
 
         for (int i = 2; i <=nextButtonCount ; i++) {
-
             try{
                 Thread.sleep(1000);
                 driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
-                //driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
                 Thread.sleep(1500);
                 tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
             }
@@ -67,21 +61,16 @@ public class NorthBristolhelperClass extends NorthBristol {
         for (int rowCount=3;rowCount<=rowSize-3;rowCount++)
         {
             new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
-            //WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
-            //List<WebElement> cols = row.findElements(By.tagName("td"));
 
             String[] data = new String[9]; //data of each row
-            for (int itr = 1; itr<9; itr++){
-                String xPath = getMainTableRow(rowCount)+"/td["+(itr+1)+"]";
+            for (int itr = 0; itr<8; itr++){
+                String xPath = getMainTableRow(rowCount)+"/td["+(itr+2)+"]";
                 data[itr] = driver.findElement(By.xpath(xPath)).getText();
             }
-
+            data[1] = generateDate(data[1]);
             data[2] = data[2].contains("TEE")?data[2].replace("TEE","Grantee"):data[2].replace("TOR","Grantor");
+
             for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
-                while(itr1 == 1){
-                    data[itr1] = generateDate(data[itr1]);
-                    break;
-                }
                 objForRow.put(header[itr1],data[itr1]);
             }
 
@@ -92,16 +81,6 @@ public class NorthBristolhelperClass extends NorthBristol {
         return objForPage;
     }
 
-   /* public String generateDate(String date){
-        Date dob = null;
-        try {
-            dob = new SimpleDateFormat("MM/dd/yyyy").parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return new SimpleDateFormat("yyyy-MM-dd").format(dob);
-    }
-*/
     public String getMainTableRow(int count){
         return "//*[@id=\"ctl00_cphMainContent_gvSearchResults\"]/tbody/tr["+count+"]"; //starts from row 3
     }

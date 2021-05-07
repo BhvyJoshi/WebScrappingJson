@@ -1,5 +1,6 @@
 package com.ASC.HeaderProcessing;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,10 +19,11 @@ public class Group2 {
         {
             header[i]=headers.get(i).getText();
         }
-        return modifyHeader(header);
+        header = new Hampden().modifyHeader(header);
+        return ArrayUtils.addAll(header,"Page__c","Type__c");
     }
 
-    public String[] modifyHeader(String[] hdr) {
+ /*   public String[] modifyHeader(String[] hdr) {
         String header = Arrays.toString(hdr);
         header = header.replace(", ",",");
         header = header.replace("Name","Name__c");
@@ -29,5 +31,5 @@ public class Group2 {
         header = header.replace("Date Received","Date_Received__C").replace("Document Type","Document_Type__c").replace("Document Desc","Document_Desc__c");
         header = header.replace("Book (page)","Book_(page)__c").replace("[","").replace("]","");
         return header.split(",");
-    }
+    }*/
 }
