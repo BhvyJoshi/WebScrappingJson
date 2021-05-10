@@ -20,23 +20,26 @@ public class CookCounty extends CookCountyHelper {
     private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
 
     @Test
-    @Parameters({"keyWord","fileName","request"})
-    public void CookCountyMethod(String keyWord, String fileName, String request){
+   /* @Parameters({"url","keyWord","fileName","request"})
+    public void CookCountyMethod(String url, String keyWord, String fileName, String request){*/
 
-   /* // need to check
     public void test_cookCounty(){
 
         String keyWord = "lender";
         String fileName = "cookCounty_demo";
-        String request = "1234";*/
-
-        driver = initializeMainPage(url);
-        firstPage(driver,keyWord);
-        header = grabHeader(driver,mainHeaderPath);
-        subHeader = getSubHeader(driver);
-        driver.findElement(By.xpath(groupListButton)).click();
-        driver.navigate().refresh();
-        tableData(driver,fileName,request,header,subHeader);
+        String request = "1234";
+        String logFileName = "CookCounty_"+fileName+"_"+request;
+        try {
+            driver = initializeMainPage(url);
+            firstPage(driver, keyWord);
+            header = grabHeader(driver, mainHeaderPath);
+            subHeader = getSubHeader(driver);
+            driver.findElement(By.xpath(groupListButton)).click();
+            driver.navigate().refresh();
+            tableData(driver, fileName, request, header, subHeader, logFileName);
+        }catch (Exception e){
+            writeLog(e.toString(),logFileName);
+        }
     }
 
     public WebDriver initializeMainPage(String url) {
@@ -62,7 +65,6 @@ public class CookCounty extends CookCountyHelper {
         }else{
             driver1.findElement(By.xpath("//*[@id=\"NameList1_GridView_NameListGroup_ctl02_ctl03\"]")).click();
         }
-
         return grabHeader(driver1,subHeaderXpath,0);
     }
     @AfterTest

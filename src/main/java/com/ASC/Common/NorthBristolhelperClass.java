@@ -29,11 +29,12 @@ public class NorthBristolhelperClass extends NorthBristol {
         driver.findElement(By.xpath(searchBtn)).click();
     }
 
-    public void tableData(WebDriver driver,String fileName,String request)
+    public void tableData(WebDriver driver,String fileName,String request,String logFileName)
     {
         String[] headers = grabHeader(driver);
-        JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,request);
+        //JSONArray tableDataContent;
+        //tableDataContent = grabData(driver,headers,request,logFileName);
+        generateFile(fileName,grabData(driver,headers,request,logFileName));
 
         int nextButtonCount = driver.findElement(By.xpath(nextButtonPath)).findElements(By.tagName("td")).size();
 
@@ -42,25 +43,30 @@ public class NorthBristolhelperClass extends NorthBristol {
                 Thread.sleep(1000);
                 driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
                 Thread.sleep(1500);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request));
+                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
+                appendJSONinFile(fileName,grabData(driver,headers,request,logFileName));
             }
             catch (Exception e1){
-                e1.printStackTrace();
+                //e1.printStackTrace();
+                writeLog(e1.toString(),logFileName);
             }
         }
-        generateFile(fileName,tableDataContent);
+        //generateFile(fileName,tableDataContent);
     }
 
-    public JSONArray grabData(WebDriver driver,String[] header,String request)
+    public JSONArray grabData(WebDriver driver,String[] header,String request,String logFileName)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
+        new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(mainTablePath+"/tr")));
         int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=3;rowCount<=rowSize-3;rowCount++)
         {
             new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
+
+            writeLog("---------------Row is --------------"+rowCount,logFileName);
 
             String[] data = new String[9]; //data of each row
             for (int itr = 0; itr<8; itr++){

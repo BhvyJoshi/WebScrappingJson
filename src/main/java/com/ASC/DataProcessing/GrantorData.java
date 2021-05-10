@@ -7,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.util.Random;
 
 public class GrantorData extends CommonMethods{
 
@@ -36,7 +35,6 @@ public class GrantorData extends CommonMethods{
         writeLog("value of grantorLable == --------------------"+grantorLabel,logFileName);
         int dataRecords = Integer.parseInt(grantorLabel.substring(16));
         writeLog("value of dataRecords == -------------"+dataRecords,logFileName);
-
         grantorLabel = null;
         System.gc();
         if (dataRecords<=10){
@@ -56,7 +54,7 @@ public class GrantorData extends CommonMethods{
         if(pageCount<noOfPages){
             try{
                 clickOnNextPage(driver, pageCount,logFileName);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,10,logFileName));
+                subTableContent = appendToListJSON(subTableContent,getActualGrantorData(driver,mainRowId,10,logFileName));
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -64,7 +62,7 @@ public class GrantorData extends CommonMethods{
         }else {
             try{
                 clickOnNextPage(driver, pageCount,logFileName);
-                subTableContent = appendToList(subTableContent,getActualGrantorData(driver,mainRowId,dataInLastPage,logFileName));
+                subTableContent = appendToListJSON(subTableContent,getActualGrantorData(driver,mainRowId,dataInLastPage,logFileName));
             }
             catch (Exception e1){
                 e1.printStackTrace();
@@ -89,34 +87,41 @@ public class GrantorData extends CommonMethods{
         Thread.sleep(3000);
     }
 
-    private JSONArray getActualGrantorData(WebDriver driver,int mainRowId,int length,String logFileName){
+    private JSONArray getActualGrantorData(WebDriver driver,int mainRowId,int length,String logFileName) {
 
         JSONArray objForSubTable = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
 
-        writeLog("value of length is --------------->"+length,logFileName);
-           while(objForSubTable.length()!=length){
-               try{
-                    for (int itr=2;itr<=length+1;itr++){
+        writeLog("value of length is --------------->" + length, logFileName);
+        int counter = 5;
+
+            while (objForSubTable.length() != length) {
+                try {
+                    for (int itr = 2; itr <= length + 1; itr++) {
                         Thread.sleep(2000);
-                        new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableBody+"/tr")));
-                        driver.findElement(By.xpath(subTableBody+"tr["+itr+"]"));
-                        writeLog("SubTable row number: ---> "+itr,logFileName);
+                        new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableBody + "/tr")));
+                        driver.findElement(By.xpath(subTableBody + "tr[" + itr + "]"));
+                        writeLog("SubTable row number: ---> " + itr, logFileName);
                         //System.out.println("SubTable row number: ---> "+itr);
-                        WebElement column1 = driver.findElement(By.xpath(subTableBody+"tr["+itr+"]/td[1]"));
-                        WebElement column2 = driver.findElement(By.xpath(subTableBody+"tr["+itr+"]/td[2]"));
-                        objForSubRow.put(headerSubTable[0],column1.getText());
-                        objForSubRow.put(headerSubTable[1],column2.getText());
-                        objForSubRow.put("attributes",putSubAttributes(mainRowId));
+                        WebElement column1 = driver.findElement(By.xpath(subTableBody + "tr[" + itr + "]/td[1]"));
+                        WebElement column2 = driver.findElement(By.xpath(subTableBody + "tr[" + itr + "]/td[2]"));
+                        objForSubRow.put(headerSubTable[0], column1.getText());
+                        objForSubRow.put(headerSubTable[1], column2.getText());
+                        objForSubRow.put("attributes", putSubAttributes(mainRowId));
                         objForSubTable.put(objForSubRow);
                         objForSubRow = new JSONObject();
                     }
-                }catch(Exception e1){
-                   e1.printStackTrace();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    counter--;
+                    if(counter==0)
+                    {
+                        break;
+                    }
                 }
-           }
-       return objForSubTable;
-    }
+            }
+            return objForSubTable;
+        }
 
     private String getButtonXpath(int rowValue){
         if(rowValue<9){

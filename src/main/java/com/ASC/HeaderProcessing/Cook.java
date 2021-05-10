@@ -4,12 +4,10 @@ import com.ASC.DataProcessing.CommonMethods;
 import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.Arrays;
-import java.util.List;
+
 
 public class Cook extends CommonMethods {
 
@@ -38,7 +36,6 @@ public class Cook extends CommonMethods {
         String dummyHeader = Arrays.toString(hdr);
         dummyHeader = dummyHeader.replace(", ",",");
         dummyHeader = dummyHeader.replace("[","").replace("]","");
-        //dummyHeader = dummyHeader.replace("Grantor","Grantor__c").replace("Grantee","Grantee__c");
         dummyHeader = dummyHeader.replace("Doc. #","Book__c").replace("Type Desc.","Type_Desc__c");
         dummyHeader = dummyHeader.replace("Recorded Date","Rec_Date__c").replace("PIN","PIN__c");
         return dummyHeader.split(",");

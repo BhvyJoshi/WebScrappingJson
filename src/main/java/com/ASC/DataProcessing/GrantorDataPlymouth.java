@@ -66,16 +66,18 @@ public class GrantorDataPlymouth extends CommonMethods {
         if (pageCount < noOfPages) {
             try {
                 clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent, getActualGrantorData(driver, mainRowId, 10, logFileName));
+                subTableContent = appendToListJSON(subTableContent, getActualGrantorData(driver, mainRowId, 10, logFileName));
             } catch (Exception e1) {
-                e1.printStackTrace();
+                //e1.printStackTrace();
+                writeLog(e1.toString(),logFileName);
             }
         } else {
             try {
                 clickOnNextPage(driver, pageCount);
-                subTableContent = appendToList(subTableContent, getActualGrantorData(driver, mainRowId, dataInLastPage, logFileName));
+                subTableContent = appendToListJSON(subTableContent, getActualGrantorData(driver, mainRowId, dataInLastPage, logFileName));
             } catch (Exception e1) {
-                e1.printStackTrace();
+                //e1.printStackTrace();
+                writeLog(e1.toString(),logFileName);
             }
         }
         return subTableContent;
@@ -99,16 +101,17 @@ public class GrantorDataPlymouth extends CommonMethods {
         JSONArray objForSubTable = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
 
-        //writeLog("value of length is --------------->"+length,logFileName);
-        System.out.println("value of length is --------------->" + length);
+        writeLog("value of length is --------------->"+length,logFileName);
+        //System.out.println("value of length is --------------->" + length);
+        int counter =5;
         while (objForSubTable.length() != length) {
             try {
                 for (int itr = 2; itr <= length + 1; itr++) {
                     //Thread.sleep(2000);
                     new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableBody + "/tr")));
                     driver.findElement(By.xpath(subTableBody + "tr[" + itr + "]"));
-                    //writeLog("SubTable row number: ---> "+itr,logFileName);
-                    System.out.println("SubTable row number: ---> " + itr);
+                    writeLog("SubTable row number: ---> "+itr,logFileName);
+                    //System.out.println("SubTable row number: ---> " + itr);
                     WebElement column1 = driver.findElement(By.xpath(subTableBody + "tr[" + itr + "]/td[1]"));
                     WebElement column2 = driver.findElement(By.xpath(subTableBody + "tr[" + itr + "]/td[2]"));
                     objForSubRow.put(headerSubTable[0], column1.getText());
@@ -119,12 +122,17 @@ public class GrantorDataPlymouth extends CommonMethods {
                 }
             } catch (Exception e1) {
                 e1.printStackTrace();
+                counter--;
+                if(counter==0)
+                {
+                    break;
+                }
             }
         }
         return objForSubTable;
     }
 
-    private String getButtonXpath(int rowValue) { //for plymouth county only
+    private String getButtonXpath(int rowValue) {
 
         if (rowValue < 9) {
             return "//*[@id=\"DocList1_GridView_Document_ctl0" + (rowValue + 1) + "_ButtonRow_Name_" + (rowValue - 1) + "\"]";

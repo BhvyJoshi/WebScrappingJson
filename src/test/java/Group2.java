@@ -28,29 +28,34 @@ public class Group2 extends Group2HelperClass {
           String fileName = "demo_"+value;
           String request ="123456";
           String firstName ="" *//*"barbara"ot working"Nadine"*//*;*/
+        String logFileName = value+"_"+fileName+"_"+request;
+        try {
 
-        driver= InitializerClass.initialize(url,value);
-        switch (value) {
-            case "Barnstable": //Done
-                searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
-                driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-                driver.get("https://www.barnstabledeeds.org/free-public-access/");
-                driver.findElement(By.xpath("//*[@id=\"text-6\"]/div/a/img")).click();
-                checkFirstName(driver,keyWord,searchRegistryRecordClick,firstName);
-                break;
-            case "Norfolk": //Done
-                searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
-                checkFirstName(driver,keyWord,searchRegistryRecordClick,firstName);
-                break;
-            case "North Essex": //Done
+            driver = InitializerClass.initialize(url, value);
+            switch (value) {
+                case "Barnstable": //Done
+                    searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
+                    driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+                    driver.get("https://www.barnstabledeeds.org/free-public-access/");
+                    driver.findElement(By.xpath("//*[@id=\"text-6\"]/div/a/img")).click();
+                    checkFirstName(driver, keyWord, searchRegistryRecordClick, firstName);
+                    break;
+                case "Norfolk": //Done
+                    searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
+                    checkFirstName(driver, keyWord, searchRegistryRecordClick, firstName);
+                    break;
+                case "North Essex": //Done
 
-            case "North Worcester": //Done
-                searchRegistryRecordClick = "$(\".homeButton a\")[1].click();";
-                checkFirstName(driver,keyWord,searchRegistryRecordClick,firstName);
-                break;
+                case "North Worcester": //Done
+                    searchRegistryRecordClick = "$(\".homeButton a\")[1].click();";
+                    checkFirstName(driver, keyWord, searchRegistryRecordClick, firstName);
+                    break;
+            }
+
+            tableData(driver, fileName, request, logFileName);
+        }catch(Exception e){
+            writeLog(e.toString(),logFileName);
         }
-
-        tableData(driver,fileName,request);
     }
 
     @AfterTest

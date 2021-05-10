@@ -21,31 +21,31 @@ public class Group3HelperClass extends GrantorData {
     public void tableData(WebDriver driver, String fileName, String request,String logFileName)
     {
         String[] headers = new Group3().grabHeader(driver);
-        //driver.findElement(By.xpath("//*[@id=\"DocList1_PageView5Btn\"]")).click();
-        JSONArray tableDataContent;
+        //JSONArray tableDataContent;
         try{
             Thread.sleep(2000);
             driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+        }catch(Exception e){ }
 
-        }catch(Exception e){
-
-        }
-        tableDataContent = grabData(driver,headers,request,logFileName);
-
+        //tableDataContent = grabData(driver,headers,request,logFileName);
+        generateFile(fileName,grabData(driver,headers,request,logFileName));
         boolean checkNext = true;
 
         while(checkNext){
             try{
                 Thread.sleep(1000);
+                new WebDriverWait(driver,20).until(ExpectedConditions.elementToBeClickable(By.xpath(nextButtonPath)));
                 driver.findElement(By.xpath(nextButtonPath)).click();
+                writeLog("\n--------------Next btn clicked-------------------\n",logFileName);
                 Thread.sleep(1500);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
+                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
+                appendJSONinFile(fileName,grabData(driver,headers,request,logFileName));
             }
             catch (Exception e1){
                 checkNext = false;
             }
         }
-        generateFile(fileName,tableDataContent);
+        //generateFile(fileName,tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request,String logfileName)
@@ -53,6 +53,7 @@ public class Group3HelperClass extends GrantorData {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
         GrantorData childRecord = new GrantorData();
+        new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(mainTablePath+"/tr")));
         int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
@@ -60,7 +61,6 @@ public class Group3HelperClass extends GrantorData {
             String[] data = new String[8]; //data of each row
             for (int itr = 0; itr<8; itr++){
                 new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
-
                     String xPath = getMainTableRow(rowCount)+"/td["+(itr+2)+"]";
                     data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 }
@@ -70,7 +70,6 @@ public class Group3HelperClass extends GrantorData {
             for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
                 objForRow.put(header[itr1],data[itr1]);
             }
-
             getObjectForRow(driver,request,objForRow,rowCount,logfileName,childRecord);
             objForPage.put(objForRow);
             objForRow = new JSONObject();

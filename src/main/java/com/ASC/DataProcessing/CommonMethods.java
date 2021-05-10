@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.WebDriver;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -12,7 +14,17 @@ import java.util.Random;
 
 public class CommonMethods {
 
-    public JSONArray appendToList(JSONArray original, JSONArray toBeAppend)
+    public JSONArray appendToList(String fileContent, JSONArray toBeAppend) //METHOD USED WHILE WRITING WHOLE PAGE DATA TO FILE
+    {
+        JSONArray sourceArray = new JSONArray(toBeAppend);
+        JSONArray destinationArray = new JSONArray(fileContent);
+
+        for (int i = 0; i < sourceArray.length(); i++) {
+            destinationArray.put(sourceArray.getJSONObject(i));
+        }
+        return destinationArray;
+    }
+    public JSONArray appendToListJSON(JSONArray original, JSONArray toBeAppend)// used for subtable/child data
     {
         JSONArray sourceArray = new JSONArray(toBeAppend);
         JSONArray destinationArray = new JSONArray(original);
@@ -23,7 +35,7 @@ public class CommonMethods {
         return destinationArray;
     }
 
-    public void generateFile(String fileName, JSONArray tableDataContent)
+    public void generateFile(String fileName, JSONArray tableDataContent) // used when file is generated for first time
     {
         try {
             File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
@@ -37,6 +49,20 @@ public class CommonMethods {
             writeLog("An error occured","");
             e.printStackTrace();
         }
+    }
+
+    public void appendJSONinFile(String fileName,JSONArray arrayToBeAppend){ // used when need to add json array data in existing file
+        String fileContent = null;
+        try {
+            fileContent = new String(Files.readAllBytes(Paths.get("C:\\JsonResponse\\"+fileName+".txt")));
+            FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
+            myWriter.write(appendToList(fileContent,arrayToBeAppend).toString());
+            myWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void getObjectForRow(String requestID, JSONObject objForRow, int rowCount) {
@@ -88,14 +114,14 @@ public class CommonMethods {
         return attributes;
     }
 
-    public void writeLog(String line, String County){
-        File myObj = new File("C:\\JsonResponse\\Logs\\"+County+".txt");
+    public void writeLog(String line, String logFileName){
+        File myObj = new File("C:\\JsonResponse\\Logs\\"+logFileName+".txt");
         try {
             myObj.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try(FileWriter fw = new FileWriter("C:\\JsonResponse\\Logs\\"+County+".txt", true);
+        try(FileWriter fw = new FileWriter("C:\\JsonResponse\\Logs\\"+logFileName+".txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw))
         {

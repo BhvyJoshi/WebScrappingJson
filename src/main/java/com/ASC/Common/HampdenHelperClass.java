@@ -8,10 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -35,27 +31,28 @@ public class HampdenHelperClass extends Hampden {
         driver.findElement(By.xpath(searchBtn)).click();
     }
 
-    public void tableData(WebDriver driver,String fileName,String requestID)
+    public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
         String[] headers = grabHeader(driver);
-        JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,requestID);
-        //boolean keepLooping = true;
+        //JSONArray tableDataContent;
+        //tableDataContent = grabData(driver,headers,requestID,logFileName);
+        generateFile(fileName,grabData(driver,headers,requestID,logFileName));
 
         while(checkForData(driver,mainTablePath)){
             try{
                 Thread.sleep(1000);
                 driver.navigate().refresh();
                 driver.findElement(By.xpath(nextButtonPath)).click();
+                writeLog("\n-----------Next Btn clicked--------\n",logFileName);
                 Thread.sleep(1500);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID));
-                //keepLooping = false;
+                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,logFileName));
+                appendJSONinFile(fileName,grabData(driver,headers,requestID,logFileName));
             }
             catch (Exception e1){
                 e1.printStackTrace();
             }
         }
-       generateFile(fileName,tableDataContent);
+       //generateFile(fileName,tableDataContent);
     }
 
     static boolean checkForData(WebDriver driver,String tableXpath){
@@ -66,57 +63,43 @@ public class HampdenHelperClass extends Hampden {
         return columnText.contains("More names may be available");
     }
 
-    public JSONArray grabData(WebDriver driver,String[] header,String requestID)
-    {
+    public JSONArray grabData(WebDriver driver,String[] header,String requestID,String logFileName) {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
 
+        new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(mainTablePath + "/tr")));
         int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
-        for (int rowCount=2;rowCount<rowSize;rowCount++)
+        for (int rowCount = 2; rowCount < rowSize; rowCount++)
         {
-            WebElement row = driver.findElement(By.xpath(getMainTableRow(rowCount)));
-
-            List<WebElement> cols = row.findElements(By.tagName("td"));
-            for (int column = 0, hdr = 0; (column < cols.size()-3); column++, hdr++) {
-                //addDataToJsonObj(header, objForRow, cols, column, hdr);
-                new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount) + "/td")));
-                //*[@id="search"]/div/div[5]/table/tbody/tr[2]/td[1]
-                String[] data = new String[9]; //data of each row
+            int noOfColumn = driver.findElement(By.xpath(getMainTableRow(rowCount))).findElements(By.tagName("td")).size();
+            while (noOfColumn>3) {
+                String[] data = new String[9];
+                writeLog("------------- Row Number is ------"+rowCount,logFileName);
+                //System.out.println("------------- Row Number is ------"+rowCount);
                 for (int itr = 0; itr <= 6; itr++) {
-                    String xPath = getMainTableRow(rowCount)+"/td["+(itr+1)+"]";
+                    //*[@id="search"]/div/table/tbody/tr[13]
+                    new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount) + "/td")));
+                    String xPath = getMainTableRow(rowCount) + "/td[" + (itr + 1) + "]";
                     data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 }
-                data[7] = generatePage(data[6]);
-                data[8] = generateType(data[0]);
-                data[3] = generateDateFormat(data[3]); // replacing data format
-                data[0] = getName(data[0]);
-                data[6] = getBook(data[6]);
+                data[7] = HampdenHelperClass.generatePage(data[6]);
+                data[8] = HampdenHelperClass.generateType(data[0]);
+                data[3] = generateDateFormat(data[3]); // replacing date format
+                data[0] = HampdenHelperClass.getName(data[0]);
+                data[6] = HampdenHelperClass.getBook(data[6]);
 
                 for (int itr1 = 0; itr1 < header.length; itr1++) { //mapping of header and data in json object
                     objForRow.put(header[itr1], data[itr1]);
                 }
-            }
-            getObjectForRow(requestID, objForRow, rowCount);
-            objForPage.put(objForRow);
-            objForRow = new JSONObject();
-        }
-        return objForPage;
-    }
 
-    static void addDataToJsonObj(String[] header, JSONObject objForRow, List<WebElement> cols, int column, int hdr) {
-        objForRow.put(header[hdr], cols.get(column).getText());
-        while(hdr == 3) {
-            Date dob;
-            try {
-                dob = new SimpleDateFormat("MM-dd-yyyy").parse(cols.get(column).getText());
-                String str = new SimpleDateFormat("yyyy-MM-dd").format(dob);
-                objForRow.put(header[hdr], str);
+                getObjectForRow(requestID,objForRow,rowCount);
+                objForPage.put(objForRow);
+                objForRow = new JSONObject();
                 break;
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
         }
+       return objForPage;
     }
 
     public String getMainTableRow(int count){

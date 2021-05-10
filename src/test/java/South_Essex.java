@@ -13,13 +13,12 @@ public class South_Essex extends SouthEssexHelperClass {
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
     public static String firstName = "julian";
-    public static String request = "123";
-*/
+    public static String request = "123";*/
     @Test
     @Parameters({"url","value","keyWord","firstName","fileName","request"})
     public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
-    //public void test(){
-        String logFileName = value+"_"+fileName;
+   /* public void test(){*/
+        String logFileName = value+"_"+fileName+"_"+request;
         try {
             driver = InitializerClass.initialize(url, value);
             firstPage(driver, keyWord, firstName);

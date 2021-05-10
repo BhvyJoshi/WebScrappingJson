@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -28,10 +27,12 @@ public class CookCountyHelper extends CookGrantorData {
         }
     }
 
-    public void tableData(WebDriver driver,String fileName,String request,String[] headers,String[] subHeaders)
+    public void tableData(WebDriver driver,String fileName,String request,String[] headers,String[] subHeaders,String logFileName)
     {
-        JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,request,subHeaders);
+        //JSONArray tableDataContent;
+        //tableDataContent = grabData(driver,headers,request,subHeaders,logFileName);
+        generateFile(fileName, grabData(driver,headers,request,subHeaders,logFileName));
+
         int nextBtnCliCkCount  = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
         boolean checkNext = true;
         int count = 0;
@@ -49,9 +50,11 @@ public class CookCountyHelper extends CookGrantorData {
                 /*new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(mainTableNextButtonPath))));
                 WebElement nextBtn = driver.findElement(By.xpath(mainTableNextButtonPath));
                 nextBtn.click();*/
-                System.out.println("\n------- Mainnext btn clicked------------"+(++count));
+                writeLog("\n------- Main Next btn clicked------------"+(++count),logFileName);
+                //System.out.println("\n------- MainNext btn clicked------------"+(++count));
                 Thread.sleep(2000);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,subHeaders));
+                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,subHeaders,logFileName));
+                appendJSONinFile(fileName,grabData(driver,headers,request,subHeaders,logFileName));
                 nextBtnCliCkCount --;
             }
             catch (Exception e1){
@@ -59,10 +62,10 @@ public class CookCountyHelper extends CookGrantorData {
                 checkNext = false;
             }
         }
-        generateFile(fileName, tableDataContent);
+        //generateFile(fileName, tableDataContent);
     }
 
-    public JSONArray grabData(WebDriver driver,String[] header,String request,String[] subHeaders)
+    public JSONArray grabData(WebDriver driver,String[] header,String request,String[] subHeaders,String logFileName)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objCommon = new JSONObject();
@@ -72,13 +75,14 @@ public class CookCountyHelper extends CookGrantorData {
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
         {
             JSONArray temp;
-            System.out.println("\n-----------main table row ------->"+rowCount);
+            writeLog("\n-----------main table row ------->"+rowCount,logFileName);
+            //System.out.println("\n-----------main table row ------->"+rowCount);
             new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfElementLocated(By.xpath(getMainTableRow(rowCount)+"/td")));
             for (int itr = 0; itr < 2; itr++) {
                 String column = driver.findElement(By.xpath(getMainTableRow(rowCount)+"/td["+(itr+1)+"]")).getText();
                 objCommon.put(header[itr], column);
             }
-            temp = getGrantorGranteeData(driver,rowCount,objCommon,request,subHeaders);
+            temp = getGrantorGranteeData(driver,rowCount,objCommon,request,subHeaders,logFileName);
 
             for (int i = 0; i < temp.length(); i++) {
                 objForPage.put(temp.getJSONObject(i));

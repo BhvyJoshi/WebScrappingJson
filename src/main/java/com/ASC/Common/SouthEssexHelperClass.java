@@ -38,8 +38,9 @@ public class SouthEssexHelperClass extends SouthEssex {
     public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
         String[] headers = grabHeader(driver);
-        JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,requestID,0,15,logFileName);
+        //JSONArray tableDataContent;
+        //tableDataContent = grabData(driver,headers,requestID,0,15,logFileName);
+        generateFile(fileName,grabData(driver,headers,requestID,0,15,logFileName));
         int searchResultCount = getSearchResultCount(driver);
         int noOfLoop = searchResultCount/15;
         int lastPageData = searchResultCount % 15;
@@ -59,7 +60,8 @@ public class SouthEssexHelperClass extends SouthEssex {
                     driver.findElement(By.xpath(nextBtnClick)).click();
                     writeLog("\n-----------Next Btn clicked---------\n",logFileName);
                     Thread.sleep(2000);
-                    tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
+                    //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
+                    appendJSONinFile(fileName,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
                 }
                 catch (Exception e1){
                     writeLog(e1.toString(),logFileName);
@@ -83,7 +85,8 @@ public class SouthEssexHelperClass extends SouthEssex {
                     driver.findElement(By.xpath(nextBtnClick)).click();
                     writeLog("\n----------------------Next Btn clicked------------------\n",logFileName);
                     Thread.sleep(1500);
-                    tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
+                    //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
+                    appendJSONinFile(fileName,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
                 }
                 catch (Exception e1){
                     writeLog(e1.toString(),logFileName);
@@ -93,9 +96,10 @@ public class SouthEssexHelperClass extends SouthEssex {
             driver.navigate().refresh();
             driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
         }
-        tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData,logFileName));
+        appendJSONinFile(fileName,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData,logFileName));
+        //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData,logFileName));
 
-        generateFile(fileName,tableDataContent);
+        //generateFile(fileName,tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String requestID,int lowerLimit, int upperLimit,String logFileName)

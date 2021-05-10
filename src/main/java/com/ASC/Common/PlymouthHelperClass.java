@@ -19,8 +19,9 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
     public void tableData(WebDriver driver,String fileName,String request,String logFileName)
     {
         String[] headers = new Plymouth().grabHeader(driver);
-        JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,request,logFileName);
+        //JSONArray tableDataContent;
+        //tableDataContent = grabData(driver,headers,request,logFileName);
+        generateFile(fileName,grabData(driver,headers,request,logFileName));
 
         boolean checkNext = true;
 
@@ -32,13 +33,14 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
                 //writeLog("\n--------------Next btn clicked--------\n",logFileName);
                 System.out.println("\n--------------Next btn clicked--------\n");
                 Thread.sleep(2000);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
+                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
+                appendJSONinFile(fileName,grabData(driver,headers,request,logFileName));
             }
             catch (Exception e1){
                 checkNext = false;
             }
         }
-       generateFile(fileName,tableDataContent);
+       //generateFile(fileName,tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request,String logFileName)

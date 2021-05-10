@@ -16,9 +16,9 @@ public class DataProcessing extends GrantorData{
     public void tableData(WebDriver driver,String fileName,String request,String logFileName)
     {
         String[] headers = new Group1().grabHeader(driver);
-        JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,request,logFileName);
-
+        //JSONArray tableDataContent;
+        //tableDataContent = grabData(driver,headers,request,logFileName);
+        generateFile(fileName,grabData(driver,headers,request,logFileName));
         boolean checkNext = true;
 
         while(checkNext){
@@ -29,13 +29,13 @@ public class DataProcessing extends GrantorData{
                 writeLog("\n------------------next Button clicked------------------",logFileName);
                 System.out.println();
                 Thread.sleep(2000);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
+                appendJSONinFile(fileName,grabData(driver,headers,request,logFileName));
             }
             catch (Exception e1){
                 checkNext = false;
             }
         }
-        generateFile(fileName,tableDataContent);
+        //generateFile(fileName,tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request,String logFileName)

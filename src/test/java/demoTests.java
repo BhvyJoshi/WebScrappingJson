@@ -16,12 +16,13 @@ public class demoTests extends Group2HelperClass {
     @Test(dataProvider ="Group2")
     public void testDemo(String value){
 
+
         String url ="https://www.masslandrecords.com";
         String keyWord = "lender";
         String fileName = "demo_"+value;
         String request = "123456";
         String firstName = "";
-
+        String logFileName = value+"_"+fileName+"_"+request;
         driver = InitializerClass.initialize(url,value);
         //firstPage(driver,keyWord,firstName); //group1
        /* if(value.contains("South Bristol")){
@@ -48,7 +49,7 @@ public class demoTests extends Group2HelperClass {
                 checkFirstName(driver,keyWord,searchRegistryRecordClick,firstName);
                 break;
         }
-        tableData(driver,fileName,request);
+        tableData(driver,fileName,request,logFileName);
     }
 
     @DataProvider(name = "Group1")

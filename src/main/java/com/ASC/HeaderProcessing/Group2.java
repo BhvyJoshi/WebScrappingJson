@@ -4,6 +4,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,12 +15,11 @@ public class Group2 {
 
     public String[] grabHeader(WebDriver driver)
     {
-        WebElement headerTag =  driver.findElement(By.xpath(headerXpath));
-        List<WebElement> headers = headerTag.findElements(By.tagName("th"));
+        new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(headerXpath+"/th")));
         String[] header = new String[7];
         for (int i =0;i<7;i++)
         {
-            header[i]=headers.get(i).getText();
+            header[i]=driver.findElement(By.xpath(headerXpath+"/th["+(i+1)+"]")).getText();
         }
         header = new Hampden().modifyHeader(header);
         return ArrayUtils.addAll(header,"Page__c","Type__c");

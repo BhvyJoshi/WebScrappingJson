@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
 
-//nedd to update logic on page no click
 public class Plymouth extends PlymouthHelperClass {
 
     public static String url = "https://www.masslandrecords.com";

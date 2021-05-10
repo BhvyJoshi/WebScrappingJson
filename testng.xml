@@ -33,6 +33,7 @@
     </test>
 
     <test name="C:/WebScrappingProjects/WebScrappingJson/src/main/java/com/ASC/ExecutableClasses/CookCounty.java">
+        <parameter name="url" value="${url}" />
         <parameter name="keyWord" value="${keyWord}" />
         <parameter name="fileName" value="${fileName}" />
         <parameter name="request" value="${request}" />

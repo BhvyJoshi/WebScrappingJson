@@ -7,13 +7,8 @@ import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Group2HelperClass extends CommonMethods {
@@ -39,29 +34,32 @@ public class Group2HelperClass extends CommonMethods {
       driver.findElement(By.xpath(searchRecordsClick)).click();
   }
 
-  public void tableData(WebDriver driver,String fileName,String requestID)
+  public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
         String[] headers = new Group2().grabHeader(driver);
-        JSONArray tableDataContent;
-        tableDataContent = grabData(driver,headers,requestID);
-
+        //JSONArray tableDataContent;
+        //tableDataContent = grabData(driver,headers,requestID,logFileName);
+        generateFile(fileName,grabData(driver,headers,requestID,logFileName));
         while(HampdenHelperClass.checkForData(driver,mainTablePath)){
             try{
                 Thread.sleep(1000);
-                WebElement nextBtn = driver.findElement(By.xpath(nextButtonPath));
-                nextBtn.click();
-                System.out.print("\n------------next Button clicked----");
+                new WebDriverWait(driver,20).until(ExpectedConditions.elementToBeClickable(By.xpath(nextButtonPath)));
+                driver.findElement(By.xpath(nextButtonPath)).click();
+                writeLog("\n------------next Button clicked----\n",logFileName);
+                //System.out.print("\n------------next Button clicked----");
                 Thread.sleep(2000);
-                tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID));
+                appendJSONinFile(fileName,grabData(driver,headers,requestID,logFileName));
+                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,logFileName));
             }
             catch (Exception e1){
-                e1.printStackTrace();
+                writeLog(e1.toString(),logFileName);
+                //e1.printStackTrace();
             }
         }
-        generateFile(fileName,tableDataContent);
+        //generateFile(fileName,tableDataContent);
     }
 
-    public JSONArray grabData(WebDriver driver,String[] header,String requestID)
+    public JSONArray grabData(WebDriver driver,String[] header,String requestID,String logFileName)
     {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
@@ -74,7 +72,8 @@ public class Group2HelperClass extends CommonMethods {
             int noOfColumn = driver.findElement(By.xpath(getMainTableRow(rowCount))).findElements(By.tagName("td")).size();
             while (noOfColumn>3) {
                 String[] data = new String[9];
-                System.out.println("------------- Row Number is ------"+rowCount);
+                writeLog("------------- Row Number is ------"+rowCount,logFileName);
+                //System.out.println("------------- Row Number is ------"+rowCount);
                 for (int itr = 0; itr <= 6; itr++) {
                     //*[@id="search"]/div/table/tbody/tr[13]
                     new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount) + "/td")));
@@ -83,23 +82,23 @@ public class Group2HelperClass extends CommonMethods {
                 }
                 data[7] = HampdenHelperClass.generatePage(data[6]);
                 data[8] = HampdenHelperClass.generateType(data[0]);
-                data[3] = generateDateFormat(data[3]); // replacing data format
+                data[3] = generateDateFormat(data[3]); // replacing date format
                 data[0] = HampdenHelperClass.getName(data[0]);
                 data[6] = HampdenHelperClass.getBook(data[6]);
 
                 for (int itr1 = 0; itr1 < header.length; itr1++) { //mapping of header and data in json object
                     objForRow.put(header[itr1], data[itr1]);
                 }
+
                 getObjectForRow(requestID,objForRow,rowCount);
                 objForPage.put(objForRow);
                 objForRow = new JSONObject();
-
                 break;
             }
-
         }
-        return objForPage;
+      return objForPage;
     }
+
     public String getMainTableRow(int count){
         return "//*[@id=\"search\"]/div/table/tbody/tr["+count+"]";
     }

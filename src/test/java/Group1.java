@@ -24,12 +24,13 @@ public class Group1 extends Group1HelperClass {
     @Test
     public void test(String url, String value, String keyWord, String firstName, String fileName, String request){
    // public void test(){
+        String logFileName = value+"_"+fileName+"_"+request;
         try{
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName);
-        tableData(driver,fileName,request,value);
+        tableData(driver,fileName,request,logFileName);
         }catch(Exception e){
-            writeLog(e.toString(),value);
+            writeLog(e.toString(),logFileName);
         }
     }
 
