@@ -9,21 +9,21 @@ import org.testng.annotations.Test;
 import java.util.concurrent.TimeUnit;
 
 public class Plymouth extends PlymouthHelperClass {
-
+/*
     public static String url = "https://www.masslandrecords.com";
     public static String value= "Plymouth";
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
-    public static String request = "12345";
+    public static String request = "12345";*/
 
     public static final String searchButtonClick = "//*[@id=\"SearchFormEx1_btnSearch\"]";
     public static final String lastNameTextBox = "//*[@id=\"SearchFormEx1_ACSTextBox_LastName1\"]";
 
     public WebDriver driver;
     @Test
-   // @Parameters({"url","value","keyWord","fileName","request"})
-    //public void PlymouthCounty(String url,String value,String keyWord,String fileName,String request){
-    public void test(){
+    @Parameters({"url","value","keyWord","fileName","request"})
+    public void PlymouthCounty(String url,String value,String keyWord,String fileName,String request){
+   /* public void test(){*/
         String logFileName = value+"_"+fileName+"_"+request;
         try {
             driver = InitializerClass.initialize(url, value);

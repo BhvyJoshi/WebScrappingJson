@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 //Done
 public class South_Essex extends SouthEssexHelperClass {
     public WebDriver driver;
-   /* public static String url = "https://www.masslandrecords.com";
+    /*public static String url = "https://www.masslandrecords.com";
     public static String value= "South Essex";
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
@@ -17,7 +17,7 @@ public class South_Essex extends SouthEssexHelperClass {
     @Test
     @Parameters({"url","value","keyWord","firstName","fileName","request"})
     public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
-   /* public void test(){*/
+    /*public void test(){*/
         String logFileName = value+"_"+fileName+"_"+request;
         try {
             driver = InitializerClass.initialize(url, value);
