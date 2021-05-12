@@ -35,7 +35,7 @@ public class NorthBristol extends CommonMethods {
         header = header.replace("Doc","Doc__c");
         header = header.replace("Type","Type__c");
         header = header.replace("Book","Book__c").replace("Page","Page__c");
-        header = header.replace("Date","Rec_Date__c").replace("Name__cType__c","Type_Desc__c");
+        header = header.replace("Date","Rec_Date__c").replace("NameType__c","Type_Desc__c");
         header = header.replace("Description","Property_Descr__c").replace("Town","Town__c");
         header = header.replace("[","").replace("]","");
         return  header.split(",");

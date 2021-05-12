@@ -14,8 +14,7 @@ public class North_Bristol extends NorthBristolhelperClass {
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
     public static String request = "123456";
-    public static String firstName = "";
-*/
+    public static String firstName = "";*/
     @Test
     @Parameters({"url","value","keyWord","firstName","fileName","request"})
     public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
