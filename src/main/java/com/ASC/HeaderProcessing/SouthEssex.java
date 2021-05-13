@@ -29,7 +29,7 @@ public class SouthEssex extends CommonMethods {
         header = header.replace("DATE","Rec_Date__c").replace("ROLE","type__c");
         header = header.replace("Type","Type_Desc__c").replace("FIRST PARTY NAME","Name");
         header = header.replace("Book","Book__c").replace("Page","Page__c");
-        header = header.replace("DESC","Property_Desc__c").replace("Street","Street__c");
+        header = header.replace("DESC","Property_Descr__c").replace("Street","Street__c");
         header = header.replace("Locus","Locus__c").replace("PBK","PBK__c");
         header = header.replace("PPG","PPG__c").replace("Consideration","Consideration__c");
         header = header.replace("SECOND PARTY NAME","Reverse_Party__c").replace("Town","Town__c");
