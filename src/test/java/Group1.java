@@ -29,7 +29,7 @@ public class Group1 extends Group1HelperClass {
         try{
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName,logFileName);
-            writeLog("------------------------Getting table data Content -------------------------",logFileName);
+        writeLog("------------------------Getting table data Content -------------------------",logFileName);
         tableData(driver,fileName,request,logFileName);
         }catch(Exception e){
             writeLog(e.toString(),logFileName);

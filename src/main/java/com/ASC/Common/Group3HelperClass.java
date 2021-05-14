@@ -69,6 +69,7 @@ public class Group3HelperClass extends GrantorData {
                     data[itr] = driver.findElement(By.xpath(xPath)).getText();
                 }
 
+            data[0] = data[0].contains("GT")?data[0].replace("GT","Grantee"):data[0].replace("GR","Grantor");
             data[5] = generateDate(data[5]);
 
             for (int itr1 = 0;itr1< header.length;itr1++){ //mapping of header and data in json object
