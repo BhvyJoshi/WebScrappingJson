@@ -65,12 +65,13 @@ public class CommonMethods {
 
     }
 
-    public void getObjectForRow(String requestID, JSONObject objForRow, int rowCount) {
+    public JSONObject getObjectForRow(String requestID, JSONObject objForRow, int rowCount) {
         JSONObject attributes = new JSONObject();
         attributes.put("type", "Lead_Search_Result__c");
         attributes.put("referenceId","ref"+ rowCount +"_"+new Random().nextInt(100000));
         objForRow.put("attributes", attributes);
         objForRow.put("Lead_Search__c", requestID);
+        return objForRow;
     }
 
     public void getObjectForRow(WebDriver driver, String requestID, JSONObject objForRow, int rowCount, String logFileName, GrantorData childrecord) {
