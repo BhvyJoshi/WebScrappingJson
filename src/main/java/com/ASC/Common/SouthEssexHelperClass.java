@@ -123,8 +123,8 @@ public class SouthEssexHelperClass extends SouthEssex {
                 objForRow.put(header[itr1],data[itr1]);
             }
 
-            getObjectForRow(requestID,objForRow,rowCount);
-            objForPage.put(objForRow);
+            //getObjectForRow(requestID,objForRow,rowCount);
+            objForPage.put(getObjectForRow(requestID,objForRow,rowCount));
             objForRow = new JSONObject();
         }
         return objForPage;
