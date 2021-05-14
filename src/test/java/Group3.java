@@ -10,8 +10,8 @@ import org.testng.annotations.Test;
 
 public class Group3 extends Group3HelperClass {
 
-   /* public static String url = "https://www.masslandrecords.com";
-    public static String value= "South Bristol"*//*"Fall River Bristol"*//*;
+    /*public static String url = "https://www.masslandrecords.com";
+    public static String value= *//*"South Bristol"*//*"Fall River Bristol";
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
     private static final String request = "1234";

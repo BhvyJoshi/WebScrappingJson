@@ -20,6 +20,7 @@ public class Group1 extends Group1HelperClass {
     private static final String request = "1234";
     private static final String firstName = "";*/
 
+
     @Parameters({"url","value","keyWord","firstName","fileName","request"})
     @Test
     public void test(String url, String value, String keyWord, String firstName, String fileName, String request){

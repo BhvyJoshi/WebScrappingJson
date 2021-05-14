@@ -15,7 +15,10 @@ public class Group3HelperClass extends GrantorData {
 
     public WebDriver driver;
 
-    private static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
+    private static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody";
+    //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]
+    //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]
+    //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tr
     private static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
     public void tableData(WebDriver driver, String fileName, String request,String logFileName)
@@ -34,7 +37,7 @@ public class Group3HelperClass extends GrantorData {
         while(checkNext){
             try{
                 Thread.sleep(1000);
-                new WebDriverWait(driver,20).until(ExpectedConditions.elementToBeClickable(By.xpath(nextButtonPath)));
+                new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(By.xpath(nextButtonPath)));
                 driver.findElement(By.xpath(nextButtonPath)).click();
                 writeLog("\n--------------Next btn clicked-------------------\n",logFileName);
                 Thread.sleep(1500);
@@ -53,7 +56,8 @@ public class Group3HelperClass extends GrantorData {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
         GrantorData childRecord = new GrantorData();
-        new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(mainTablePath+"/tr")));
+
+        //new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(mainTablePath+"/tr")));
         int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
 
         for (int rowCount=1;rowCount<=rowSize;rowCount++)

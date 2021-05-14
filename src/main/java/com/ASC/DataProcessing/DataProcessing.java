@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class DataProcessing extends GrantorData{
 
     public static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table";
+    //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tbody
     public static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";
 
     public void tableData(WebDriver driver,String fileName,String request,String logFileName)

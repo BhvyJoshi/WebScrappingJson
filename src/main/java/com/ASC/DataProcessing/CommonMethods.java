@@ -61,15 +61,10 @@ public class CommonMethods {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public JSONObject getObjectForRow(String requestID, JSONObject objForRow, int rowCount) {
-        JSONObject attributes = new JSONObject();
-        attributes.put("type", "Lead_Search_Result__c");
-        attributes.put("referenceId","ref"+ rowCount +"_"+new Random().nextInt(100000));
-        objForRow.put("attributes", attributes);
+        objForRow.put("attributes", putAttributes(rowCount));
         objForRow.put("Lead_Search__c", requestID);
         return objForRow;
     }
@@ -131,5 +126,4 @@ public class CommonMethods {
             //exception handling left as an exercise for the reader
         }
     }
-
 }
