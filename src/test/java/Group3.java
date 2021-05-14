@@ -9,9 +9,9 @@ import org.testng.annotations.Test;
 //completely done.
 
 public class Group3 extends Group3HelperClass {
-
-    /*public static String url = "https://www.masslandrecords.com";
-    public static String value= *//*"South Bristol"*//*"Fall River Bristol";
+/*
+    public static String url = "https://www.masslandrecords.com";
+    public static String value= "South Bristol"*//*"Fall River Bristol"*//*;
     public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
     private static final String request = "1234";
@@ -26,7 +26,7 @@ public class Group3 extends Group3HelperClass {
         String logFileName = value+"_"+fileName+"_"+request;
         try {
             driver = InitializerClass.initialize(url, value);
-            if (value.contains("South Bristol")) {
+            if (value.equals("South Bristol")) {
                 driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");
             }
             new Group1HelperClass().firstPage(driver, keyWord, firstName,logFileName);
