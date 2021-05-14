@@ -39,19 +39,21 @@ public class Group2 extends Group2HelperClass {
                     driver.get("https://www.barnstabledeeds.org/free-public-access/");
                     driver.findElement(By.xpath("//*[@id=\"text-6\"]/div/a/img")).click();
                     checkFirstName(driver, keyWord, searchRegistryRecordClick, firstName);
+                    writeLog("----------------Registry Search btn and Search is clicked--------",logFileName);
                     break;
                 case "Norfolk": //Done
                     searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
                     checkFirstName(driver, keyWord, searchRegistryRecordClick, firstName);
+                    writeLog("----------------Registry Search btn and Search is clicked--------",logFileName);
                     break;
                 case "North Essex": //Done
 
                 case "North Worcester": //Done
                     searchRegistryRecordClick = "$(\".homeButton a\")[1].click();";
                     checkFirstName(driver, keyWord, searchRegistryRecordClick, firstName);
+                    writeLog("----------------Registry Search btn and Search is clicked--------",logFileName);
                     break;
             }
-
             tableData(driver, fileName, request, logFileName);
         }catch(Exception e){
             writeLog(e.toString(),logFileName);

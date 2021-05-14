@@ -32,8 +32,7 @@ public class NorthBristolhelperClass extends NorthBristol {
     public void tableData(WebDriver driver,String fileName,String request,String logFileName)
     {
         String[] headers = grabHeader(driver);
-        //JSONArray tableDataContent;
-        //tableDataContent = grabData(driver,headers,request,logFileName);
+
         generateFile(fileName,grabData(driver,headers,request,logFileName));
 
         int nextButtonCount = driver.findElement(By.xpath(nextButtonPath)).findElements(By.tagName("td")).size();

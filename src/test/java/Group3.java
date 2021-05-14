@@ -29,7 +29,8 @@ public class Group3 extends Group3HelperClass {
             if (value.contains("South Bristol")) {
                 driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");
             }
-            new Group1HelperClass().firstPage(driver, keyWord, firstName);
+            new Group1HelperClass().firstPage(driver, keyWord, firstName,logFileName);
+            writeLog("---------------- Search is clicked--------",logFileName);
             tableData(driver, fileName, request, logFileName);
         }catch (Exception e){
             writeLog(e.toString(),logFileName);

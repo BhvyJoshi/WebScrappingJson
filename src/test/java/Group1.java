@@ -28,7 +28,8 @@ public class Group1 extends Group1HelperClass {
         String logFileName = value+"_"+fileName+"_"+request;
         try{
         driver = InitializerClass.initialize(url,value);
-        firstPage(driver,keyWord,firstName);
+        firstPage(driver,keyWord,firstName,logFileName);
+            writeLog("------------------------Getting table data Content -------------------------",logFileName);
         tableData(driver,fileName,request,logFileName);
         }catch(Exception e){
             writeLog(e.toString(),logFileName);

@@ -27,7 +27,7 @@ public class DataProcessing extends GrantorData{
                 Thread.sleep(1000);
                 new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfElementLocated(By.xpath(nextButtonPath)));
                 driver.findElement(By.xpath(nextButtonPath)).click();
-                writeLog("\n------------------next Button clicked------------------",logFileName);
+                writeLog("\n------------------Main table Next Button clicked------------------",logFileName);
                 System.out.println();
                 Thread.sleep(2000);
                 appendJSONinFile(fileName,grabData(driver,headers,request,logFileName));
@@ -63,8 +63,8 @@ public class DataProcessing extends GrantorData{
             for (int itr1 = 0;itr1 <header.length;itr1++){ //mapping of header and data in json object
               objForRow.put(header[itr1],data[itr1]);
             }
-            getObjectForRow(driver,request,objForRow,rowCount,logFileName,childRecords);
-            objForPage.put(objForRow);
+
+            objForPage.put(getObjectForRow(driver,request,objForRow,rowCount,logFileName,childRecords));
             objForRow = new JSONObject();
             childRecords = new GrantorData();
         }

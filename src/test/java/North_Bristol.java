@@ -23,6 +23,7 @@ public class North_Bristol extends NorthBristolhelperClass {
         try{
         driver = InitializerClass.initialize(url,value);
         firstPage(driver,keyWord,firstName);
+        writeLog("---------------- Search is clicked--------",logFileName);
         tableData(driver,fileName,request,logFileName);
         }
         catch (Exception e){

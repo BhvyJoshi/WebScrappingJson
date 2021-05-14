@@ -19,8 +19,6 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
     public void tableData(WebDriver driver,String fileName,String request,String logFileName)
     {
         String[] headers = new Plymouth().grabHeader(driver);
-        //JSONArray tableDataContent;
-        //tableDataContent = grabData(driver,headers,request,logFileName);
         generateFile(fileName,grabData(driver,headers,request,logFileName));
 
         boolean checkNext = true;
@@ -48,6 +46,7 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
         JSONArray objForPage = new JSONArray();
         JSONObject objForRow = new JSONObject();
         GrantorDataPlymouth childData = new GrantorDataPlymouth();
+
         new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(mainTablePath+"/tr")));
 
         int rowSize = driver.findElement(By.xpath(mainTablePath)).findElements(By.tagName("tr")).size();
@@ -71,7 +70,6 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
             }
 
             objForRow.put("attributes",putAttributes(rowCount));
-
             objForRow.put("Grantors__r",childData.getGrantorData(driver,rowCount,logFileName));
             objForRow.put("Lead_Search__c",request);
             objForPage.put(objForRow);

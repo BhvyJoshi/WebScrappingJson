@@ -22,10 +22,12 @@ public class CookGrantorData extends Cook {
 
        while(GranteeCount==null || GranteeCount==null) {
            try{
+               writeLog("------------------------Get grantor grantee count -------------------------",logFileName);
                 GranteeCount = driver.findElement(By.xpath(getMainTableRow(row) + "/td[4]")).getText();
                 GrantorCount = driver.findElement(By.xpath(getMainTableRow(row) + "/td[3]")).getText();
            }catch(Exception e){
-               e.printStackTrace();
+               writeLog(e.toString(),logFileName);
+               //e.printStackTrace();
            }
        }
        writeLog("value of grantor count :-----"+GrantorCount,logFileName);

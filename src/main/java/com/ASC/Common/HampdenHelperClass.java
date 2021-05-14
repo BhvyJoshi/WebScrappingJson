@@ -34,8 +34,6 @@ public class HampdenHelperClass extends Hampden {
     public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
         String[] headers = grabHeader(driver);
-        //JSONArray tableDataContent;
-        //tableDataContent = grabData(driver,headers,requestID,logFileName);
         generateFile(fileName,grabData(driver,headers,requestID,logFileName));
 
         while(checkForData(driver,mainTablePath)){
@@ -49,7 +47,8 @@ public class HampdenHelperClass extends Hampden {
                 appendJSONinFile(fileName,grabData(driver,headers,requestID,logFileName));
             }
             catch (Exception e1){
-                e1.printStackTrace();
+                //e1.printStackTrace();
+                writeLog(e1.toString(),logFileName);
             }
         }
        //generateFile(fileName,tableDataContent);

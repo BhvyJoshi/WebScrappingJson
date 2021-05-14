@@ -30,6 +30,7 @@ public class Plymouth extends PlymouthHelperClass {
             driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
             driver.findElement(By.xpath(lastNameTextBox)).sendKeys(keyWord);
             driver.findElement(By.xpath(searchButtonClick)).click();
+            writeLog("---------------- Search is clicked--------",logFileName);
             tableData(driver, fileName, request,logFileName);
         }catch (Exception e){
             writeLog(e.toString(),logFileName);

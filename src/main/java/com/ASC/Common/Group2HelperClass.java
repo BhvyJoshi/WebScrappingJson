@@ -37,8 +37,6 @@ public class Group2HelperClass extends CommonMethods {
   public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
         String[] headers = new Group2().grabHeader(driver);
-        //JSONArray tableDataContent;
-        //tableDataContent = grabData(driver,headers,requestID,logFileName);
         generateFile(fileName,grabData(driver,headers,requestID,logFileName));
         while(HampdenHelperClass.checkForData(driver,mainTablePath)){
             try{

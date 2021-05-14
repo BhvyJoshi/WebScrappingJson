@@ -30,11 +30,14 @@ public class CookCounty extends CookCountyHelper {
         String logFileName = "CookCounty_"+fileName+"_"+request;
         try {
             driver = initializeMainPage(url);
-            firstPage(driver, keyWord);
+            firstPage(driver, keyWord,logFileName);
+            writeLog("------------------------Got first initial page -------------------------",logFileName);
             header = grabHeader(driver, mainHeaderPath);
             subHeader = getSubHeader(driver);
+            writeLog("------------------------Got Headers and SubHeaders -------------------------",logFileName);
             driver.findElement(By.xpath(groupListButton)).click();
             driver.navigate().refresh();
+            writeLog("------------------------Getting required data content -------------------------",logFileName);
             tableData(driver, fileName, request, header, subHeader, logFileName);
         }catch (Exception e){
             writeLog(e.toString(),logFileName);

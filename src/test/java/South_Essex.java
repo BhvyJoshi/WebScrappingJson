@@ -22,6 +22,7 @@ public class South_Essex extends SouthEssexHelperClass {
         try {
             driver = InitializerClass.initialize(url, value);
             firstPage(driver, keyWord, firstName);
+            writeLog("-------------------Search btn is chicked---------------",logFileName);
             tableData(driver, fileName, request,logFileName);
         }catch (Exception e)
         {

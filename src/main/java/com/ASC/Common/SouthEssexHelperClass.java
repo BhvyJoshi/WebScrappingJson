@@ -38,8 +38,6 @@ public class SouthEssexHelperClass extends SouthEssex {
     public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
         String[] headers = grabHeader(driver);
-        //JSONArray tableDataContent;
-        //tableDataContent = grabData(driver,headers,requestID,0,15,logFileName);
         generateFile(fileName,grabData(driver,headers,requestID,0,15,logFileName));
         int searchResultCount = getSearchResultCount(driver);
         int noOfLoop = searchResultCount/15;
@@ -123,7 +121,6 @@ public class SouthEssexHelperClass extends SouthEssex {
                 objForRow.put(header[itr1],data[itr1]);
             }
 
-            //getObjectForRow(requestID,objForRow,rowCount);
             objForPage.put(getObjectForRow(requestID,objForRow,rowCount));
             objForRow = new JSONObject();
         }

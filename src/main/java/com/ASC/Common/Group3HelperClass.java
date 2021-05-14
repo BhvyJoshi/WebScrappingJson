@@ -16,7 +16,7 @@ public class Group3HelperClass extends GrantorData {
     public WebDriver driver;
 
     private static final String mainTablePath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody";
-    //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]
+                                                 //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]
     //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tbody/tr[1]
     //*[@id="DocList1_ContentContainer1"]/table/tbody/tr[1]/td/div/div[2]/table/tr
     private static final String nextButtonPath = "//*[@id=\"DocList1_LinkButtonNext\"]";

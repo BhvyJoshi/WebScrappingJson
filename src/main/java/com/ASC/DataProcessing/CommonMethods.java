@@ -69,11 +69,12 @@ public class CommonMethods {
         return objForRow;
     }
 
-    public void getObjectForRow(WebDriver driver, String requestID, JSONObject objForRow, int rowCount, String logFileName, GrantorData childrecord) {
+    public JSONObject getObjectForRow(WebDriver driver, String requestID, JSONObject objForRow, int rowCount, String logFileName, GrantorData childrecord) {
 
         objForRow.put("attributes",putAttributes(rowCount));
         objForRow.put("Grantors__r",childrecord.getGrantorData(driver,rowCount,logFileName));
         objForRow.put("Lead_Search__c",requestID);
+        return objForRow;
     }
 
     public String generateDate(String date){

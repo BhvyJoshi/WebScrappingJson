@@ -24,6 +24,7 @@ public class Hampden extends HampdenHelperClass {
         try{
         driver = InitializerClass.initialize(url, value);
         firstPageForHampden(driver, keyWord, firstName);
+            writeLog("---------------- Search is clicked--------",logFileName);
         tableData(driver, fileName,request,logFileName);
         }catch (Exception e){
             writeLog(e.toString(),logFileName);

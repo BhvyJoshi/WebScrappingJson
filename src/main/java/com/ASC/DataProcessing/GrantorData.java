@@ -30,8 +30,10 @@ public class GrantorData extends CommonMethods{
             grantorLabel = null;
             grantorLabel = driver.findElement(By.xpath(labelPath)).getText();
             Thread.sleep(1000);
-
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){
+            //e.printStackTrace();
+            writeLog(e.toString(),logFileName);
+        }
         writeLog("value of grantorLable == --------------------"+grantorLabel,logFileName);
         int dataRecords = Integer.parseInt(grantorLabel.substring(16));
         writeLog("value of dataRecords == -------------"+dataRecords,logFileName);
@@ -57,7 +59,8 @@ public class GrantorData extends CommonMethods{
                 subTableContent = appendToListJSON(subTableContent,getActualGrantorData(driver,mainRowId,10,logFileName));
             }
             catch (Exception e1){
-                e1.printStackTrace();
+                //e1.printStackTrace();
+                writeLog(e1.toString(),logFileName);
             }
         }else {
             try{
@@ -65,7 +68,8 @@ public class GrantorData extends CommonMethods{
                 subTableContent = appendToListJSON(subTableContent,getActualGrantorData(driver,mainRowId,dataInLastPage,logFileName));
             }
             catch (Exception e1){
-                e1.printStackTrace();
+                //e1.printStackTrace();
+                writeLog(e1.toString(),logFileName);
             }
         }
         return subTableContent;

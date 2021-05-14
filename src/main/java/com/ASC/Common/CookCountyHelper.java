@@ -14,16 +14,16 @@ public class CookCountyHelper extends CookGrantorData {
     private static final String mainTableNextButtonPath = "//*[@id=\"NameList1_LinkButtonNext\"]";
     private static final String mainTablePath = "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[2]/table/tbody";
     private static final String textBoxId = "SearchFormEx1_ACSTextBox_LastName1";
-    private static final String mainHeaderPath = "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     private static final String searchBtn = "//*[@id=\"SearchFormEx1_btnSearch\"]";
 
-    public void firstPage(WebDriver driver, String value) {
+    public void firstPage(WebDriver driver, String value,String logFileName) {
         try {
             Thread.sleep(1500);
             driver.findElement(By.id(textBoxId)).sendKeys(value);
             driver.findElement(By.xpath(searchBtn)).click();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            writeLog("------------------------Got Headers and SubHeaders -------------------------",logFileName);
         }
     }
 
@@ -50,7 +50,7 @@ public class CookCountyHelper extends CookGrantorData {
                 /*new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(mainTableNextButtonPath))));
                 WebElement nextBtn = driver.findElement(By.xpath(mainTableNextButtonPath));
                 nextBtn.click();*/
-                writeLog("\n------- Main Next btn clicked------------"+(++count),logFileName);
+                writeLog("\n------- Main Table Next btn clicked------------"+(++count),logFileName);
                 //System.out.println("\n------- MainNext btn clicked------------"+(++count));
                 Thread.sleep(2000);
                 //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,subHeaders,logFileName));
