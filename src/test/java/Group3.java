@@ -10,24 +10,22 @@ import org.testng.annotations.Test;
 //completely done.
 
 public class Group3 extends Group3HelperClass {
-    public static String url = "https://www.masslandrecords.com";
-    public static String value= /*"South Bristol"*/"Fall River Bristol";
+   /* public static String url = "https://www.masslandrecords.com";
+    public static String value= *//*"South Bristol"*//*"Fall River Bristol";
     public static String keyWord = "aaaaaaaaa";
     public static String fileName = "demo_"+value;
     private static final String request = "1234";
-    private static final String firstName = "";
+    private static final String firstName = "";*/
 
     public WebDriver driver;
     private static final String msgBox = "//*[@id=\"MessageBoxCtrl1_ContentContainer\"]";
     private static final String errMsg = "//*[@id=\"MessageBoxCtrl1_ErrorLabel1\"]";
     private static final String alertMessage = "Search criteria resulted in 0 hits. Please verify the search criteria and try again.";
 
-
-
     @Test
-    //@Parameters({"url","value","keyWord","firstName","fileName","request"})
-    //public void test(String url, String value, String keyWord, String firstName, String fileName, String request){
-    public void test(){
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test(String url, String value, String keyWord, String firstName, String fileName, String request){
+    //public void test(){
         String logFileName = value+"_"+fileName+"_"+request;
         try {
             driver = InitializerClass.initialize(url, value);

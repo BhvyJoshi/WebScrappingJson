@@ -8,17 +8,20 @@ import org.testng.annotations.Test;
 
 //completely done --. need to ask about firstName on site is not working
 public class North_Bristol extends NorthBristolhelperClass {
-    public WebDriver driver;
-    public static String url = "https://www.masslandrecords.com";
+
+    /*public static String url = "https://www.masslandrecords.com";
     public static String value= "North Bristol";
     public static String keyWord = "aaaaaaaaaaa";
     public static String fileName = "demo_"+value;
     public static String request = "123456";
-    public static String firstName = "";
+    public static String firstName = "";*/
+
+    public WebDriver driver;
+
     @Test
-    //@Parameters({"url","value","keyWord","firstName","fileName","request"})
-    //public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
-    public void test(){
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
+    //public void test(){
         String logFileName = value+"_"+fileName+"_"+request;
         try{
         driver = InitializerClass.initialize(url,value);

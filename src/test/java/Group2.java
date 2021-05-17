@@ -1,4 +1,3 @@
-import com.ASC.Common.Group1HelperClass;
 import com.ASC.Common.Group2HelperClass;
 import com.ASC.Common.InitializerClass;
 import org.openqa.selenium.By;

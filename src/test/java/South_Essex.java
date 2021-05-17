@@ -8,16 +8,16 @@ import org.testng.annotations.Test;
 //Done
 public class South_Essex extends SouthEssexHelperClass {
     public WebDriver driver;
-    public static String url = "https://www.masslandrecords.com";
+    /*public static String url = "https://www.masslandrecords.com";
     public static String value= "South Essex";
     public static String keyWord = "aaaaaaaaaaaaaaaaaa";
     public static String fileName = "demo_"+value;
     public static String firstName = "julian";
-    public static String request = "123";
+    public static String request = "123";*/
     @Test
-    /*@Parameters({"url","value","keyWord","firstName","fileName","request"})
-    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){*/
-    public void test(){
+    @Parameters({"url","value","keyWord","firstName","fileName","request"})
+    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
+    //public void test(){
         String logFileName = value+"_"+fileName+"_"+request;
         try {
             driver = InitializerClass.initialize(url, value);
