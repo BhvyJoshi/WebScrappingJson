@@ -12,33 +12,45 @@ import java.util.concurrent.TimeUnit;
 public class CookCounty extends CookCountyHelper {
 
     public WebDriver driver;
-    //public static final String url = "http://162.217.184.82/i2/";
+    public static final String url = "http://162.217.184.82/i2/";
     public static final String mainHeaderPath = "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static String[] header = new String[2];
     public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static String[] subHeader = new String[6];
     private final static String groupListButton = "//*[@id=\"TabResultController1_tabItemGroupListtabitem\"]";
 
-    @Test
-    @Parameters({"url","keyWord","fileName","request"})
-    public void CookCountyMethod(String url, String keyWord, String fileName, String request){
-   /* public void test_cookCounty(){
+    private static final String msgBox = "//*[@id=\"MessageBoxCtrl1_ContentContainer\"]";
+    private static final String errMsg = "//*[@id=\"MessageBoxCtrl1_ErrorLabel1\"]";
+    private static final String alertMessage = "Search criteria resulted in 0 hits. Please verify the search criteria and try again.";
 
-        String keyWord = "lender";
+
+    @Test
+    /*@Parameters({"url","keyWord","fileName","request"})
+    public void CookCountyMethod(String url, String keyWord, String fileName, String request){*/
+    public void test_cookCounty(){
+
+        String keyWord = "testng";
         String fileName = "cookCounty_demo";
-        String request = "1234";*/
+        String request = "1234";
         String logFileName = "CookCounty_"+fileName+"_"+request;
         try {
             driver = initializeMainPage(url);
             firstPage(driver, keyWord,logFileName);
-            writeLog("------------------------Got first initial page -------------------------",logFileName);
-            header = grabHeader(driver, mainHeaderPath);
-            subHeader = getSubHeader(driver);
-            writeLog("------------------------Got Headers and SubHeaders -------------------------",logFileName);
-            driver.findElement(By.xpath(groupListButton)).click();
-            driver.navigate().refresh();
-            writeLog("------------------------Getting required data content -------------------------",logFileName);
-            tableData(driver, fileName, request, header, subHeader, logFileName);
+            if (driver.findElement(By.xpath(msgBox)).isDisplayed()) {
+                if(alertMessage.equals(driver.findElement(By.xpath(errMsg)).getText()))
+                {
+                    generateEmptyFile(fileName);
+                }
+            }else {
+                writeLog("------------------------Got first initial page -------------------------", logFileName);
+                header = grabHeader(driver, mainHeaderPath);
+                subHeader = getSubHeader(driver);
+                writeLog("------------------------Got Headers and SubHeaders -------------------------", logFileName);
+                driver.findElement(By.xpath(groupListButton)).click();
+                driver.navigate().refresh();
+                writeLog("------------------------Getting required data content -------------------------", logFileName);
+                tableData(driver, fileName, request, header, subHeader, logFileName);
+            }
         }catch (Exception e){
             writeLog(e.toString(),logFileName);
         }

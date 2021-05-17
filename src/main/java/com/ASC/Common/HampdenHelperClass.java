@@ -31,27 +31,30 @@ public class HampdenHelperClass extends Hampden {
         driver.findElement(By.xpath(searchBtn)).click();
     }
 
-    public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
-    {
-        String[] headers = grabHeader(driver);
-        generateFile(fileName,grabData(driver,headers,requestID,logFileName));
+    public void tableData(WebDriver driver,String fileName,String requestID,String logFileName) {
+        if (!checkForData(driver, mainTablePath)) {
+            generateEmptyFile(fileName);
+            //closeChromeInstance(driver);
+        } else {
+            String[] headers = grabHeader(driver);
+            generateFile(fileName, grabData(driver, headers, requestID, logFileName));
 
-        while(checkForData(driver,mainTablePath)){
-            try{
-                Thread.sleep(1000);
-                driver.navigate().refresh();
-                driver.findElement(By.xpath(nextButtonPath)).click();
-                writeLog("\n-----------Next Btn clicked--------\n",logFileName);
-                Thread.sleep(1500);
-                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,logFileName));
-                appendJSONinFile(fileName,grabData(driver,headers,requestID,logFileName));
+            while (checkForData(driver, mainTablePath)) {
+                try {
+                    Thread.sleep(1000);
+                    driver.navigate().refresh();
+                    driver.findElement(By.xpath(nextButtonPath)).click();
+                    writeLog("\n-----------Next Btn clicked--------\n", logFileName);
+                    Thread.sleep(1500);
+                    //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,logFileName));
+                    appendJSONinFile(fileName, grabData(driver, headers, requestID, logFileName));
+                } catch (Exception e1) {
+                    //e1.printStackTrace();
+                    writeLog(e1.toString(), logFileName);
+                }
             }
-            catch (Exception e1){
-                //e1.printStackTrace();
-                writeLog(e1.toString(),logFileName);
-            }
+            //generateFile(fileName,tableDataContent);
         }
-       //generateFile(fileName,tableDataContent);
     }
 
     static boolean checkForData(WebDriver driver,String tableXpath){
@@ -59,7 +62,7 @@ public class HampdenHelperClass extends Hampden {
         List<WebElement> rows = table.findElements(By.tagName("tr"));
         WebElement column = rows.get(rows.size()-1).findElement(By.tagName("td"));
         String columnText = column.getText();
-        return columnText.contains("More names may be available");
+        return columnText.equals("More names may be available");
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String requestID,String logFileName) {

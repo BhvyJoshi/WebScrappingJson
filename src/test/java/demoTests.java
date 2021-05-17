@@ -9,28 +9,32 @@ import org.testng.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 /*@Ignore*/
-public class demoTests extends Group2HelperClass {
+public class demoTests extends Group1HelperClass {
 
     public WebDriver driver;
     public  String searchRegistryRecordClick;
-    @Test(dataProvider ="Group2")
+    private static final String msgBox = "//*[@id=\"MessageBoxCtrl1_ContentContainer\"]";
+    private static final String errMsg = "//*[@id=\"MessageBoxCtrl1_ErrorLabel1\"]";
+    private static final String alertMessage = "Search criteria resulted in 0 hits. Please verify the search criteria and try again.";
+
+
+    @Test(dataProvider ="Group1")
     public void testDemo(String value){
 
-
         String url ="https://www.masslandrecords.com";
-        String keyWord = "lender";
+        String keyWord = "aaaaaaa";
         String fileName = "demo_"+value;
         String request = "123456";
         String firstName = "";
         String logFileName = value+"_"+fileName+"_"+request;
         driver = InitializerClass.initialize(url,value);
-        //firstPage(driver,keyWord,firstName); //group1
+        firstPage(driver,keyWord,firstName,logFileName); //group1
        /* if(value.contains("South Bristol")){
             driver.get("https://i2e.uslandrecords.com/MA/BristolSouth/D/Default.aspx");
         }
         new Group1HelperClass().firstPage(driver, keyWord, firstName); //group3*/
 
-        switch (value) {
+        /*switch (value) {
             case "Barnstable": //Done
                 searchRegistryRecordClick = "$(\".homeButton a\")[0].click();";
                 driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -48,15 +52,24 @@ public class demoTests extends Group2HelperClass {
                 searchRegistryRecordClick = "$(\".homeButton a\")[1].click();";
                 checkFirstName(driver,keyWord,searchRegistryRecordClick,firstName);
                 break;
+        }*/
+        if (driver.findElement(By.xpath(msgBox)).isDisplayed()) {
+
+            if(alertMessage.equals(driver.findElement(By.xpath(errMsg)).getText()))
+            {
+                generateEmptyFile(fileName);
+            }
+            //closeChromeInstance(driver);
+        } else {
+            tableData(driver, fileName, request, logFileName);
         }
-        tableData(driver,fileName,request,logFileName);
     }
 
     @DataProvider(name = "Group1")
     public Object[][] dataProvFunc(){
         return new Object[][]{
-                /*{"Hampshire"},{"Fall River Bristol"},{"Dukes"},{"Franklin"},{"Middle Berkshire"},{"Nantucket"},
-                {"North Berkshire"},{"North Middlesex"},{"South Berkshire"},{"South Middlesex"},*/
+                {"Hampshire"},{"Fall River Bristol"},{"Dukes"},{"Franklin"},{"Middle Berkshire"},{"Nantucket"},
+                {"North Berkshire"},{"North Middlesex"},{"South Berkshire"},{"South Middlesex"},
                 {"Worcester"},{"Suffolk"}
         };
     }

@@ -9,17 +9,17 @@ import org.testng.annotations.Test;
 public class Hampden extends HampdenHelperClass {
 
     public WebDriver driver;
-   /* public static String url = "https://www.masslandrecords.com";
+    public static String url = "https://www.masslandrecords.com";
     public static String value= "Hampden";
-    public static String keyWord = "lender";
+    public static String keyWord = "aaaaaaaa";
     public static String fileName = "demo_"+value;
     public static String firstName = "";
-    public static String request = "12345";*/
+    public static String request = "12345";
 
     @Test
-    @Parameters({"url","value","keyWord","firstName","fileName","request"})
-    public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
-    /*public void test(){*/
+    //@Parameters({"url","value","keyWord","firstName","fileName","request"})
+    //public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
+    public void test(){
         String logFileName = value+"_"+fileName+"_"+request;
         try{
         driver = InitializerClass.initialize(url, value);

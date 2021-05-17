@@ -35,69 +35,70 @@ public class SouthEssexHelperClass extends SouthEssex {
         return Integer.parseInt(result);
     }
 
-    public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
-    {
-        String[] headers = grabHeader(driver);
-        generateFile(fileName,grabData(driver,headers,requestID,0,15,logFileName));
-        int searchResultCount = getSearchResultCount(driver);
-        int noOfLoop = searchResultCount/15;
-        int lastPageData = searchResultCount % 15;
-        int count =0;
-        if(noOfLoop>10){
-            while(count<noOfLoop-1){
-                try{
-                    String nextBtnClick;
-                    count ++;
-                    Thread.sleep(1000);
-                    if(count == 1) {
-                        nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[10]";
-                    }else {
+    public void tableData(WebDriver driver,String fileName,String requestID,String logFileName) {
+        if(driver.findElement(By.xpath(searchResultCount)).getText().equals("No records found for information provided.")) {
+            generateEmptyFile(fileName);
+        } else {
+            String[] headers = grabHeader(driver);
+            generateFile(fileName, grabData(driver, headers, requestID, 0, 15, logFileName));
+            int searchResultCount = getSearchResultCount(driver);
+            int noOfLoop = searchResultCount / 15;
+            int lastPageData = searchResultCount % 15;
+            int count = 0;
+            if (noOfLoop > 10) {
+                while (count < noOfLoop - 1) {
+                    try {
+                        String nextBtnClick;
+                        count++;
+                        Thread.sleep(1000);
+                        if (count == 1) {
+                            nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[10]";
+                        } else {
+                            driver.navigate().refresh();
+                            nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]";
+                        }
+                        driver.findElement(By.xpath(nextBtnClick)).click();
+                        writeLog("\n-----------Next Btn clicked---------\n", logFileName);
+                        Thread.sleep(2000);
+                        //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
+                        appendJSONinFile(fileName, grabData(driver, headers, requestID, (15 * count), (15 * count) + 15, logFileName));
+                    } catch (Exception e1) {
+                        writeLog(e1.toString(), logFileName);
+                        //e1.printStackTrace();
+                    }
+                }
+                driver.navigate().refresh();
+                driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
+            } else {
+                while (count < noOfLoop - 1) {
+                    try {
+                        String nextBtnClick;
+                        count++;
+                        Thread.sleep(1000);
+                        if (count == 1) {
+                            nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[2]";
+                        } else {
+                            nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[" + (count + 1) + "]";
+                        }
                         driver.navigate().refresh();
-                        nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]";
+                        driver.findElement(By.xpath(nextBtnClick)).click();
+                        writeLog("\n----------------------Next Btn clicked------------------\n", logFileName);
+                        Thread.sleep(1500);
+                        //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
+                        appendJSONinFile(fileName, grabData(driver, headers, requestID, (15 * count), (15 * count) + 15, logFileName));
+                    } catch (Exception e1) {
+                        writeLog(e1.toString(), logFileName);
+                        //e1.printStackTrace();
                     }
-                    driver.findElement(By.xpath(nextBtnClick)).click();
-                    writeLog("\n-----------Next Btn clicked---------\n",logFileName);
-                    Thread.sleep(2000);
-                    //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
-                    appendJSONinFile(fileName,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
                 }
-                catch (Exception e1){
-                    writeLog(e1.toString(),logFileName);
-                    //e1.printStackTrace();
-                }
+                driver.navigate().refresh();
+                driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[" + (noOfLoop + 1) + "]")).click();
             }
-            driver.navigate().refresh();
-            driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[11]")).click();
-        }else{
-            while(count<noOfLoop-1){
-                try{
-                    String nextBtnClick;
-                    count ++;
-                    Thread.sleep(1000);
-                    if(count == 1) {
-                        nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a[2]";
-                    }else {
-                        nextBtnClick = "//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(count+1)+"]";
-                    }
-                    driver.navigate().refresh();
-                    driver.findElement(By.xpath(nextBtnClick)).click();
-                    writeLog("\n----------------------Next Btn clicked------------------\n",logFileName);
-                    Thread.sleep(1500);
-                    //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
-                    appendJSONinFile(fileName,grabData(driver,headers,requestID,(15*count),(15*count)+15,logFileName));
-                }
-                catch (Exception e1){
-                    writeLog(e1.toString(),logFileName);
-                    //e1.printStackTrace();
-                }
-            }
-            driver.navigate().refresh();
-            driver.findElement(By.xpath("//*[@id=\"ASPxGridView1_DXPagerTop\"]/a["+(noOfLoop+1)+"]")).click();
-        }
-        appendJSONinFile(fileName,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData,logFileName));
-        //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData,logFileName));
+            appendJSONinFile(fileName, grabData(driver, headers, requestID, (15 * noOfLoop), (15 * noOfLoop) + lastPageData, logFileName));
+            //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,(15*noOfLoop),(15*noOfLoop)+lastPageData,logFileName));
 
-        //generateFile(fileName,tableDataContent);
+            //generateFile(fileName,tableDataContent);
+        }
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String requestID,int lowerLimit, int upperLimit,String logFileName)

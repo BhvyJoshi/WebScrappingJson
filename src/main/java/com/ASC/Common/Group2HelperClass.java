@@ -36,22 +36,26 @@ public class Group2HelperClass extends CommonMethods {
 
   public void tableData(WebDriver driver,String fileName,String requestID,String logFileName)
     {
-        String[] headers = new Group2().grabHeader(driver);
-        generateFile(fileName,grabData(driver,headers,requestID,logFileName));
-        while(HampdenHelperClass.checkForData(driver,mainTablePath)){
-            try{
-                Thread.sleep(1000);
-                new WebDriverWait(driver,20).until(ExpectedConditions.elementToBeClickable(By.xpath(nextButtonPath)));
-                driver.findElement(By.xpath(nextButtonPath)).click();
-                writeLog("\n------------next Button clicked----\n",logFileName);
-                //System.out.print("\n------------next Button clicked----");
-                Thread.sleep(2000);
-                appendJSONinFile(fileName,grabData(driver,headers,requestID,logFileName));
-                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,logFileName));
-            }
-            catch (Exception e1){
-                writeLog(e1.toString(),logFileName);
-                //e1.printStackTrace();
+        if(!HampdenHelperClass.checkForData(driver, mainTablePath)){
+            generateEmptyFile(fileName);
+            //closeChromeInstance(driver);
+        }else {
+            String[] headers = new Group2().grabHeader(driver);
+            generateFile(fileName, grabData(driver, headers, requestID, logFileName));
+            while (HampdenHelperClass.checkForData(driver, mainTablePath)) {
+                try {
+                    Thread.sleep(1000);
+                    new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath(nextButtonPath)));
+                    driver.findElement(By.xpath(nextButtonPath)).click();
+                    writeLog("\n------------next Button clicked----\n", logFileName);
+                    //System.out.print("\n------------next Button clicked----");
+                    Thread.sleep(2000);
+                    appendJSONinFile(fileName, grabData(driver, headers, requestID, logFileName));
+                    //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,requestID,logFileName));
+                } catch (Exception e1) {
+                    writeLog(e1.toString(), logFileName);
+                    //e1.printStackTrace();
+                }
             }
         }
         //generateFile(fileName,tableDataContent);

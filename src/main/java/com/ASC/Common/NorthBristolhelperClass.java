@@ -20,7 +20,7 @@ public class NorthBristolhelperClass extends NorthBristol {
 
     public static final String mainTablePath = "//*[@id=\"ctl00_cphMainContent_gvSearchResults\"]/tbody";
     public static final String nextButtonPath = "//*[@id=\"ctl00_cphMainContent_gvSearchResults\"]/tbody/tr[1]/td/table/tbody/tr";
-
+    public static final String noResultMsg = "";
     public void firstPage(WebDriver driver, String keyWord,String firstName){
         driver.findElement(By.xpath(searchRecords)).click();
         driver.findElement(By.xpath(recordedLandInquiry)).click();
@@ -29,28 +29,29 @@ public class NorthBristolhelperClass extends NorthBristol {
         driver.findElement(By.xpath(searchBtn)).click();
     }
 
-    public void tableData(WebDriver driver,String fileName,String request,String logFileName)
-    {
-        String[] headers = grabHeader(driver);
+    public void tableData(WebDriver driver,String fileName,String request,String logFileName) {
+        if (driver.findElement(By.xpath(mainTablePath+"/tr/td")).getText().equals("Sorry, no records were found matching that criteria.")) {
+            generateEmptyFile(fileName);
+        } else {
+            String[] headers = grabHeader(driver);
+            generateFile(fileName, grabData(driver, headers, request, logFileName));
 
-        generateFile(fileName,grabData(driver,headers,request,logFileName));
+            int nextButtonCount = driver.findElement(By.xpath(nextButtonPath)).findElements(By.tagName("td")).size();
 
-        int nextButtonCount = driver.findElement(By.xpath(nextButtonPath)).findElements(By.tagName("td")).size();
-
-        for (int i = 2; i <=nextButtonCount ; i++) {
-            try{
-                Thread.sleep(1000);
-                driver.findElement(By.xpath(nextButtonPath+"/td["+i+"]")).click();
-                Thread.sleep(1500);
-                //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
-                appendJSONinFile(fileName,grabData(driver,headers,request,logFileName));
+            for (int i = 2; i <= nextButtonCount; i++) {
+                try {
+                    Thread.sleep(1000);
+                    driver.findElement(By.xpath(nextButtonPath + "/td[" + i + "]")).click();
+                    Thread.sleep(1500);
+                    //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
+                    appendJSONinFile(fileName, grabData(driver, headers, request, logFileName));
+                } catch (Exception e1) {
+                    //e1.printStackTrace();
+                    writeLog(e1.toString(), logFileName);
+                }
             }
-            catch (Exception e1){
-                //e1.printStackTrace();
-                writeLog(e1.toString(),logFileName);
-            }
+            //generateFile(fileName,tableDataContent);
         }
-        //generateFile(fileName,tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request,String logFileName)
