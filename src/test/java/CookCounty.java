@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class CookCounty extends CookCountyHelper {
 
     public WebDriver driver;
-    //public static final String url = "http://162.217.184.82/i2/";
+    public static final String url = "http://162.217.184.82/i2/";
     public static final String mainHeaderPath = "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static String[] header = new String[2];
     public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
@@ -25,13 +25,13 @@ public class CookCounty extends CookCountyHelper {
 
 
     @Test
-    @Parameters({"url","keyWord","fileName","request"})
-    public void CookCountyMethod(String url, String keyWord, String fileName, String request){
-    //public void test_cookCounty(){
+    //@Parameters({"url","keyWord","fileName","request"})
+    //public void CookCountyMethod(String url, String keyWord, String fileName, String request){
+    public void test_cookCounty(){
 
-        /*String keyWord = "testng";
+        String keyWord = "lender";
         String fileName = "cookCounty_demo";
-        String request = "1234";*/
+        String request = "1234";
         String logFileName = "CookCounty_"+fileName+"_"+request;
         try {
             driver = initializeMainPage(url);

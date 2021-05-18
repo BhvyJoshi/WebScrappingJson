@@ -66,6 +66,21 @@ public class CommonMethods {
         }
     }
 
+    public void generateTooManyResultsContent(String fileName) // used when file is generated for first time
+    {
+        try {
+            File myObj = new File("C:\\JsonResponse\\"+fileName+".txt");
+            if(myObj.createNewFile()) {
+                FileWriter myWriter = new FileWriter("C:\\JsonResponse\\"+fileName+".txt");
+                myWriter.write("Too_Many_Results");
+                myWriter.close();
+            }
+        } catch (IOException e) {
+            //System.out.println("An error occurred.");
+            writeLog("An error occured","");
+            e.printStackTrace();
+        }
+    }
     public void closeChromeInstance(WebDriver driver)
     {
         driver.close();

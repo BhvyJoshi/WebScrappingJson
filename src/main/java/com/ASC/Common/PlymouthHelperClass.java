@@ -28,8 +28,8 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
                 Thread.sleep(1000);
                 new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(By.xpath(nextButtonPath)));
                 driver.findElement(By.xpath(nextButtonPath)).click();
-                //writeLog("\n--------------Next btn clicked--------\n",logFileName);
-                System.out.println("\n--------------Next btn clicked--------\n");
+                writeLog("\n--------------Next btn clicked--------\n",logFileName);
+                //System.out.println("\n--------------Next btn clicked--------\n");
                 Thread.sleep(2000);
                 //tableDataContent = appendToList(tableDataContent,grabData(driver,headers,request,logFileName));
                 appendJSONinFile(fileName,grabData(driver,headers,request,logFileName));
@@ -38,7 +38,6 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
                 checkNext = false;
             }
         }
-       //generateFile(fileName,tableDataContent);
     }
 
     public JSONArray grabData(WebDriver driver,String[] header,String request,String logFileName)
@@ -54,8 +53,8 @@ public class PlymouthHelperClass extends GrantorDataPlymouth {
         for (int rowCount=1;rowCount<=rowSize;rowCount++)
         {
             new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getMainTableRow(rowCount)+"/td")));
-            //writeLog("----Main Table row------"+rowCount,logFileName);
-            System.out.println("----Main Table row------"+rowCount);
+            writeLog("----Main Table row------"+rowCount,logFileName);
+            //System.out.println("----Main Table row------"+rowCount);
 
             String[] data = new String[10];
             for (int i = 0; i <=9; i++) {

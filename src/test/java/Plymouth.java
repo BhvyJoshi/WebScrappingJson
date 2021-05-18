@@ -1,6 +1,7 @@
 import com.ASC.Common.InitializerClass;
 import com.ASC.Common.PlymouthHelperClass;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
@@ -9,9 +10,10 @@ import org.testng.annotations.Test;
 import java.util.concurrent.TimeUnit;
 
 public class Plymouth extends PlymouthHelperClass {
-   /* public static String url = "https://www.masslandrecords.com";
+/*
+    public static String url = "https://www.masslandrecords.com";
     public static String value= "Plymouth";
-    public static String keyWord = "aaaaaaaa";
+    public static String keyWord = "lender";
     public static String fileName = "demo_"+value;
     public static String request = "12345";*/
 
@@ -34,18 +36,25 @@ public class Plymouth extends PlymouthHelperClass {
             driver.findElement(By.xpath(lastNameTextBox)).sendKeys(keyWord);
             driver.findElement(By.xpath(searchButtonClick)).click();
             writeLog("---------------- Search is clicked--------",logFileName);
-            if (driver.findElement(By.xpath(msgBox)).isDisplayed()) {
-
-                if(alertMessage.equals(driver.findElement(By.xpath(errMsg)).getText()))
-                {
-                    generateEmptyFile(fileName);
-                }
-            } else {
-                writeLog("------------------------Getting table data Content -------------------------", logFileName);
+            try {
+                if(driver.findElement(By.xpath("//*[@id=\"DocList1_ToolBarContainer\"]")).isDisplayed());
                 tableData(driver, fileName, request, logFileName);
+
+            } catch (NoSuchElementException e) {
+                if (driver.findElement(By.xpath(msgBox)).isEnabled()) {
+                    if (alertMessage.equals(driver.findElement(By.xpath(errMsg)).getText())) {
+                        generateEmptyFile(fileName);
+                    } else {
+                        generateTooManyResultsContent(fileName);
+                    }
+                }
+                else {
+                    //e.printStackTrace();
+                    writeLog(e.toString(), logFileName);
+                }
             }
-        }catch (Exception e){
-            writeLog(e.toString(),logFileName);
+        }catch(Exception e){
+            writeLog(e.toString(), logFileName);
         }
     }
 

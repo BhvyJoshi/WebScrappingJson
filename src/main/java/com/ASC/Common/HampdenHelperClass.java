@@ -34,7 +34,7 @@ public class HampdenHelperClass extends Hampden {
     public void tableData(WebDriver driver,String fileName,String requestID,String logFileName) {
         if (!checkForData(driver, mainTablePath)) {
             generateEmptyFile(fileName);
-            //closeChromeInstance(driver);
+
         } else {
             String[] headers = grabHeader(driver);
             generateFile(fileName, grabData(driver, headers, requestID, logFileName));

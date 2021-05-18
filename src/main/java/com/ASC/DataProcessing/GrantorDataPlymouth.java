@@ -26,8 +26,8 @@ public class GrantorDataPlymouth extends CommonMethods {
             new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(By.xpath(getButtonXpath(rowID))));
             new WebDriverWait(driver,20).until(ExpectedConditions.presenceOfElementLocated(By.xpath(getButtonXpath(rowID))));
             driver.findElement(By.xpath(getButtonXpath(rowID))).click();
-            //writeLog("-----row is clicked-----"+rowID,logFileName);
-            System.out.println("-----row is clicked-----" + rowID);
+            writeLog("-----row is clicked-----"+rowID,logFileName);
+            //System.out.println("-----row is clicked-----" + rowID);
             Thread.sleep(2500);
             driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
             new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfElementLocated(By.xpath(labelPath)));
@@ -36,15 +36,16 @@ public class GrantorDataPlymouth extends CommonMethods {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //writeLog("value of grantorLabel == --------------------"+grantorLabel,logFileName);
-        System.out.println("value of grantorLabel == --------------------" + grantorLabel);
+        writeLog("value of grantorLabel == --------------------"+grantorLabel,logFileName);
+        //System.out.println("value of grantorLabel == --------------------" + grantorLabel);
         String[] dataRecordValue = grantorLabel.split("-");
         int dataRecords = Integer.parseInt(dataRecordValue[1]);
-        //writeLog("value of dataRecords == -------------"+dataRecords,logFileName);
-        System.out.println("value of dataRecords == -------------" + dataRecords);
+        writeLog("value of dataRecords == -------------"+dataRecords,logFileName);
+        //System.out.println("value of dataRecords == -------------" + dataRecords);
 
         grantorLabel = null;
-        System.out.println("value of grantor label is ----->" + grantorLabel);
+        //System.out.println("value of grantor label is ----->" + grantorLabel);
+        writeLog("value of grantorLabel == --------------------"+grantorLabel,logFileName);
         System.gc();
         if (dataRecords <= 10) {
             JSONArray records = getActualGrantorData(driver, rowID, dataRecords, logFileName);

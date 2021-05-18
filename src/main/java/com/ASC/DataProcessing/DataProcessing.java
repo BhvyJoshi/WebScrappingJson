@@ -17,6 +17,7 @@ public class DataProcessing extends GrantorData{
     public void tableData(WebDriver driver,String fileName,String request,String logFileName)
     {
         String[] headers = new Group1().grabHeader(driver);
+        writeLog("------------------------Getting table data Content -------------------------", logFileName);
         //JSONArray tableDataContent;
         //tableDataContent = grabData(driver,headers,request,logFileName);
         generateFile(fileName,grabData(driver,headers,request,logFileName));
