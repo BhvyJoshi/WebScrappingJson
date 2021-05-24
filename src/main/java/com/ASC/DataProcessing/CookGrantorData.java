@@ -110,13 +110,14 @@ public class CookGrantorData extends Cook {
     public JSONArray grabSubTable(WebDriver driver,String[] subHeader,JSONObject commonData,String requestID,String logFileName){
         JSONArray objForSubPage = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
-        JSONObject childRecord = new JSONObject();
-        String[] data = new String[6]; //data of each row
 
+        //data of each row
         new WebDriverWait(driver,60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableXpath+"/tr")));
         int subRowSize = driver.findElement(By.xpath(subTableXpath)).findElements(By.tagName("tr")).size();
 
         for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++){
+            String[] data = new String[6];
+            JSONObject childRecord = new JSONObject();
 
             writeLog("---------------subTable row no --->"+subRowCount,logFileName);
 
@@ -143,7 +144,7 @@ public class CookGrantorData extends Cook {
             objForSubRow.put("Lead_Search__c",requestID);
             objForSubPage.put(objForSubRow);
             objForSubRow = new JSONObject();
-            data = new String[6];
+
         }
         return objForSubPage;
     }
