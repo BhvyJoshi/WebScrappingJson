@@ -28,6 +28,7 @@ public class Group2 extends Group2HelperClass {
           String request ="123456";
           String firstName =""*//*"" "barbara"ot working"Nadine"*//*;*/
         String logFileName = value+"_"+fileName+"_"+request;
+        writeLog(" URL is ---->"+url+"-------------------------", logFileName);
         try {
 
             driver = InitializerClass.initialize(url, value);

@@ -30,6 +30,7 @@ public class Plymouth extends PlymouthHelperClass {
     public void PlymouthCounty(String url,String value,String keyWord,String fileName,String request){
     //public void test(){
         String logFileName = value+"_"+fileName+"_"+request;
+        writeLog(" URL is ---->"+url+"-------------------------", logFileName);
         try {
             driver = InitializerClass.initialize(url, value);
             driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);

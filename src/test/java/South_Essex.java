@@ -19,10 +19,11 @@ public class South_Essex extends SouthEssexHelperClass {
     public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
     //public void test(){
         String logFileName = value+"_"+fileName+"_"+request;
+        writeLog(" URL is ---->"+url+"-------------------------", logFileName);
         try {
             driver = InitializerClass.initialize(url, value);
             firstPage(driver, keyWord, firstName);
-            writeLog("-------------------Search btn is chicked---------------",logFileName);
+            writeLog("-------------------Search btn is clicked---------------",logFileName);
             tableData(driver, fileName, request,logFileName);
         }catch (Exception e)
         {

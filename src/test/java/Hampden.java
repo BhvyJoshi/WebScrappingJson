@@ -22,6 +22,7 @@ public class Hampden extends HampdenHelperClass {
     public void test(String url,String value,String keyWord, String firstName,String fileName,String request){
     //public void test(){
         String logFileName = value+"_"+fileName+"_"+request;
+        writeLog(" URL is ---->"+url+"-------------------------", logFileName);
         try{
         driver = InitializerClass.initialize(url, value);
         firstPageForHampden(driver, keyWord, firstName);

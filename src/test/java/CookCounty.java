@@ -1,8 +1,11 @@
 import com.ASC.Common.CookCountyHelper;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -12,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class CookCounty extends CookCountyHelper {
 
     public WebDriver driver;
-    public static final String url = "http://162.217.184.82/i2/";
+    //public  String url = "http://162.217.184.82/i2/";
     public static final String mainHeaderPath = "//*[@id=\"NameList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
     public static String[] header = new String[2];
     public static final String subHeaderXpath = "//*[@id=\"DocList1_ContentContainer1\"]/table/tbody/tr[1]/td/div/div[1]/table/thead/tr";
@@ -23,25 +26,25 @@ public class CookCounty extends CookCountyHelper {
     private static final String errMsg = "//*[@id=\"MessageBoxCtrl1_ErrorLabel1\"]";
     private static final String alertMessage = "Search criteria resulted in 0 hits. Please verify the search criteria and try again.";
 
+    private static final String searchCriteria ="//*[@id=\"Navigator1_SearchCriteria1_menuLabel\"]";
+    private static final String GrantorGranteeSearch = "//*[@id=\"Navigator1_SearchCriteria1_LinkButton01\"]";
+
 
     @Test
-    //@Parameters({"url","keyWord","fileName","request"})
-    //public void CookCountyMethod(String url, String keyWord, String fileName, String request){
-    public void test_cookCounty(){
+    @Parameters({"url","keyWord","fileName","request"})
+    public void CookCountyMethod(String url, String keyWord, String fileName, String request){
+    //public void test_cookCounty(){
 
-        String keyWord = "lender";
+        /*String keyWord = "lender";
         String fileName = "cookCounty_demo";
-        String request = "1234";
+        String request = "1234";*/
         String logFileName = "CookCounty_"+fileName+"_"+request;
+        writeLog(" URL is ---->"+url+"-------------------------", logFileName);
         try {
             driver = initializeMainPage(url);
             firstPage(driver, keyWord,logFileName);
-            if (driver.findElement(By.xpath(msgBox)).isDisplayed()) {
-                if(alertMessage.equals(driver.findElement(By.xpath(errMsg)).getText()))
-                {
-                    generateEmptyFile(fileName);
-                }
-            }else {
+            try {
+                if(driver.findElement(By.xpath("//*[@id=\"NameList1_ContentContainer1\"]")).isDisplayed());
                 writeLog("------------------------Got first initial page -------------------------", logFileName);
                 header = grabHeader(driver, mainHeaderPath);
                 subHeader = getSubHeader(driver);
@@ -50,6 +53,18 @@ public class CookCounty extends CookCountyHelper {
                 driver.navigate().refresh();
                 writeLog("------------------------Getting required data content -------------------------", logFileName);
                 tableData(driver, fileName, request, header, subHeader, logFileName);
+
+            } catch (NoSuchElementException e) {
+                if (driver.findElement(By.xpath(msgBox)).isEnabled()) {
+                    if (alertMessage.equals(driver.findElement(By.xpath(errMsg)).getText())) {
+                        generateEmptyFile(fileName);
+                    } else {
+                        generateTooManyResultsContent(fileName);
+                    }
+                }
+                else {
+                    writeLog(e.toString(), logFileName);
+                }
             }
         }catch (Exception e){
             writeLog(e.toString(),logFileName);
@@ -64,8 +79,9 @@ public class CookCounty extends CookCountyHelper {
         driver.get(url);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().deleteAllCookies();
-        driver.findElement(By.xpath("//*[@id=\"Navigator1_SearchCriteria1_menuButton\"]")).click();
-        driver.findElement(By.xpath("//*[@id=\"Navigator1_SearchCriteria1_LinkButton01\"]")).click();
+        new WebDriverWait(driver,60).until(ExpectedConditions.elementToBeClickable(By.xpath(searchCriteria)));
+        driver.findElement(By.xpath(searchCriteria)).click();
+        driver.findElement(By.xpath(GrantorGranteeSearch)).click();
         return driver;
     }
 
@@ -81,6 +97,7 @@ public class CookCounty extends CookCountyHelper {
         }
         return grabHeader(driver1,subHeaderXpath,0);
     }
+
     @AfterTest
     public void cleanUp()
     {
