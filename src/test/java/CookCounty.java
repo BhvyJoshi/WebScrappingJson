@@ -39,7 +39,7 @@ public class CookCounty extends CookCountyHelper {
         String fileName = "cookCounty_demo";
         String request = "1234";*/
         String logFileName = "CookCounty_"+fileName+"_"+request;
-        writeLog(" URL is ---->"+url+"-------------------------", logFileName);
+        writeLog(" URL is ---->"+url+"-----------------------------", logFileName);
         try {
             driver = initializeMainPage(url);
             firstPage(driver, keyWord,logFileName);
