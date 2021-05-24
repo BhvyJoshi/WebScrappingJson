@@ -111,6 +111,7 @@ public class CookGrantorData extends Cook {
         JSONArray objForSubPage = new JSONArray();
         JSONObject objForSubRow = new JSONObject();
         JSONObject childRecord = new JSONObject();
+        String[] data = new String[6]; //data of each row
 
         new WebDriverWait(driver,60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(subTableXpath+"/tr")));
         int subRowSize = driver.findElement(By.xpath(subTableXpath)).findElements(By.tagName("tr")).size();
@@ -118,11 +119,9 @@ public class CookGrantorData extends Cook {
         for (int subRowCount=1;subRowCount<=subRowSize;subRowCount++){
 
             writeLog("---------------subTable row no --->"+subRowCount,logFileName);
-            //System.out.println("---------------subTable row no --->"+subRowCount);
 
             new WebDriverWait(driver,30).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getSubTableRow(subRowCount)+"/td")));
 
-            String[] data = new String[6]; //data of each row
             for (int itr = 0; itr<6; itr++){
                 new WebDriverWait(driver,10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(getSubTableRow(subRowCount)+"/td")));
                 String xPath = getSubTableRow(subRowCount)+"/td["+(itr+2)+"]";
@@ -144,6 +143,7 @@ public class CookGrantorData extends Cook {
             objForSubRow.put("Lead_Search__c",requestID);
             objForSubPage.put(objForSubRow);
             objForSubRow = new JSONObject();
+            data = new String[6];
         }
         return objForSubPage;
     }
@@ -154,11 +154,11 @@ public class CookGrantorData extends Cook {
         JSONArray childRecordArray = new JSONArray();
 
         childRecord1.put("Type__c",subHeader[0]);
-        childRecord1.put("Name",data[0]);// need to change Name__c if required
+        childRecord1.put("Name",data[0]);
         childRecord1.put("attributes",putSubAttributes(subRowCount));
 
         childRecord2.put("Type__c",subHeader[1]);
-        childRecord2.put("Name",data[1]); // need to change Name__c if required
+        childRecord2.put("Name",data[1]);
         childRecord2.put("attributes",putSubAttributes(subRowCount));
 
         return childRecordArray.put(childRecord1).put(childRecord2);

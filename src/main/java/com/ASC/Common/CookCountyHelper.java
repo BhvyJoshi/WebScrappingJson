@@ -29,8 +29,6 @@ public class CookCountyHelper extends CookGrantorData {
 
     public void tableData(WebDriver driver,String fileName,String request,String[] headers,String[] subHeaders,String logFileName)
     {
-        //JSONArray tableDataContent;
-        //tableDataContent = grabData(driver,headers,request,subHeaders,logFileName);
         generateFile(fileName, grabData(driver,headers,request,subHeaders,logFileName));
 
         int nextBtnCliCkCount  = driver.findElements(By.xpath("//*[@id=\"NameList1_ctl01\"]/tbody/tr/td[3]/a")).size();
